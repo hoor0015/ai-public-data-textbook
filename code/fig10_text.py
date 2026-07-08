@@ -11,6 +11,7 @@ import seaborn as sns
 
 sns.set_style("whitegrid")
 import koreanize_matplotlib  # noqa: E402,F401
+import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity

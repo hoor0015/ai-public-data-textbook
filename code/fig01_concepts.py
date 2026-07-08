@@ -7,6 +7,7 @@ import seaborn as sns
 
 sns.set_style("white")
 import koreanize_matplotlib  # noqa: E402,F401
+import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 

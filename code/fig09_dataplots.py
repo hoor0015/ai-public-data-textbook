@@ -10,6 +10,7 @@ from scipy import stats
 
 sns.set_style("whitegrid")
 import koreanize_matplotlib  # noqa: E402,F401
+import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
 BASE = Path(__file__).resolve().parent.parent
 FIG = BASE / "figures"
