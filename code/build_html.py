@@ -180,10 +180,11 @@ print(f"built {len(chapters)} chapter pages")
 toc_html = [
     f"<h1>{BOOK_TITLE}</h1>",
     f"<p><strong>{BOOK_SUBTITLE}.</strong> "
-    "이미 만들어진 AI 에이전트(VSCode + Claude Code)를 활용해 한국 공공데이터를 분석하는 "
-    "Kwangwoon University 강의 교재입니다. 13개 주차가 각각 이론(1회차)과 실습(2회차)으로 나뉘며, "
+    "AI 에이전트를 활용해 한국 공공데이터를 분석하는 학부 수준의 강의 교재입니다. "
+    "13개 주차가 각각 이론(1회차)과 실습(2회차)으로 나뉘며, "
     "학생의 역할은 코딩이 아니라 에이전트에 대한 지시, 결과의 검증, 정책적 해석입니다. "
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
+    "<p>광운대학교 행정학과 조교수 김경동(kdkim@kw.ac.kr)</p>",
 ]
 for part_title, weeks in PARTS:
     toc_html.append(f'<h2 class="toc-part">{part_title}</h2><ul>')
