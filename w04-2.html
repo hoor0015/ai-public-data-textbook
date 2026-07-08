@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4주차 2회차. 에이전트로 분석 환경 구축하기 - AI 기반 공공데이터 분석</title>
+<style>
+:root { --accent:#2f6fb0; --sidebar-w:320px; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+       color:#1f2328; line-height:1.75; background:#fff; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+nav.sidebar { position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  overflow-y:auto; background:#f7f8fa; border-right:1px solid #e3e6ea; padding:22px 18px; }
+nav.sidebar h1 { font-size:1.02rem; line-height:1.45; margin:0 0 14px;
+  padding-bottom:12px; border-bottom:2px solid var(--accent); }
+nav.sidebar h1 a { color:#1f2328; }
+nav.sidebar ul { list-style:none; margin:0; padding:0; }
+nav.sidebar li.part { margin-top:14px; font-weight:700; font-size:.92rem; color:#57606a; }
+nav.sidebar li.chap { margin:4px 0 0 6px; font-size:.88rem; font-weight:600; }
+nav.sidebar li.sec { margin:2px 0 2px 20px; font-size:.83rem; font-weight:400; }
+nav.sidebar li.cur > a { color:#a33; }
+nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; border-radius:3px;
+  padding:0 5px; margin-right:5px; vertical-align:1px; }
+nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
+nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
+main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
+main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
+main h3 { font-size:1.12rem; margin-top:1.8em; }
+main h4 { font-size:1.0rem; margin-top:1.5em; }
+main img { max-width:100%; display:block; margin:20px auto; border:1px solid #eceef0; border-radius:4px; }
+main table { border-collapse:collapse; margin:18px 0; font-size:.92rem; }
+main th, main td { border:1px solid #d5d9de; padding:6px 12px; }
+main th { background:#f0f3f6; }
+main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
+main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
+  padding:14px 16px; overflow-x:auto; line-height:1.5; }
+main pre code { background:none; padding:0; }
+main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
+  background:#fafbfc; color:#4b5563; }
+main input[type=checkbox] { margin-right:6px; }
+.pager { display:flex; justify-content:space-between; margin-top:56px;
+  padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
+.pager a { max-width:46%; }
+.toc-part { margin-top:26px; font-size:1.1rem; }
+@media (max-width: 900px) {
+  nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
+  main { margin-left:0; padding:24px 20px 60px; }
+}
+</style></head>
+<body>
+<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<li class="part">1부. 에이전트와 도구</li>
+<li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
+<li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
+<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리</a></li>
+<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트가 일하는 모습 관찰하기</a></li>
+<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 에이전트에게 일 시키는 법: 지시 설계</a></li>
+<li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
+<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
+<li class="chap cur"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="sec"><a href="w04-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
+<li class="sec"><a href="w04-2.html#준비물">준비물</a></li>
+<li class="sec"><a href="w04-2.html#21-에이전트에게-uv-설치를-지시한다">2.1 에이전트에게 uv 설치를 지시한다</a></li>
+<li class="sec"><a href="w04-2.html#22-분석-프로젝트-생성과-패키지-설치">2.2 분석 프로젝트 생성과 패키지 설치</a></li>
+<li class="sec"><a href="w04-2.html#23-첫-실행-CSV를-읽고-요약통계-출력">2.3 첫 실행: CSV를 읽고 요약통계 출력</a></li>
+<li class="sec"><a href="w04-2.html#24-오류가-나면-에이전트와-함께-디버깅하기">2.4 오류가 나면: 에이전트와 함께 디버깅하기</a></li>
+<li class="sec"><a href="w04-2.html#25-환경-검증-무엇이-어디에-설치되었나-확인">2.5 환경 검증: 무엇이 어디에 설치되었나 확인</a></li>
+<li class="sec"><a href="w04-2.html#검증-체크리스트">검증 체크리스트</a></li>
+<li class="sec"><a href="w04-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
+<li class="sec"><a href="w04-2.html#제출-과제">제출 과제</a></li>
+<li class="part">2부. 공공데이터의 수집과 정리</li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
+<li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="part">3부. 분석과 해석</li>
+<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="part">4부. 종합과 확장</li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+</ul></nav>
+<main><h1>4주차 2회차. 에이전트로 분석 환경 구축하기</h1>
+<h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
+<p>1회차에서 분석 환경의 설계도(로컬, 터미널, 파이썬과 패키지, uv, 폴더 구조)를 이해했다. 오늘은 그 설계도대로 여러분의 노트북에 실제 환경을 짓는다. 단, 짓는 것은 에이전트다. 여러분은 설치 명령을 한 줄도 외우지 않는다. 대신 에이전트에게 지시하고, 에이전트가 명령을 실행하는 과정을 관찰하고, 완성된 환경을 검증한다. 이 과목 전체에서 오늘이 갖는 의미는 각별하다. 오늘 만든 환경 위에서 남은 9주의 모든 분석이 돌아간다.</p>
+<p>이 실습이 끝나면 다음이 갖춰진다.</p>
+<ul>
+<li>노트북에 설치된 uv (버전 확인까지 완료)</li>
+<li>공공데이터분석 폴더의 uv 프로젝트 (pyproject.toml, uv.lock, .venv)</li>
+<li>설치된 분석 패키지 4종 (pandas, matplotlib, seaborn, koreanize-matplotlib)</li>
+<li>첫 분석 실행 결과: sigungu_2023.csv의 요약통계</li>
+<li>메모 폴더의 '환경보고서_4주차.md'와 CLAUDE.md에 추가된 실행 규칙</li>
+</ul>
+<h2 id="준비물">준비물</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>폴더</td>
+<td>1주차에 만든 <code>공공데이터분석</code> 폴더 (VSCode로 열어 둘 것)</td>
+</tr>
+<tr>
+<td>데이터</td>
+<td><code>data/sigungu_2023.csv</code> (2주차 실습에서 넣어 둔 그대로. 전국 229개 시군구 인구 지표, 출처: 행정안전부 주민등록인구통계·국가데이터처(옛 통계청) 인구동향조사, KOSIS에서 수집)</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>VSCode + Claude Code, 인터넷 연결 (설치 파일과 패키지를 내려받는다)</td>
+</tr>
+<tr>
+<td>선수 내용</td>
+<td>4주차 1회차 (uv의 세 명령, 가상환경, 폴더 구조), 3주차 (CLAUDE.md)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-에이전트에게-uv-설치를-지시한다">2.1 에이전트에게 uv 설치를 지시한다</h2>
+<p>uv는 파이썬 패키지가 아니라 컴퓨터에 한 번 설치해 두는 프로그램이다. 공식 문서(docs.astral.sh/uv)에 Windows용 설치 방법이 안내되어 있지만, 우리는 그 문서를 읽고 따라 하는 대신 에이전트에게 통째로 맡긴다. 다만 지시문에 두 가지 안전장치를 넣는다. 설치 전에 이미 설치되어 있는지 먼저 확인하게 하고(같은 것을 두 번 설치하는 헛수고 방지), 공식 문서의 방법을 쓰도록 못 박는다(출처를 알 수 없는 설치법 방지).</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"이 컴퓨터에 uv가 설치되어 있는지 먼저 확인해 줘. 설치되어 있지 않으면, uv 공식 문서(docs.astral.sh/uv)에 나온 Windows 표준 방법으로 설치해 줘. 끝나면 uv --version을 실행해서 설치된 버전을 알려 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 에이전트가 먼저 터미널에서 <code>uv --version</code> 같은 확인 명령을 실행한다(승인 요청이 뜬다). "찾을 수 없다"는 결과가 나오면, 공식 설치 명령의 실행 승인을 요청한다. 공식 문서의 Windows 설치 명령은 다음과 같은 모습이다.</p>
+<pre><code>powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
+</code></pre>
+<p>이번 승인은 여느 때보다 꼼꼼히 읽자. 이 명령은 "인터넷 주소 astral.sh에서 설치 스크립트를 내려받아(irm) 즉시 실행하라(iex)"는 뜻이다. 인터넷에서 받은 것을 곧바로 실행하는 일은 위험할 수 있는 행동이며, 주소가 공식 사이트일 때만 승인해야 한다. astral.sh는 uv를 만든 회사의 공식 주소이므로 승인해도 된다. 설치는 보통 1분 안에 끝나고, 완료 메시지가 터미널에 출력된다.</p>
+<p><strong>검증.</strong> 이번 검증은 특별하다. 이 과목에서 처음으로 여러분이 터미널에 직접 명령을 입력해 본다. VSCode 메뉴에서 Terminal → New Terminal로 새 터미널을 열고(설치 직후에는 새로 연 터미널이어야 uv를 인식한다), 다음을 손으로 타이핑한 뒤 Enter를 누르자.</p>
+<pre><code>uv --version
+</code></pre>
+<p><code>uv 0.10.2</code> 같은 버전 문구가 출력되면 성공이다. 별것 아닌 한 줄이지만 의미가 있다. 에이전트가 보고한 것("설치했습니다")을 에이전트가 쓰는 것과 같은 통로(터미널)에서 여러분이 재확인한 것이다. 1회차 그림 4-1에서 본 "사람과 에이전트가 같은 문으로 드나든다"를 몸으로 확인한 셈이다.</p>
+<div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>유의 · 설치 명령의 승인 기준</strong><br>
+프로그램 설치는 파일 생성과 달리 컴퓨터 전체에 영향을 주는 행동이다. 승인 전에 최소 두 가지를 확인하는 습관을 들이자. (1) 명령 속의 인터넷 주소가 공식 사이트인가. (2) 에이전트가 설치하려는 것이 내가 지시한 바로 그 프로그램인가. 에이전트가 공식 문서와 다른 우회 방법(예: 다른 도구를 먼저 설치해서 그걸로 설치)을 제안한다면, 거부하고 "공식 문서의 표준 방법을 써 줘"라고 다시 지시하면 된다.
+</div>
+
+<h2 id="22-분석-프로젝트-생성과-패키지-설치">2.2 분석 프로젝트 생성과 패키지 설치</h2>
+<p>uv가 준비되었으니 공공데이터분석 폴더를 uv 프로젝트로 만들고(uv init), 분석 패키지 4종을 설치한다(uv add). 1회차 표 4-3에서 본 두 명령이 실전에 등장하는 순간이다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"지금 열려 있는 이 폴더를 uv 프로젝트로 만들어 줘. 그다음 pandas, matplotlib, seaborn, koreanize-matplotlib 네 개 패키지를 uv add로 설치해 줘. 기존에 있던 파일(README.md, data 폴더 등)은 건드리지 말 것. 끝나면 (1) 새로 생긴 파일과 폴더의 목록, (2) pyproject.toml의 내용을 보여 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동, 그리고 작은 사고.</strong> 에이전트가 <code>uv init</code>을 실행하면 높은 확률로 오류가 하나 난다.</p>
+<pre><code>error: The current directory (`공공데이터분석`) is not a valid package name.
+Please provide a package name with `--name`.
+</code></pre>
+<p>uv는 폴더 이름으로 프로젝트 이름을 지으려 하는데, 한글 폴더 이름은 파이썬 프로젝트 이름 규칙(영문·숫자)에 맞지 않아 거절당한 것이다. 당황할 필요 없다. 그리고 관찰하라. 에이전트는 이 오류 문구를 읽고, 스스로 <code>uv init --name public-data</code> 같은 영문 이름을 붙인 명령으로 고쳐서 재시도할 것이다. 2주차에서 배운 에이전트 루프(행동 → 관찰 → 계획 수정)가 오류 앞에서 작동하는 생생한 장면이다. 만약 에이전트가 헤매면 "영문 프로젝트 이름을 지정해서 다시 시도해 줘"라고 거들면 된다.</p>
+<p><code>uv init</code>이 성공하면 pyproject.toml, main.py, .python-version, .gitignore 등이 생긴다(기존 README.md는 그대로 남는다). 이어지는 <code>uv add</code>에서는 터미널에 다운로드 기록이 줄줄이 흐른 뒤, 설치된 패키지 목록이 출력된다. 여기서 이상한 점을 하나 발견할 것이다. 분명 4개를 시켰는데 목록에는 numpy, pillow 등 처음 보는 이름까지 수십 개가 찍힌다. 오류가 아니다. pandas가 일하려면 numpy(수치 계산 패키지)가 필요하고, matplotlib가 그림을 저장하려면 pillow(이미지 패키지)가 필요하다. 이렇게 패키지가 기대는 다른 패키지를 의존성(dependency)이라 하며, uv가 필요한 의존성을 알아서 함께 설치해 준 것이다. 탐색기에는 .venv 폴더와 uv.lock 파일도 새로 보인다.</p>
+<p><strong>검증.</strong> 세 군데를 눈으로 확인한다.</p>
+<ol>
+<li>탐색기에서 pyproject.toml을 클릭해 열고, <code>dependencies</code> 항목에 지시한 4개 패키지 이름이 모두 들어 있는지 확인한다.</li>
+<li>탐색기에 .venv 폴더와 uv.lock 파일이 생겼는지 확인한다. (uv.lock을 열어 보면 수천 줄의 버전 기록이 보인다. 읽을 필요는 없고, "재현의 열쇠가 만들어졌구나"만 확인하면 된다.)</li>
+<li>1주차에 만든 README.md와 data 폴더가 그대로인지 확인한다. "건드리지 말 것"이라는 제약이 지켜졌는가도 검증 대상이다.</li>
+</ol>
+<h2 id="23-첫-실행-CSV를-읽고-요약통계-출력">2.3 첫 실행: CSV를 읽고 요약통계 출력</h2>
+<p>환경이 완성되었는지는 목록이 아니라 실행으로 증명된다. 첫 과제는 소박하게, sigungu_2023.csv를 읽어 기초 정보와 요약통계를 출력하는 것이다. 2주차에는 에이전트가 이 파일을 "눈으로 훑어" 답했다면, 오늘은 pandas로 "계산해서" 답한다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"main.py를 다음 내용으로 다시 작성해 줘. data 폴더의 sigungu_2023.csv를 pandas로 읽어서 (1) 행과 열의 개수, (2) 열 이름 목록, (3) 총인구·고령인구비율·합계출산율 세 열의 요약통계(개수, 평균, 최솟값, 최댓값 포함), (4) 총인구가 가장 많은 시군구와 가장 적은 시군구를 출력할 것. 코드 각 부분에 한국어 주석을 달고, uv run main.py로 실행해서 결과를 보여 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 에이전트가 main.py를 고쳐 쓰고(원래 들어 있던 "Hello from ..." 인사 코드를 지우고 새 코드를 넣는다), <code>uv run main.py</code>의 실행 승인을 요청한다. 실행 결과는 대략 다음과 같은 값이어야 한다.</p>
+<ul>
+<li>행과 열: 229행, 12열</li>
+<li>총인구: 평균 약 224,625명, 최댓값 1,190,964명(경기 수원시), 최솟값 8,996명(경북 울릉군)</li>
+<li>고령인구비율: 평균 약 25.0%, 최댓값 약 45.3%(경북 의성군)</li>
+<li>합계출산율: 평균 약 0.823, 최솟값 0.320(부산 중구), 최댓값 1.651(전남 영광군)</li>
+</ul>
+<p><strong>검증 1: 아는 값과 대조.</strong> 행 수 229는 2주차 실습에서 확인했던 시군구 수와 같은가. 총인구 1위로 보고된 시군구를 탐색기에서 CSV를 직접 열어 찾아보고, 화면의 값과 일치하는지 대조한다.</p>
+<p><strong>검증 2: 이상한 숫자 하나를 추궁한다.</strong> 출력된 요약통계에서 "개수(count)" 줄을 보라. 총인구는 229인데 합계출산율은 228이다. 시군구는 229개인데 왜 출산율 값은 228개뿐인가. 에이전트가 이 차이를 먼저 언급했는가? 대부분 언급 없이 지나간다. 표는 그럴듯하게 뽑지만 그 안의 이상 신호까지 챙겨 보고하지는 않는 것, 이것이 에이전트 보고의 전형적인 빈틈이다. 다음 지시로 추궁해 보자.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"요약통계에서 합계출산율의 개수가 228로 총인구(229)보다 1 적다. 어느 시군구의 값이 비어 있는지 데이터에서 직접 확인해서 알려 줘. 추측하지 말고 코드로 확인할 것."
+</div>
+
+<p>에이전트가 결측값을 찾는 코드를 실행하면, 경북 군위군의 합계출산율(과 출생아수)이 비어 있다는 답이 나온다. 값이 비어 있는 칸을 결측값(missing value)이라 부르는데, 왜 생기고 어떻게 다루는지는 7주차의 주제다. 오늘 기억할 것은 하나다. 평균 0.823은 229개가 아니라 228개의 평균이며, 그 사실은 검증하는 사람의 눈에만 보였다는 것.</p>
+<h2 id="24-오류가-나면-에이전트와-함께-디버깅하기">2.4 오류가 나면: 에이전트와 함께 디버깅하기</h2>
+<p>앞 단계까지 순조로웠다면 오히려 아쉽다. 오류를 읽고 고치는 연습을 못 했기 때문이다. 그래서 일부러 오류를 만든다. 프로그래머들은 오류를 찾아 고치는 일을 디버깅(debugging)이라 부르는데, 에이전트 시대의 디버깅은 "오류문을 읽고 → 원인 설명과 수정을 에이전트에게 시키고 → 고쳐진 것을 확인"하는 순환이다.</p>
+<p><strong>실험: 없는 파일을 읽게 하기.</strong></p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"실험을 하나 하자. main.py에서 파일 이름을 일부러 sigungu_2024.csv로 바꿔서 uv run main.py를 실행해 줘. 오류가 나도 고치지 말고, 오류 메시지 전문을 그대로 보여 줘."
+</div>
+
+<p>터미널에 붉은 오류문이 길게 출력된다. 겁먹지 말고 요령을 배우자. 파이썬 오류문은 아래에서 위로 읽는다. 맨 마지막 줄에 오류의 이름과 핵심 메시지가 있다.</p>
+<pre><code>FileNotFoundError: [Errno 2] No such file or directory: 'data/sigungu_2024.csv'
+</code></pre>
+<p>번역하면 "그런 파일이나 폴더가 없다: data/sigungu_2024.csv"다. 오류의 원인(없는 파일명)이 메시지 안에 그대로 적혀 있다. 오류문은 컴퓨터의 비명이 아니라 진단서다. 이제 고치는 것도 에이전트에게 시키되, 원인 설명을 먼저 요구한다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"방금 오류의 원인을 한 문장으로 설명하고, 고친 다음 다시 실행해서 정상 동작을 보여 줘. 무엇을 바꿨는지도 알려 줘."
+</div>
+
+<p><strong>예상되는 행동과 검증.</strong> 에이전트가 "존재하지 않는 파일명을 지정했기 때문"이라 설명하고, 파일명을 되돌려 재실행한 뒤 2.3과 같은 요약통계를 다시 보여 줄 것이다. 검증 포인트는 "무엇을 바꿨는지"의 답이 실제 수정 내용과 일치하는가다. 에이전트는 오류를 고치면서 부탁하지 않은 다른 부분까지 손대는 경우가 있다. 고친 뒤의 출력이 2.3의 출력과 같은지(숫자가 달라지지 않았는지) 확인하라.</p>
+<p>이 밖에 오늘 만날 수 있는 대표 오류가 <code>ModuleNotFoundError: No module named 'pandas'</code>다. 뜻은 "pandas라는 패키지를 찾을 수 없다"인데, 십중팔구 패키지가 없는 게 아니라 찾는 곳이 다른 것이다. <code>uv run</code> 없이 맨 <code>python main.py</code>로 실행하면 프로젝트의 도구상자(.venv)가 아닌 다른 파이썬이 나서기 때문에 이 오류가 난다. 1회차에서 세운 규칙("파이썬 실행은 언제나 uv run으로")이 바로 이 오류의 백신이다.</p>
+<div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>왜 일부러 오류를 내 보는가?</strong><br>
+언젠가 진짜 오류가 났을 때의 심리적 차이 때문이다. 오류를 처음 만나는 사람은 붉은 글자의 양에 압도되어 "망했다"부터 생각한다. 오류를 내 본 사람은 마지막 줄부터 읽는다. 그리고 에이전트에게 오류문을 주며 원인을 물을 줄 안다. 오류는 분석 작업의 일상이고, 에이전트는 오류문을 사람보다 훨씬 능숙하게 읽는다. 여러분에게 필요한 것은 오류를 안 내는 능력이 아니라, 오류 앞에서 절차(읽기 → 시키기 → 확인하기)를 밟는 침착함이다.
+</div>
+
+<h2 id="25-환경-검증-무엇이-어디에-설치되었나-확인">2.5 환경 검증: 무엇이 어디에 설치되었나 확인</h2>
+<p>마지막으로 오늘 지은 환경의 준공 검사를 한다. 무엇이 어떤 버전으로 어디에 설치되었는지를 문서로 남겨 두면, 나중에 환경이 이상해졌을 때 비교 기준이 되고, 보고서에 "어떤 환경에서 분석했는가"를 밝힐 때의 근거가 된다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"이 프로젝트의 환경을 점검해서 메모 폴더에 '환경보고서_4주차.md' 파일로 저장해 줘. 다음 항목을 포함할 것. (1) uv 버전, (2) 이 프로젝트가 쓰는 파이썬 버전, (3) pandas·matplotlib·seaborn·koreanize-matplotlib의 설치된 버전, (4) 가상환경(.venv)의 위치, (5) uv run main.py의 실행 결과 요약. 모든 값은 추측하지 말고 실제 명령을 실행해서 확인한 값만 적고, 각 값을 확인할 때 쓴 명령도 함께 기록해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 에이전트가 버전 확인 명령들을 차례로 실행하고(각각 승인 요청이 올 수 있다), 결과를 모아 마크다운 보고서를 메모 폴더에 저장한다. 지시문의 마지막 문장이 3주차에서 배운 "검증을 내장한 지시"다. 확인 명령까지 기록하게 하면, 보고서의 어떤 값이든 나중에 같은 명령으로 재확인할 수 있다.</p>
+<p><strong>검증.</strong> 보고서 파일을 열고 두 가지를 확인한다. 첫째, (1)번 uv 버전이 2.1에서 여러분이 직접 <code>uv --version</code>으로 확인한 값과 같은가. 둘째, (3)번의 패키지 버전 하나를 골라 에이전트가 기록해 둔 확인 명령을 터미널에 직접 입력해 보고, 보고서의 값과 같은지 본다.</p>
+<p><strong>마무리: 오늘의 규칙을 CLAUDE.md에 새긴다.</strong> 3주차에서 CLAUDE.md는 "매번 말하지 않아도 되는 영구 규칙"이라 배웠다. 오늘 확정된 규칙들을 새겨 두자.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"CLAUDE.md에 다음 규칙을 추가해 줘. (1) 파이썬 코드 실행은 항상 uv run을 사용할 것. (2) 패키지 추가가 필요하면 uv add를 쓰되, 추가 전에 나에게 무엇을 왜 설치하는지 알릴 것. (3) data 폴더의 원본 데이터 파일은 절대 수정하지 말 것. (4) 표·그림 등 분석 산출물은 산출물 폴더에 저장할 것. 추가한 뒤 CLAUDE.md 전체 내용을 보여 줘."
+</div>
+
+<p>에이전트가 보여 준 CLAUDE.md에서 3주차에 적어 둔 기존 규칙이 지워지지 않고 새 규칙이 추가되었는지 확인하면, 오늘의 공사가 모두 끝난다.</p>
+<h2 id="검증-체크리스트">검증 체크리스트</h2>
+<ul>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 새 터미널에서 <code>uv --version</code>을 직접 입력해 버전이 출력되는 것을 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> pyproject.toml의 dependencies에 패키지 4개가 모두 기록되어 있다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> .venv 폴더와 uv.lock 파일이 생겼고, 1주차에 만든 README.md와 data 폴더는 변형되지 않았다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>uv run main.py</code>의 출력에서 229행 12열을 확인했고, 총인구 1위 시군구를 CSV 원본과 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 합계출산율의 개수가 228인 이유(군위군 결측)를 에이전트를 시켜 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 일부러 낸 오류(FileNotFoundError)의 마지막 줄을 소리 내어 해석할 수 있다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 환경보고서_4주차.md의 값 하나를 직접 명령으로 재확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> CLAUDE.md에 실행·설치·데이터·산출물 규칙 4개가 추가되었고 기존 내용은 보존되었다</li>
+</ul>
+<h2 id="자주-겪는-문제">자주 겪는 문제</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>설치 직후 터미널에서 <code>uv</code>를 찾을 수 없다고 한다</td>
+<td>설치 전에 열려 있던 터미널은 새 프로그램을 모른다</td>
+<td>터미널을 닫고 새로 열거나 VSCode를 재시작한 뒤 다시 시도</td>
+</tr>
+<tr>
+<td>uv 설치 명령이 보안 경고로 차단된다</td>
+<td>백신 프로그램이나 학교·기관 보안 정책이 스크립트 실행을 막음</td>
+<td>경고 내용을 읽고 판단하되, 학교 관리 노트북이라면 전산 담당자에게 문의</td>
+</tr>
+<tr>
+<td><code>uv init</code>이 폴더 이름 오류를 낸다</td>
+<td>한글 폴더 이름은 프로젝트 이름으로 쓸 수 없음</td>
+<td>정상적인 상황이다. 에이전트가 <code>--name 영문이름</code>으로 재시도하는지 관찰 (2.2절)</td>
+</tr>
+<tr>
+<td><code>ModuleNotFoundError: No module named 'pandas'</code></td>
+<td><code>uv run</code> 없이 실행해서 도구상자 밖의 파이썬이 나섬</td>
+<td><code>uv run main.py</code>로 실행. CLAUDE.md 규칙이 있는지 확인</td>
+</tr>
+<tr>
+<td><code>uv add</code>가 매우 느리거나 실패한다</td>
+<td>네트워크 문제 (학교 와이파이 등)</td>
+<td>잠시 후 재시도. 에이전트에게 "다시 시도해 줘"라고 지시</td>
+</tr>
+<tr>
+<td>요약통계의 숫자가 교재와 미세하게 다르다</td>
+<td>다른 데이터 파일을 읽었거나 파일이 수정됨</td>
+<td>에이전트에게 "읽은 파일의 전체 경로와 행 수를 보여 줘"라고 확인. 229행이 아니면 data 폴더의 파일을 점검</td>
+</tr>
+<tr>
+<td>에이전트가 pip라는 도구로 설치하려 한다</td>
+<td>uv 이전의 전통적 설치 도구를 제안하는 경우가 있음</td>
+<td>거부하고 "이 프로젝트는 uv만 사용해. uv add로 설치해 줘"라고 재지시</td>
+</tr>
+</tbody>
+</table>
+<h2 id="제출-과제">제출 과제</h2>
+<p><strong>과제 4-A. 환경보고서.</strong> '환경보고서_4주차.md'를 제출한다. 평가 기준은 다섯 항목이 모두 실측값(확인 명령 포함)으로 채워졌는가, 그리고 그중 한 값에 대해 "직접 재확인한 방법"을 보고서 끝에 한 문단 덧붙였는가다.</p>
+<p><strong>과제 4-B. 디버깅 일지.</strong> 오늘 만난 오류(일부러 낸 것 포함) 중 하나를 골라 메모 폴더에 '디버깅일지_4주차.md'로 정리한다. (1) 오류문의 마지막 줄(복사), (2) 원인을 내 말로 한 문장, (3) 해결 과정에서 에이전트에게 준 지시문, (4) 해결을 어떻게 확인했는지를 적는다. 평가 기준은 오류문 해석의 정확성과 확인 절차의 구체성이다.</p>
+<p><strong>과제 4-C. 예습 질문.</strong> 군위군의 합계출산율은 왜 비어 있을까. 힌트: 2023년 7월에 군위군의 소속 행정구역이 바뀌었다. 어떤 변화였는지 찾아보고 두 문장으로 정리하라(출처 포함). 행정구역 개편이 데이터에 남기는 흔적은 7주차에서 본격적으로 다룬다.</p><div class="pager"><span><a href="w04-1.html">← 4주차 1회차. 분석 환경 이해하기</a></span><span><a href="w05-1.html">5주차 1회차. 공공데이터 생태계 →</a></span></div></main>
+</body></html>

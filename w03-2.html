@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3주차 2회차. 지시문 개선 워크숍 - AI 기반 공공데이터 분석</title>
+<style>
+:root { --accent:#2f6fb0; --sidebar-w:320px; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+       color:#1f2328; line-height:1.75; background:#fff; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+nav.sidebar { position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  overflow-y:auto; background:#f7f8fa; border-right:1px solid #e3e6ea; padding:22px 18px; }
+nav.sidebar h1 { font-size:1.02rem; line-height:1.45; margin:0 0 14px;
+  padding-bottom:12px; border-bottom:2px solid var(--accent); }
+nav.sidebar h1 a { color:#1f2328; }
+nav.sidebar ul { list-style:none; margin:0; padding:0; }
+nav.sidebar li.part { margin-top:14px; font-weight:700; font-size:.92rem; color:#57606a; }
+nav.sidebar li.chap { margin:4px 0 0 6px; font-size:.88rem; font-weight:600; }
+nav.sidebar li.sec { margin:2px 0 2px 20px; font-size:.83rem; font-weight:400; }
+nav.sidebar li.cur > a { color:#a33; }
+nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; border-radius:3px;
+  padding:0 5px; margin-right:5px; vertical-align:1px; }
+nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
+nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
+main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
+main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
+main h3 { font-size:1.12rem; margin-top:1.8em; }
+main h4 { font-size:1.0rem; margin-top:1.5em; }
+main img { max-width:100%; display:block; margin:20px auto; border:1px solid #eceef0; border-radius:4px; }
+main table { border-collapse:collapse; margin:18px 0; font-size:.92rem; }
+main th, main td { border:1px solid #d5d9de; padding:6px 12px; }
+main th { background:#f0f3f6; }
+main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
+main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
+  padding:14px 16px; overflow-x:auto; line-height:1.5; }
+main pre code { background:none; padding:0; }
+main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
+  background:#fafbfc; color:#4b5563; }
+main input[type=checkbox] { margin-right:6px; }
+.pager { display:flex; justify-content:space-between; margin-top:56px;
+  padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
+.pager a { max-width:46%; }
+.toc-part { margin-top:26px; font-size:1.1rem; }
+@media (max-width: 900px) {
+  nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
+  main { margin-left:0; padding:24px 20px 60px; }
+}
+</style></head>
+<body>
+<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<li class="part">1부. 에이전트와 도구</li>
+<li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
+<li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
+<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리</a></li>
+<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트가 일하는 모습 관찰하기</a></li>
+<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 에이전트에게 일 시키는 법: 지시 설계</a></li>
+<li class="chap cur"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
+<li class="sec"><a href="w03-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
+<li class="sec"><a href="w03-2.html#준비물">준비물</a></li>
+<li class="sec"><a href="w03-2.html#21-같은-과제-다른-지시-나쁜-지시-vs-좋은-지시-비교-실험">2.1 같은 과제, 다른 지시: 나쁜 지시 vs 좋은 지시 비교 실험</a></li>
+<li class="sec"><a href="w03-2.html#22-계획-모드로-복잡한-과제-쪼개기">2.2 계획 모드로 복잡한 과제 쪼개기</a></li>
+<li class="sec"><a href="w03-2.html#23-내-프로젝트의-CLAUDEmd-작성">2.3 내 프로젝트의 CLAUDE.md 작성</a></li>
+<li class="sec"><a href="w03-2.html#24-나만의-지시문-라이브러리-시작하기">2.4 나만의 지시문 라이브러리 시작하기</a></li>
+<li class="sec"><a href="w03-2.html#검증-체크리스트">검증 체크리스트</a></li>
+<li class="sec"><a href="w03-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
+<li class="sec"><a href="w03-2.html#제출-과제">제출 과제</a></li>
+<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
+<li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="part">2부. 공공데이터의 수집과 정리</li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
+<li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="part">3부. 분석과 해석</li>
+<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="part">4부. 종합과 확장</li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+</ul></nav>
+<main><h1>3주차 2회차. 지시문 개선 워크숍</h1>
+<h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
+<p>1회차에서 좋은 지시의 다섯 요소(역할·맥락·과제·제약·산출물), 계획 모드, CLAUDE.md, 검증 내장을 배웠다. 이번 실습은 그것을 전부 손으로 해 보는 워크숍이다. 오늘의 재료는 지난주에도 쓴 sigungu_2023.csv 하나뿐이다. 데이터가 같으니, 결과의 차이는 온전히 지시의 차이에서 나온다. 그것을 눈으로 확인하는 것이 오늘의 목표다.</p>
+<p>이 실습이 끝나면 다음이 남는다.</p>
+<ul>
+<li>같은 과제를 나쁜 지시와 좋은 지시로 시켰을 때의 결과 비교 기록</li>
+<li>계획 모드로 계획서를 받아 검토·수정·승인해 본 경험</li>
+<li>내 프로젝트 폴더에 설치된 CLAUDE.md (앞으로 학기 내내 쓴다)</li>
+<li>나만의 지시문 라이브러리 파일 (앞으로 계속 자란다)</li>
+</ul>
+<p>아직 파이썬 환경(4주차)이 없으므로, 오늘도 에이전트의 파일 읽기와 간단한 확인 작업만으로 진행한다. 계산의 정밀함보다 지시와 결과의 관계에 집중한다.</p>
+<h2 id="준비물">준비물</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>폴더</td>
+<td>1주차에 만든 <code>공공데이터분석</code> 폴더 (data, 메모 폴더 포함)</td>
+</tr>
+<tr>
+<td>데이터</td>
+<td><code>data/sigungu_2023.csv</code> (전국 229개 시군구 인구 지표, 출처: 행정안전부 주민등록인구통계·국가데이터처(옛 통계청) 인구동향조사, KOSIS에서 수집). 2주차 실습에서 넣어 둔 그 파일이다</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>VSCode + Claude Code 확장 (1주차 2회차에서 설치)</td>
+</tr>
+<tr>
+<td>선수 내용</td>
+<td>3주차 1회차 (다섯 요소, 계획 모드, CLAUDE.md, 검증 내장), 2주차 2회차 (비결정성, 환각 실험)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-같은-과제-다른-지시-나쁜-지시-vs-좋은-지시-비교-실험">2.1 같은 과제, 다른 지시: 나쁜 지시 vs 좋은 지시 비교 실험</h2>
+<p>첫 실험은 통제된 비교다. 같은 데이터, 같은 에이전트, 다른 지시. 과제는 "sigungu_2023.csv에서 합계출산율이 높은 곳과 낮은 곳 파악하기"로 고정한다.</p>
+<p><strong>실험 A. 나쁜 지시.</strong> 새 대화를 열고 다음을 입력한다. 일부러 빈칸투성이로 만든 지시다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시 (나쁜 지시)</strong><br>
+"인구 데이터 분석해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 에이전트는 폴더를 뒤져 파일을 찾고, 무엇을 할지 스스로 정한다. 열 몇 개의 요약을 내놓을 수도 있고, 흥미로운 사실 목록을 만들 수도 있고, 반대로 "어떤 분석을 원하시나요?"라고 되물을 수도 있다. 되묻는 것은 좋은 반응이지만, 어느 쪽이 나올지는 복불복이다. 결과가 무엇이든 지우지 말고 그대로 두라. 비교 자료다.</p>
+<p><strong>실험 B. 좋은 지시.</strong> 대화를 닫고 새 대화를 연 뒤(2주차에서 배웠듯 새 대화는 맥락창이 비워진 상태다), 다섯 요소와 검증 내장을 갖춘 지시를 입력한다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시 (좋은 지시)</strong><br>
+"구청 인구정책팀의 분석 보조로서 일해 줘. data 폴더의 sigungu_2023.csv를 읽고, 합계출산율 상위 5개와 하위 5개 시군구를 찾아 줘. 파일에 있는 값만 사용하고 추측은 하지 마. 합계출산율 값이 비어 있는 시군구가 있으면 몇 곳인지 먼저 보고해 줘. 결과는 시도·시군구·합계출산율 세 열의 마크다운 표 두 개(상위, 하위)와 세 문장 요약으로 대화창에 보여 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 파일을 읽고, 결측(빈 값)을 확인해 보고하고, 표 두 개와 요약을 내놓는다. 실험 A보다 도구 사용 로그가 목적 지향적으로 짧게 정리되는 경우가 많다.</p>
+<p><strong>관찰 과제.</strong> 두 결과를 나란히 놓고 다음 네 기준으로 비교해 메모하라.</p>
+<ol>
+<li><strong>과제 일치.</strong> 내가 원한 것(출산율 상·하위 파악)을 해 주었는가.</li>
+<li><strong>형식.</strong> 결과의 형태를 내가 예측할 수 있었는가.</li>
+<li><strong>근거.</strong> 어떤 파일과 열에서 나온 결과인지 드러나는가.</li>
+<li><strong>함정 처리.</strong> 값이 비어 있는 시군구의 존재를 알려 주었는가.</li>
+</ol>
+<p><strong>검증.</strong> 실험 B의 표를 파일과 직접 대조한다. VSCode 탐색기에서 sigungu_2023.csv를 열고 다음을 확인하라. 미리 계산해 둔 참값은 이렇다. 상위 5곳은 전남 영광군(1.651), 전남 강진군(1.468), 경북 의성군(1.406), 전북 김제시(1.367), 전남 해남군(1.356)이고, 하위 5곳은 부산 중구(0.320), 서울 관악구(0.394), 서울 종로구(0.406), 서울 광진구(0.449), 대구 서구(0.474)다. 그리고 경북 군위군은 합계출산율 칸이 비어 있다(값이 있는 시군구는 229곳 중 228곳). 에이전트의 표가 이와 다르면, 무엇이 왜 다른지 대화로 추궁해 보라.</p>
+<div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>유의 · 에이전트가 틀리는 장면을 놓치지 말 것</strong><br>
+실험 A에서 에이전트가 요약을 내놓으며 "전국 합계출산율은 0.823"이라고 말하는 장면을 볼 수도 있다. 이 숫자는 시군구 228곳(군위군 결측 제외)의 값을 똑같이 하나씩 세어 낸 단순평균이다. 인구가 119만 명인 수원시와 9천 명인 울릉군을 같은 무게로 섞은 값이므로, 인구 규모를 반영해 산출하는 공식 전국 통계와는 다른 숫자다. 계산 자체는 맞지만 이름표("전국 합계출산율")가 틀린, 검증하기 가장 까다로운 유형의 오류다. 이런 장면을 목격했다면 오늘 실습의 가장 값진 수확이니 그대로 기록해 두라. 목격하지 못했더라도, "그 평균은 어떻게 계산한 값인가?"라고 물어 계산 방식을 밝히게 하는 연습을 해 보라.
+</div>
+
+<p>여유가 있으면 한 가지 더. 실험 A의 나쁜 지시를 새 대화에서 한 번 더 입력해 보라. 2주차의 비결정성 실험처럼, 나쁜 지시일수록 두 번의 결과 차이가 크다는 것을 확인할 수 있다.</p>
+<h2 id="22-계획-모드로-복잡한-과제-쪼개기">2.2 계획 모드로 복잡한 과제 쪼개기</h2>
+<p>이번에는 지시 한 번으로 끝나지 않는 큰 과제를 계획 모드로 다루어 본다. 과제는 "내가 고른 시도의 인구 프로필 문서 만들기"다. 1회차 1.3절에서 본 것처럼, 이 안에는 구조 파악·추출·요약·해석·문서화의 여러 단계가 숨어 있다.</p>
+<p>먼저 계획 모드로 전환한다. Claude Code 확장의 지시 입력창 아래에 현재 모드 표시가 있다. 이것을 눌러 계획 모드(Plan mode)를 선택한다. 화면 구성은 버전에 따라 조금 다를 수 있으니, 보이지 않으면 입력창 주변에서 모드 선택 표시를 찾아보라.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"data 폴더의 sigungu_2023.csv를 바탕으로 '강원 인구 프로필'이라는 마크다운 문서를 만들고 싶어. 문서에는 강원 시군구들의 총인구·고령인구비율·합계출산율 현황과, 눈에 띄는 점 세 가지가 들어가야 해. 산출물은 메모 폴더에 저장할 거야. 어떤 단계로 진행할지 계획을 먼저 세워 줘."
+</div>
+
+<p>강원 자리에는 각자 관심 있는 시도를 넣으면 된다(이 데이터의 시도는 17개다).</p>
+<p><strong>예상되는 에이전트의 행동.</strong> 계획 모드이므로 에이전트는 파일을 읽고 조사만 한다. 문서를 바로 만들지 않고, "1단계: 데이터 구조 확인, 2단계: 해당 시도 추출, ..." 같은 계획서를 제시한 뒤 진행 여부를 묻는다. VSCode에서는 계획이 문서 형태로 열려 차분히 읽을 수 있다.</p>
+<p><strong>검토 과제.</strong> 계획서를 받으면 바로 승인하지 말고 다음 세 가지를 따져 보라.</p>
+<ol>
+<li>단계가 빠지지 않았는가. 특히 <strong>검증 단계</strong>(중간 결과를 나에게 보여 주고 확인받는 단계)가 계획에 들어 있는가.</li>
+<li>산출물의 위치와 형식이 내 지시와 일치하는가 (메모 폴더, 마크다운).</li>
+<li>내가 시키지 않은 일(예: 다른 파일 수정)이 끼어 있지 않은가.</li>
+</ol>
+<p><strong>계획 보완 체험.</strong> 검증 단계가 계획에 없다면(없는 경우가 많다), 승인하지 말고 이렇게 되돌려 보내라.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"계획에 한 단계를 추가해 줘. 문서를 쓰기 전에, 추출한 시군구 표를 먼저 대화창에 보여 주고 내 확인을 받은 다음에 문서 작성으로 넘어가."
+</div>
+
+<p>수정된 계획이 오면 승인한다. 승인하면 에이전트가 실행 모드로 전환되어 계획대로 작업한다. 중간에 표를 보여 주며 확인을 구하면, 파일을 직접 열어 시군구 수(강원이라면 18곳)와 값 한두 개를 대조한 뒤 진행시키라.</p>
+<p><strong>검증.</strong> 완성된 문서에 대해 세 가지를 확인한다. (1) 메모 폴더에 마크다운 파일이 실제로 생겼는가. (2) 문서 속 숫자 두 개(예: 시군구 수, 총인구가 가장 많은 시군구)를 sigungu_2023.csv에서 직접 찾아 대조하라. 참고로 강원을 골랐다면 시군구는 18곳, 총인구 1위는 원주시(360,807명)다. (3) "눈에 띄는 점 세 가지"에 근거 숫자가 붙어 있는가. 근거 없는 해석 문장이 있으면 "이 문장의 근거가 파일의 어느 값인지 알려 줘"라고 추궁해 보라.</p>
+<div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>왜 계획서 검토가 "검증의 앞당김"인가?</strong><br>
+지난주까지의 검증은 결과가 나온 뒤에 했다. 계획 모드는 검증의 시점을 실행 앞으로 당긴다. 잘못된 방향(엉뚱한 지표, 엉뚱한 저장 위치)을 파일이 하나도 바뀌기 전에 잡을 수 있고, 계획서에 검증 단계를 심어 두면 실행 중간에도 확인 지점이 생긴다. 분량이 큰 작업일수록 이 관문의 값어치가 커진다. 12주차에 파이프라인 전체를 설계할 때 이 감각을 다시 쓰게 된다.
+</div>
+
+<h2 id="23-내-프로젝트의-CLAUDEmd-작성">2.3 내 프로젝트의 CLAUDE.md 작성</h2>
+<p>오늘 실습에서 여러분은 이미 같은 말을 반복했다. "data 폴더의", "파일에 있는 값만", "메모 폴더에 저장". 이 반복을 CLAUDE.md로 고정할 차례다.</p>
+<p>VSCode 탐색기에서 <code>공공데이터분석</code> 폴더의 맨 위에 새 파일 <code>CLAUDE.md</code>를 만들고(대문자 그대로), 아래 내용을 기초로 작성하라. 그대로 베껴도 되지만, 폴더 구성이나 규칙이 자신의 상황과 다르면 맞게 고쳐야 한다. 에이전트에게 타이핑을 맡겨도 좋으나 내용의 결정은 여러분 몫이다.</p>
+<pre><code class="language-markdown"># 공공데이터분석 프로젝트 규칙
+
+## 프로젝트 소개
+- 이 폴더는 「AI 기반 공공데이터 분석」 수업의 실습 폴더다.
+- 사용자는 프로그래밍을 배우지 않은 행정학과 학부생이다.
+  전문 용어를 쓸 때는 쉬운 한국어 설명을 붙인다.
+
+## 폴더 구조
+- data/: 원본 데이터. 이 폴더의 파일은 절대 수정하거나 삭제하지 않는다.
+- 메모/: 관찰 일지, 실습 기록, 에이전트가 만드는 문서의 저장 위치
+- 새 파일은 시키지 않는 한 만들지 않고, 만들 때는 메모 폴더에 만든다.
+
+## 데이터 설명
+- data/sigungu_2023.csv: 2023년 전국 229개 시군구의 인구 지표.
+  출처는 행정안전부 주민등록인구통계와 국가데이터처 인구동향조사(KOSIS 수집).
+- 이 파일에서 경북 군위군은 합계출산율과 출생아수 값이 비어 있다.
+
+## 작업 규칙
+- 모든 답변과 문서는 한국어로 쓴다.
+- 숫자를 보고할 때는 data 폴더의 파일에서 확인한 값만 쓴다.
+  파일에 없는 숫자를 물으면 추측하지 말고 &quot;파일에 없다&quot;고 답한다.
+- 계산 결과를 보고할 때는 어떤 파일의 어떤 열로 어떻게 계산했는지 밝힌다.
+- 값이 비어 있는 칸을 계산에서 제외했다면 그 사실을 반드시 알린다.
+- 파일 삭제는 어떤 경우에도 실행 전에 사용자에게 확인을 받는다.
+</code></pre>
+<p>내용을 뜯어 보면 1회차에서 배운 것이 그대로 들어 있다. 프로젝트 소개는 역할(의 상대방), 폴더 구조와 데이터 설명은 맥락, 작업 규칙은 제약과 검증 내장(근거 보고, 결측 보고, 모름의 허용)이다. 매번의 지시문에서 반복하던 부분을 프로젝트 수준으로 올려 둔 것이다.</p>
+<p><strong>예상되는 효과와 검증.</strong> CLAUDE.md는 새 대화부터 적용된다. 파일을 저장한 뒤 반드시 새 대화를 열고 두 가지를 시험하라.</p>
+<ol>
+<li><strong>적용 확인.</strong> "이 프로젝트에서 지켜야 할 작업 규칙을 아는 대로 말해 줘"라고 물었을 때, 방금 작성한 규칙들이 답에 나오는가.</li>
+<li><strong>동작 확인.</strong> CLAUDE.md 작성 전에는 길게 지시해야 했던 것을 짧게 시켜 본다. 예를 들어 "sigungu_2023.csv에서 합계출산율 평균을 구해 줘"라고만 입력해 보라. 규칙이 작동한다면, 따로 시키지 않아도 군위군 결측을 언급하고 계산 방식을 밝힐 것이다. 2.1의 실험 A에서 봤던 무단정한 보고와 비교해 보라.</li>
+</ol>
+<p>시험에서 규칙이 지켜지지 않는 항목이 있다면, 해당 문장이 모호하지 않은지 살펴 더 구체적으로 고쳐라. 1회차에서 강조했듯 CLAUDE.md는 참고 맥락이지 강제 장치가 아니므로, 지켜지는 정도를 관찰하며 문장을 다듬는 과정 자체가 지시 설계 연습이다.</p>
+<h2 id="24-나만의-지시문-라이브러리-시작하기">2.4 나만의 지시문 라이브러리 시작하기</h2>
+<p>마지막으로, 오늘 만든 좋은 지시문을 일회용으로 버리지 않기 위한 장치를 만든다. 요리사가 레시피를 모으듯, 분석가는 검증된 지시문을 모은다. 메모 폴더에 <code>지시문라이브러리.md</code>를 만들고 다음 형식으로 시작하라.</p>
+<pre><code class="language-markdown"># 나의 지시문 라이브러리
+
+## 1. CSV에서 상위·하위 찾기
+- 상황: 데이터 파일에서 어떤 지표의 상위·하위 항목을 표로 받고 싶을 때
+- 지시문: &quot;data 폴더의 [파일명]을 읽고, [열 이름] 상위 5개와 하위 5개
+  [단위]를 찾아 줘. 파일에 있는 값만 사용하고, 값이 비어 있는 곳이
+  있으면 몇 곳인지 먼저 보고해 줘. 결과는 마크다운 표와 세 문장
+  요약으로 보여 줘.&quot;
+- 검증 방법: 표의 1위 값을 파일에서 직접 찾아 대조
+- 개선 메모: (다시 써 보고 느낀 점을 적는다)
+
+## 2. 계획 먼저 받기
+- 상황: 단계가 세 개 이상인 문서 작성을 맡길 때
+- 지시문: (계획 모드에서) &quot;[파일명]을 바탕으로 [문서명]을 만들고 싶어.
+  문서에는 [들어갈 내용]이 들어가야 해. 산출물은 [위치]에 저장할 거야.
+  어떤 단계로 진행할지 계획을 먼저 세워 줘.&quot;
+- 검증 방법: 계획서에 검증 단계가 있는지 확인, 없으면 추가 요청
+- 개선 메모:
+</code></pre>
+<p>[대괄호] 부분만 바꾸면 다른 데이터, 다른 과제에 재사용할 수 있는 틀(템플릿)이다. 앞으로 매주 실습에서 잘 작동한 지시문을 하나 이상 이 파일에 추가한다. "개선 메모" 칸이 이 라이브러리의 핵심이다. 같은 지시문을 다시 썼을 때 무엇이 아쉬웠고 어떻게 고쳤는지가 쌓이면, 그것이 곧 여러분의 지시 설계 실력의 기록이 된다.</p>
+<p><strong>검증.</strong> 라이브러리의 1번 지시문을 실제로 재사용해 본다. [열 이름]에 "고령인구비율"을 넣어 새 대화에서 실행해 보라. 상위 1위가 경북 의성군(약 45.3%), 하위 1위가 울산 북구(약 10.7%)로 나오는지 파일과 대조하면 된다. 템플릿이 다른 열에서도 그대로 작동하면 성공이다. 흥미로운 점 하나. 의성군은 고령인구비율이 전국에서 가장 높으면서 합계출산율(1.406)은 상위 3위 안에 든다. 2.1에서 만든 표와 연결해 보면, 하나의 시군구도 지표에 따라 전혀 다른 얼굴을 보인다는 것을 알 수 있다.</p>
+<h2 id="검증-체크리스트">검증 체크리스트</h2>
+<ul>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.1에서 나쁜 지시와 좋은 지시의 결과를 네 기준(과제 일치, 형식, 근거, 함정 처리)으로 비교해 기록했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.1에서 에이전트가 보고한 상위·하위 시군구를 파일을 직접 열어 참값과 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.1에서 군위군의 합계출산율 결측을 에이전트가 알려 줬는지 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.2에서 계획서를 받아 검토했고, 최소 1회 계획 보완을 요청한 뒤 승인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.2에서 완성된 문서의 숫자 두 개를 파일과 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.3에서 CLAUDE.md를 만들었고, 새 대화에서 규칙이 적용되는지 두 가지 시험을 통과했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.4에서 지시문라이브러리.md를 만들었고, 템플릿 하나를 다른 열에 재사용해 보았다</li>
+</ul>
+<h2 id="자주-겪는-문제">자주 겪는 문제</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>나쁜 지시를 줬는데 결과가 꽤 좋다</td>
+<td>에이전트가 빈칸을 운 좋게 내 의도대로 메움</td>
+<td>실험 실패가 아니다. 같은 지시를 새 대화에서 한 번 더 줘 보라. 편차가 드러난다. "한 번 잘 나옴"과 "언제나 잘 나옴"의 차이가 오늘의 학습 목표다</td>
+</tr>
+<tr>
+<td>계획 모드 표시를 못 찾겠다</td>
+<td>확장 버전에 따라 화면 구성이 다름</td>
+<td>입력창 아래나 주변의 모드 표시를 찾아 클릭. 그래도 없으면 확장을 최신으로 업데이트</td>
+</tr>
+<tr>
+<td>계획 모드인데 에이전트가 바로 실행해 버린 것 같다</td>
+<td>계획 모드가 아닌 상태에서 지시함</td>
+<td>입력창의 모드 표시가 계획 모드인지 확인하고 새로 지시. 계획 모드에서는 파일 생성·수정이 일어나지 않는 것이 정상이다</td>
+</tr>
+<tr>
+<td>CLAUDE.md를 만들었는데 적용이 안 된다</td>
+<td>진행 중이던 대화에서 시험함, 또는 파일 위치·이름 문제</td>
+<td>새 대화를 열어야 적용된다. 파일이 프로젝트 폴더 맨 위에 있는지, 이름이 정확히 CLAUDE.md인지 확인</td>
+</tr>
+<tr>
+<td>CLAUDE.md 규칙 중 일부만 지켜진다</td>
+<td>문장이 모호하거나 규칙끼리 충돌</td>
+<td>안 지켜지는 규칙을 더 구체적인 행동 문장으로 고친다 ("데이터를 조심히 다룰 것" 대신 "data 폴더 파일은 수정·삭제하지 않는다")</td>
+</tr>
+<tr>
+<td>에이전트가 결측을 알려 주지 않았다</td>
+<td>지시문이나 CLAUDE.md에 결측 보고 규칙이 없음</td>
+<td>지시문에 "값이 비어 있는 곳이 있으면 먼저 보고해 줘"를 추가. 이 경험 자체를 지시문라이브러리의 개선 메모에 기록</td>
+</tr>
+</tbody>
+</table>
+<h2 id="제출-과제">제출 과제</h2>
+<p><strong>과제 3-A. 비교 실험 보고.</strong> 2.1의 실험 A와 B의 결과를 네 기준으로 비교한 표와, 어느 쪽 지시의 어떤 요소가 어떤 차이를 만들었는지에 대한 자기 분석 반 쪽을 '메모/비교실험_3주차.md'로 제출한다. 평가 기준은 비교의 구체성(결과 원문 인용 포함)과 다섯 요소 개념의 정확한 사용이다.</p>
+<p><strong>과제 3-B. CLAUDE.md와 시험 기록.</strong> 작성한 CLAUDE.md 전문과, 2.3의 두 가지 시험(적용 확인, 동작 확인) 결과 기록을 제출한다. 규칙이 지켜지지 않아 문장을 고친 경우, 고치기 전후의 문장과 결과 변화를 함께 적으면 가산점이 있다.</p>
+<p><strong>과제 3-C. 지시문 라이브러리.</strong> 지시문라이브러리.md를 제출한다. 수업에서 만든 두 개 외에, 자신의 관심사(동아리, 아르바이트, 다른 과목)에서 쓸 법한 지시문 템플릿 한 개를 스스로 설계해 추가할 것. 평가 기준은 다섯 요소의 반영과 검증 방법의 구체성이다.</p><div class="pager"><span><a href="w03-1.html">← 3주차 1회차. 에이전트에게 일 시키는 법: 지시 설계</a></span><span><a href="w04-1.html">4주차 1회차. 분석 환경 이해하기 →</a></span></div></main>
+</body></html>

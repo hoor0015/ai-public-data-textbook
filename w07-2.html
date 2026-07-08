@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7주차 2회차. 에이전트로 데이터 정제하기 - AI 기반 공공데이터 분석</title>
+<style>
+:root { --accent:#2f6fb0; --sidebar-w:320px; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+       color:#1f2328; line-height:1.75; background:#fff; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+nav.sidebar { position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  overflow-y:auto; background:#f7f8fa; border-right:1px solid #e3e6ea; padding:22px 18px; }
+nav.sidebar h1 { font-size:1.02rem; line-height:1.45; margin:0 0 14px;
+  padding-bottom:12px; border-bottom:2px solid var(--accent); }
+nav.sidebar h1 a { color:#1f2328; }
+nav.sidebar ul { list-style:none; margin:0; padding:0; }
+nav.sidebar li.part { margin-top:14px; font-weight:700; font-size:.92rem; color:#57606a; }
+nav.sidebar li.chap { margin:4px 0 0 6px; font-size:.88rem; font-weight:600; }
+nav.sidebar li.sec { margin:2px 0 2px 20px; font-size:.83rem; font-weight:400; }
+nav.sidebar li.cur > a { color:#a33; }
+nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; border-radius:3px;
+  padding:0 5px; margin-right:5px; vertical-align:1px; }
+nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
+nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
+main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
+main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
+main h3 { font-size:1.12rem; margin-top:1.8em; }
+main h4 { font-size:1.0rem; margin-top:1.5em; }
+main img { max-width:100%; display:block; margin:20px auto; border:1px solid #eceef0; border-radius:4px; }
+main table { border-collapse:collapse; margin:18px 0; font-size:.92rem; }
+main th, main td { border:1px solid #d5d9de; padding:6px 12px; }
+main th { background:#f0f3f6; }
+main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
+main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
+  padding:14px 16px; overflow-x:auto; line-height:1.5; }
+main pre code { background:none; padding:0; }
+main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
+  background:#fafbfc; color:#4b5563; }
+main input[type=checkbox] { margin-right:6px; }
+.pager { display:flex; justify-content:space-between; margin-top:56px;
+  padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
+.pager a { max-width:46%; }
+.toc-part { margin-top:26px; font-size:1.1rem; }
+@media (max-width: 900px) {
+  nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
+  main { margin-left:0; padding:24px 20px 60px; }
+}
+</style></head>
+<body>
+<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<li class="part">1부. 에이전트와 도구</li>
+<li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
+<li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
+<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리</a></li>
+<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트가 일하는 모습 관찰하기</a></li>
+<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 에이전트에게 일 시키는 법: 지시 설계</a></li>
+<li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
+<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
+<li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="part">2부. 공공데이터의 수집과 정리</li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
+<li class="chap cur"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="sec"><a href="w07-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
+<li class="sec"><a href="w07-2.html#준비물">준비물</a></li>
+<li class="sec"><a href="w07-2.html#21-정제-전-진단-보고서를-시킨다">2.1 정제 전 진단 보고서를 시킨다</a></li>
+<li class="sec"><a href="w07-2.html#22-결측이상치-처리-지시하고-근거를-기록하게-한다">2.2 결측·이상치 처리: 지시하고, 근거를 기록하게 한다</a></li>
+<li class="sec"><a href="w07-2.html#23-두-데이터-병합하기-2023년-인구--2013년-출산율">2.3 두 데이터 병합하기: 2023년 인구 × 2013년 출산율</a></li>
+<li class="sec"><a href="w07-2.html#24-정제-결과-검증-에이전트를-믿지-말고-표본-대조">2.4 정제 결과 검증: 에이전트를 믿지 말고 표본 대조</a></li>
+<li class="sec"><a href="w07-2.html#25-정제-로그-무엇을-왜-바꿨는지-남기기">2.5 정제 로그: 무엇을 왜 바꿨는지 남기기</a></li>
+<li class="sec"><a href="w07-2.html#검증-체크리스트">검증 체크리스트</a></li>
+<li class="sec"><a href="w07-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
+<li class="sec"><a href="w07-2.html#제출-과제">제출 과제</a></li>
+<li class="sec"><a href="w07-2.html#부록-병합-예제-코드-전문">부록: 병합 예제 코드 전문</a></li>
+<li class="part">3부. 분석과 해석</li>
+<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="part">4부. 종합과 확장</li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+</ul></nav>
+<main><h1>7주차 2회차. 에이전트로 데이터 정제하기</h1>
+<h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
+<p>1회차에서 결측·이상치·자료형·병합 키의 원리를 배웠다. 이번 실습에서는 그 원리를 실제 데이터 두 개에 적용한다. 2023년 시군구 인구 파일과 2013년 시군구 합계출산율 파일을 진단하고, 결측과 이상치를 판단하고, 두 파일을 병합해 "10년 치 출산율 비교"가 가능한 데이터 한 장을 만든다. 이 데이터가 8주차 탐색적 분석의 재료다.</p>
+<p>오늘의 진행 순서는 1회차에서 배운 원칙 그대로다. 진단 없이 치료 없고, 처리에는 근거를 남기고, 결과는 표본으로 대조한다. 특히 오늘은 에이전트가 결측을 그럴듯하게 망치는 장면을 일부러 만들어서 관찰한다. 2주차의 환각 실험이 "묻는 방식"의 실험이었다면, 오늘은 "맡기는 방식"의 실험이다.</p>
+<p>이 실습이 끝나면 다음 산출물이 남는다.</p>
+<ul>
+<li>정제 전 진단 보고서 (<code>진단보고서_7주차.md</code>)</li>
+<li>병합·정제된 데이터 (<code>data/sigungu_tfr_2013_2023.csv</code>, 229행)</li>
+<li>무엇을 왜 바꿨는지 기록한 정제 로그 (<code>정제로그_7주차.md</code>)</li>
+</ul>
+<h2 id="준비물">준비물</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>폴더</td>
+<td>학기 내내 쓰는 <code>공공데이터분석</code> 프로젝트 폴더 (4주차에 uv 환경 구축 완료)</td>
+</tr>
+<tr>
+<td>데이터 1</td>
+<td><code>data/sigungu_2023.csv</code> (2023년 전국 229개 시군구 인구 지표, 출처: 행정안전부 주민등록인구통계·국가데이터처(옛 통계청) 인구동향조사, KOSIS에서 수집)</td>
+</tr>
+<tr>
+<td>데이터 2</td>
+<td><code>data/sigungu_tfr_2013.csv</code> (2013년 시군구 합계출산율, 출처: 국가데이터처 인구동향조사, KOSIS에서 수집)</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>VSCode + Claude Code, pandas (4주차 환경)</td>
+</tr>
+<tr>
+<td>선수 내용</td>
+<td>5주차 2회차(프로파일링), 7주차 1회차(정제의 원리)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-정제-전-진단-보고서를-시킨다">2.1 정제 전 진단 보고서를 시킨다</h2>
+<p><strong>무엇을 왜.</strong> 정제의 첫 단계는 손대는 것이 아니라 파악하는 것이다. 5주차의 프로파일링을 한 단계 확장해서, 이번에는 "정제를 위한" 진단을 시킨다. 차이는 목적에 있다. 5주차에는 데이터가 무엇인지 알기 위해 보았다면, 오늘은 무엇을 고쳐야 하는지 목록을 만들기 위해 본다. 파일이 두 개이므로 병합 가능성 진단(두 파일의 시군구 이름이 서로 맞는지)까지 요구하는 것이 핵심이다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"data 폴더의 sigungu_2023.csv와 sigungu_tfr_2013.csv를 pandas로 읽고, 정제 전 진단 보고서를 '진단보고서_7주차.md'로 만들어 줘. 파일마다 (1) 행 수와 열 수, (2) 열별 자료형, (3) 결측값의 개수와 정확한 위치(어느 시군구의 어느 열인지), (4) 숫자 열의 최소·최대값과 상식에 어긋나는 값 후보를 정리해 줘. 마지막으로 (5) 두 파일을 (시도, 시군구) 기준으로 이어 붙인다고 할 때 한쪽에만 있는 시군구가 있는지 목록으로 보여 줘. 이 단계에서는 데이터를 절대 수정하지 말고 진단만 해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동.</strong> 에이전트가 파이썬 코드를 만들어 실행하고(승인 요청이 올 것이다), 보고서 파일을 생성한다. 보고서에는 대략 다음이 담긴다. 2023년 파일은 229행 12열이고 결측은 2칸(경북 군위군의 합계출산율·출생아수)이다. 2013년 파일은 264행 3열이고 결측이 없다. 그리고 (5)에서 흥미로운 목록이 나온다. 2023년에만 있는 시군구 1곳(인천 미추홀구), 2013년에만 있는 행 36개(수원시 장안구·성남시 분당구 같은 일반구들, 충북 청원군, 세종시, 인천 남구)다.</p>
+<p><strong>검증.</strong> 보고된 결측 위치를 직접 확인한다. VSCode 탐색기에서 <code>sigungu_2023.csv</code>를 클릭해 열고, Ctrl+F로 "군위군"을 찾아 해당 행의 끝부분에 값 두 개가 정말 비어 있는지 본다(쉼표 두 개가 연달아 나오거나 행이 일찍 끝난다). 그리고 "행 수 229"도 대조한다. 파일 맨 아래로 스크롤하면 마지막 행 번호가 230일 것이다(1행은 열 이름이므로 데이터는 229행). 에이전트의 보고서에서 최소 두 항목을 이렇게 원본과 대조하는 습관이 오늘 실습 전체의 바탕이 된다.</p>
+<div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>유의 · "수정하지 말고 진단만"을 명시하는 이유</strong><br>
+에이전트는 친절해서 탈이다. 진단을 시키면 "결측이 있길래 처리해 두었습니다"라며 부탁하지 않은 수정까지 해 버리는 일이 있다. 진단과 치료를 분리하는 것은 의료의 원칙이자 3주차에서 배운 좋은 지시의 원칙(과제의 범위를 명확히)이기도 하다. 지시문 끝의 "절대 수정하지 말고"는 장식이 아니라 안전장치다.
+</div>
+
+<h2 id="22-결측이상치-처리-지시하고-근거를-기록하게-한다">2.2 결측·이상치 처리: 지시하고, 근거를 기록하게 한다</h2>
+<h3>실험: 에이전트가 결측을 망치는 장면을 직접 본다</h3>
+<p><strong>무엇을 왜.</strong> 처리를 지시하기 전에, 1회차 유의 박스에서 경고한 장면을 직접 만들어 본다. 목적은 에이전트를 골탕 먹이는 것이 아니라, 잘못된 위임이 어떤 결과를 낳는지 눈으로 확인해 두는 것이다. 에이전트에게 "결측을 0으로 채우는" 처리를 시키고, 그 결과로 순위가 어떻게 뒤집히는지 본다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"실험을 하나 해 보자. sigungu_2023.csv를 읽어서 합계출산율의 결측값을 0으로 채운 사본을 메모리에서만 만들고(파일 저장은 하지 마), 그 사본 기준으로 합계출산율이 낮은 시군구 5곳을 출력해 줘. 그다음, 결측을 채우지 않은 원본 기준으로도 같은 5곳을 출력해서 두 결과를 비교해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 두 개의 순위표가 나온다. 결측을 0으로 채운 쪽에서는 경북 군위군이 출산율 0.000으로 전국 최저 1위에 오른다. 원본 기준 최저는 부산 중구(0.320)다. 군위군의 출산율은 낮은 것이 아니라 없는 것인데, 0으로 채우는 순간 "전국에서 아이가 가장 안 태어나는 곳"이라는 거짓 사실이 만들어진다. 이 사본이 파일로 저장되어 8주차 분석에 흘러들었다면, 그래프와 보고서까지 오염되었을 것이다. 에이전트는 이 모든 과정에서 한 번도 거짓말을 하지 않았다는 점에 주목하자. 시킨 일을 정확히 했을 뿐이다. 문제는 지시, 곧 위임의 방식에 있었다.</p>
+<p><strong>검증.</strong> 두 순위표에서 군위군의 위치를 확인하고, 관찰한 내용을 한 문장으로 기록해 둔다(2.5의 정제 로그에 "하지 않기로 한 처리"로 남길 것이다).</p>
+<h3>본 처리: 근거를 함께 기록하게 한다</h3>
+<p><strong>무엇을 왜.</strong> 이제 올바른 방식으로 처리를 지시한다. 핵심은 두 가지다. 처리 방법을 에이전트가 아니라 내가 정한다는 것, 그리고 모든 처리에 근거를 함께 기록하게 한다는 것이다. 1회차에서 판단한 대로 군위군의 결측은 보존한다. 이상치 후보는 삭제하지 않고 "조사 목록"으로 만든다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"진단보고서_7주차.md를 바탕으로 다음 방침대로 처리해 줘. (1) 군위군의 합계출산율·출생아수 결측은 채우지 말고 결측 그대로 보존한다. 근거는 '2023년 7월 군위군의 대구 편입으로 인한 집계 공백으로 추정, 실측값이 없으므로 대치 부적절'이라고 기록한다. (2) 합계출산율과 인구증가율에서 박스플롯 기준으로 수염 바깥에 있는 시군구를 찾아서, 삭제하지 말고 '이상치 조사 목록' 표로 만들어 줘. 표에는 시군구, 값, 전국 평균과의 차이, '오류 의심'인지 '실제 값으로 보임'인지에 대한 의견을 넣어 줘. (3) 이 모든 내용을 진단보고서 아래에 '처리 내역' 절로 추가해 줘. 원본 CSV 파일은 수정하지 마."
+</div>
+
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 보고서에 처리 내역 절이 추가된다. 이상치 조사 목록에는 1회차 그림 7-2에서 본 얼굴들이 나타날 것이다. 출산율 상위의 전남 영광군(1.651), 하위의 부산 중구(0.320), 인구증가율 상위의 대구 중구(+11.05%)와 경기 양주시(+10.1%) 등이다. 에이전트가 "실제 값으로 보임"이라는 의견을 붙이더라도 그것은 의견일 뿐이며, 최종 판단(유지·수정·조사)은 여러분의 몫으로 남는다.</p>
+<p><strong>검증.</strong> 이상치 목록에서 한 곳을 골라 KOSIS나 해당 지자체 홈페이지에서 값을 교차 확인해 본다. 예를 들어 "전남 영광군 2023년 합계출산율"을 검색해 파일의 1.651과 비교한다. 교차 확인이 어렵다면 최소한 데이터 안에서의 정합성이라도 본다. 영광군의 출생아수와 인구 규모가 높은 출산율과 어긋나지 않는지 에이전트에게 계산을 시켜 볼 수 있다.</p>
+<h2 id="23-두-데이터-병합하기-2023년-인구--2013년-출산율">2.3 두 데이터 병합하기: 2023년 인구 × 2013년 출산율</h2>
+<p><strong>무엇을 왜.</strong> 오늘의 본 작업이다. 1회차 1.5절에서 원리와 실제 어긋남 사례를 미리 보았으니, 이제 에이전트에게 그 병합을 시킨다. 좋은 병합 지시의 요건은 세 가지다. 키를 명시하고(시도+시군구 두 열), 진단 병합을 먼저 시키고(어디가 안 맞는지 보고받은 뒤 해소 방침을 지시), 안전장치를 요구한다(행 수 검증).</p>
+<p><strong>1단계. 진단 병합.</strong></p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"sigungu_2023.csv와 sigungu_tfr_2013.csv를 병합하려고 해. 먼저 진단부터 하자. 병합 키는 시도와 시군구 두 열의 조합으로 하고(시군구 이름 하나만 쓰면 안 되는 이유는 알고 있어), how='outer'와 indicator=True로 병합해서 (1) 양쪽에서 짝을 찾은 행 수, (2) 2023년 파일에만 있는 시군구 목록, (3) 2013년 파일에만 있는 시군구 목록을 보고해 줘. 아직 아무것도 고치지 말고 결과만 보여 줘."
+</div>
+
+<p><strong>예상되는 결과.</strong> 짝을 찾은 행 228, 2023년에만 1곳(인천 미추홀구), 2013년에만 36행. 1회차 표 7-2에서 본 그대로다.</p>
+<p><strong>2단계. 해소 방침을 지시하고 본 병합.</strong> 진단 결과를 받았으면, 어긋난 것들을 어떻게 다룰지 내가 정해서 지시한다. 이 판단이 사람의 일이라는 것이 오늘의 요지다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"진단 결과를 바탕으로 다음 방침대로 본 병합을 해 줘. (1) 2013년 데이터에서 '인천 남구'는 2018년에 미추홀구로 이름이 바뀐 같은 지역이므로, 시군구 이름을 '미추홀구'로 바꿔서 짝을 살려 줘. (2) 2013년에만 있는 일반구 행들(장안구, 분당구, 진해구 등)은 시 단위 행이 양쪽에 다 있으므로 병합에서 제외되어도 그대로 둬. (3) 충북 청원군은 2014년 청주시 통합으로 소멸했으므로 짝 없음이 정상이라고 기록해 줘. (4) 2023년 파일의 229개 시군구를 기준으로 왼쪽 병합(how='left')을 하되, validate='one_to_one'을 반드시 넣어 줘. (5) 병합 결과의 행 수가 정확히 229인지, 2013년 출산율이 붙지 않은 시군구가 몇 곳인지 검증해서 보고해 줘. (6) 결과를 data/sigungu_tfr_2013_2023.csv로 저장하고, 전체 코드를 code 폴더에 ch07_merge.py로 저장해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 에이전트가 코드를 작성·실행하고 다음을 보고한다. 병합 결과는 229행이고, 미추홀구 수정 덕분에 229곳 모두 2013년 출산율이 붙었다. 다만 군위군은 2023년 쪽 출산율이 결측이므로 10년 비교가 가능한 시군구는 사실상 228곳이다. 참고로 이 교재의 <code>code/ch07_merge.py</code>가 바로 이 작업의 완성본이며, 전문이 이 장의 부록에 있다. 에이전트가 만든 코드와 비교해 보면 좋다.</p>
+<p><strong>검증.</strong> 세 가지를 본다. 첫째, 행 수. <code>sigungu_tfr_2013_2023.csv</code>를 열어 데이터가 229행인지 확인한다(1회차에서 배운 병합 검증의 제1규칙). 둘째, 새 열. 오른쪽 끝에 <code>합계출산율_2013</code> 열이 생겼는지 본다. 셋째, 청주시 문제. 병합은 성공했지만 2013년의 청주시 값(1.341)은 통합 전 옛 청주시의 값이라는 점을 에이전트가 스스로 언급했는지 확인한다. 언급하지 않았다면 "2013년과 2023년의 청주시는 관할 범위가 같은가?"라고 물어보라. 이름이 맞으면 만족하는 기계와 실체를 묻는 사람의 차이가 여기서 갈린다.</p>
+<h2 id="24-정제-결과-검증-에이전트를-믿지-말고-표본-대조">2.4 정제 결과 검증: 에이전트를 믿지 말고 표본 대조</h2>
+<p><strong>무엇을 왜.</strong> 병합이 "성공했다"는 보고와 병합이 "옳다"는 것은 다르다. 행 수가 맞아도 값이 엉뚱한 행에 붙었을 수 있다. 최종 확인은 표본 대조다. 몇 개 시군구를 골라, 병합 결과의 값이 원본 두 파일의 값과 정확히 일치하는지 사람이 직접 본다. 13주차에 배울 "숫자 삼중 대조"의 예행연습이기도 하다.</p>
+<p>표본은 아무렇게나 고르지 않는다. 병합이 틀렸다면 티가 날 만한 곳, 곧 이번 병합에서 문제가 있었던 지점을 포함해 고른다.</p>
+<ul>
+<li><strong>평범한 표본 1곳.</strong> 예: 서울 종로구. 아무 문제 없이 붙었어야 정상.</li>
+<li><strong>이름이 바뀐 곳.</strong> 인천 미추홀구. 2013년 값이 "남구" 행에서 제대로 왔는지.</li>
+<li><strong>동명이인.</strong> 강원 고성군과 경남 고성군. 서로 값이 바뀌지 않았는지.</li>
+</ul>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"sigungu_tfr_2013_2023.csv에서 서울 종로구, 인천 미추홀구, 강원 고성군, 경남 고성군 네 행의 합계출산율(2023)과 합계출산율_2013 값을 표로 출력해 줘. 계산하지 말고 파일에 있는 값 그대로."
+</div>
+
+<p><strong>검증 (여기가 사람의 일이다).</strong> 에이전트가 출력한 표를 옆에 띄워 놓고, 원본 두 파일을 VSCode에서 직접 열어 Ctrl+F로 네 지역을 찾아 값을 손으로 대조한다. 맞아야 할 값은 다음과 같다 (실제 파일에서 확인한 값이다).</p>
+<p><strong>표 7-3. 표본 대조표 (원본 파일 기준 정답)</strong></p>
+<table>
+<thead>
+<tr>
+<th>시도</th>
+<th>시군구</th>
+<th>2013년 출산율 (원본: tfr_2013)</th>
+<th>2023년 출산율 (원본: 2023)</th>
+<th>대조 포인트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>서울</td>
+<td>종로구</td>
+<td>0.729</td>
+<td>0.406</td>
+<td>평범한 표본</td>
+</tr>
+<tr>
+<td>인천</td>
+<td>미추홀구</td>
+<td>1.107 (원본에는 "남구" 행)</td>
+<td>0.659</td>
+<td>명칭 변경이 제대로 이어졌나</td>
+</tr>
+<tr>
+<td>강원</td>
+<td>고성군</td>
+<td>1.309</td>
+<td>0.870</td>
+<td>경남 고성군과 안 바뀌었나</td>
+</tr>
+<tr>
+<td>경남</td>
+<td>고성군</td>
+<td>1.422</td>
+<td>0.619</td>
+<td>강원 고성군과 안 바뀌었나</td>
+</tr>
+</tbody>
+</table>
+<p>네 곳이 모두 일치하면 병합의 구조가 건강하다고 볼 수 있다. 하나라도 어긋나면 병합 키 처리에 문제가 있는 것이므로, 2.3으로 돌아가 원인을 찾는다. 특히 두 고성군의 값이 서로 바뀌어 있다면 키에서 시도가 빠졌다는 결정적 증거다.</p>
+<p>대조를 마쳤으면 마지막으로 가벼운 맛보기 분석을 한 번 시켜 보자. "228곳 중 2013년보다 2023년 출산율이 오른 시군구가 몇 곳인지 세어 줘"라고 지시하면, 인천 강화군, 전남 영광군, 경북 의성군, 전북 김제시 단 4곳이라는 답이 나온다(실제 실행 결과다). 나머지 224곳은 내렸다. 과장의 질문("오른 곳도 있는지")에 대한 답이 벌써 나왔다. 이 발견을 제대로 그림으로 탐색하는 것이 8주차다.</p>
+<h2 id="25-정제-로그-무엇을-왜-바꿨는지-남기기">2.5 정제 로그: 무엇을 왜 바꿨는지 남기기</h2>
+<p><strong>무엇을 왜.</strong> 오늘 우리는 데이터에 여러 번 손을 댔다. 반년 뒤의 나, 혹은 내 분석을 검토하는 다른 사람이 "왜 군위군만 출산율이 비어 있죠?", "왜 청원군이 없죠?"라고 물으면 답할 수 있어야 한다. 그 답을 담는 문서가 정제 로그다. 공공부문에서 데이터 근거를 요구받는 일은 흔하며, 정제 로그는 분석의 신뢰성을 지키는 최소한의 문서다. 좋은 소식은 이 기록을 에이전트가 아주 잘 쓴다는 것이다. 오늘 대화에 모든 재료가 있기 때문이다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"오늘 이 대화에서 한 정제 작업 전체를 '정제로그_7주차.md'로 정리해 줘. 표 형식으로 (1) 처리 대상(파일·열·행), (2) 무엇을 했는지, (3) 왜 그렇게 판단했는지 근거, (4) 하지 않기로 한 처리와 그 이유(예: 결측을 0으로 채우지 않은 이유, 이상치를 삭제하지 않은 이유)를 담아 줘. 마지막에 '원본 파일은 수정하지 않았고 산출물은 별도 파일로 저장했다'는 사실도 명시해 줘."
+</div>
+
+<p><strong>예상되는 결과.</strong> 군위군 결측 보존(근거: 대구 편입에 따른 집계 공백), 인천 남구 → 미추홀구 이름 통일(근거: 2018년 명칭 변경), 청원군 짝 없음 기록(근거: 2014년 통합 소멸), 일반구 33행 제외(근거: 시 단위 중복), 이상치 조사 목록 유지(근거: 실제 값 가능성) 등이 표로 정리된다.</p>
+<p><strong>검증.</strong> 로그의 각 행이 "무엇을"만이 아니라 "왜"를 담고 있는지 확인한다. "결측 처리함" 같은 행은 낙제다. "군위군 출산율 결측을 보존함. 실측값이 존재하지 않아 어떤 대치도 창작이 되기 때문"이라야 합격이다. 그리고 원본 파일이 정말 수정되지 않았는지 파일 수정 날짜로 확인한다.</p>
+<div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>왜 정제 규칙을 CLAUDE.md에 올려 두는가?</strong><br>
+오늘 세운 원칙들(원본은 수정하지 않는다, 결측은 임의로 채우지 않고 보고한다, 병합에는 행 수 검증을 넣는다, 모든 처리는 로그로 남긴다)은 이번 주만의 규칙이 아니라 학기 내내, 그리고 실무에서도 유효한 규칙이다. 3주차에서 배운 대로, 매번 지시문에 반복해 쓰는 대신 프로젝트의 CLAUDE.md에 "데이터 정제 규칙" 절로 박아 두자. 그러면 다음에 깜빡 잊고 "결측 처리해 줘"라고 대충 지시해도, 에이전트가 규칙을 먼저 확인하고 임의로 채우는 대신 물어 온다. 규칙의 영구 고정이야말로 오늘 실험(2.2)의 재발 방지책이다.
+</div>
+
+<h2 id="검증-체크리스트">검증 체크리스트</h2>
+<ul>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 진단 보고서의 수치 두 개 이상(행 수, 결측 위치)을 원본 CSV를 직접 열어 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.2의 실험에서 결측을 0으로 채웠을 때 군위군이 "전국 최저"로 둔갑하는 것을 확인하고 기록했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 결측·이상치 처리에 대해 에이전트가 아니라 내가 방침을 정해 지시했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 병합 결과가 정확히 229행임을 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 표본 대조 4곳(종로구, 미추홀구, 두 고성군)이 원본 값과 모두 일치했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 정제로그_7주차.md의 모든 항목에 "왜"가 적혀 있다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 원본 CSV 두 개는 수정되지 않았다</li>
+</ul>
+<h2 id="자주-겪는-문제">자주 겪는 문제</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>병합 결과가 229행보다 훨씬 많다</td>
+<td>병합 키를 시군구 이름 하나로만 잡아 동명이인(중구 6곳 등)이 뒤엉킴</td>
+<td>키를 (시도, 시군구) 조합으로 지시하고, validate='one_to_one'을 요구</td>
+</tr>
+<tr>
+<td>에이전트가 진단 단계에서 결측을 미리 채워 버렸다</td>
+<td>지시에 "수정하지 말고 진단만"을 안 넣음</td>
+<td>원본을 다시 읽게 하고, 진단과 처리를 분리해 다시 지시. CLAUDE.md에 규칙으로 고정</td>
+</tr>
+<tr>
+<td>미추홀구를 살리려고 2023년 파일의 이름을 "남구"로 바꿨다</td>
+<td>수정 방향의 판단을 에이전트에 맡김</td>
+<td>병합은 되지만 결과물이 옛 이름이 되어 버린다. 현재 명칭(미추홀구) 기준으로 통일하도록 다시 지시</td>
+</tr>
+<tr>
+<td>합계출산율_2013 열이 전부 결측이다</td>
+<td>시도 표기 불일치(예: "강원" vs "강원도") 등으로 짝이 하나도 안 맞음</td>
+<td>진단 병합(indicator=True)으로 돌아가 양쪽 키 값의 표기를 대조</td>
+</tr>
+<tr>
+<td>CSV의 한글이 깨져 보인다</td>
+<td>인코딩 문제 (2주차에서 경험)</td>
+<td>에이전트에게 인코딩 확인과 UTF-8 변환 사본 생성을 지시</td>
+</tr>
+<tr>
+<td>에이전트가 청원군을 오타로 판단해 "청주시로 고쳐서" 짝을 만들었다</td>
+<td>행정구역 연혁을 모른 채 이름 유사도로 추측</td>
+<td>그럴듯하지만 틀린 판단의 전형. 청원군은 2014년 통합으로 소멸한 별개 행정구역이었다. 짝 없음이 정답이므로 되돌리게 하고 로그에 기록</td>
+</tr>
+</tbody>
+</table>
+<h2 id="제출-과제">제출 과제</h2>
+<p><strong>과제 7-A. 정제 패키지.</strong> 다음 세 파일을 제출한다. (1) 진단보고서_7주차.md, (2) sigungu_tfr_2013_2023.csv, (3) 정제로그_7주차.md. 평가 기준은 병합의 정확성(행 수와 표본 대조)과 로그의 "왜" 항목의 충실성이다.</p>
+<p><strong>과제 7-B. 내 데이터 진단.</strong> 5주차에 정한 학기 프로젝트 데이터에 오늘의 2.1(진단 보고서)을 그대로 적용한다. 결측·이상치·자료형 문제·병합 키 후보를 정리하고, 다음 주까지 처리 방침(무엇을 보존하고 무엇을 고칠지)을 각 항목당 한 문장의 근거와 함께 제출한다. 발견된 문제가 하나도 없다면 "왜 이 데이터는 깨끗한가"(가공된 통계인지, 원천 행정데이터인지)를 추정해 제출해도 된다.</p>
+<h2 id="부록-병합-예제-코드-전문">부록: 병합 예제 코드 전문</h2>
+<p>아래는 2.3의 병합 작업을 담은 <code>code/ch07_merge.py</code>의 전문이다. 학생이 이 코드를 작성할 필요는 없다. 다만 에이전트가 만든 코드가 이런 얼개(진단 병합 → 불일치 해소 → 안전장치를 건 본 병합 → 검증 → 저장)를 갖추었는지 알아보는 눈은 길러 두자.</p>
+<pre><code class="language-python"># 7주차 병합 예제: 2023년 시군구 인구 데이터와 2013년 합계출산율 데이터 병합
+from pathlib import Path
+
+import pandas as pd
+
+DATA = Path(__file__).resolve().parent.parent / &quot;data&quot;
+
+# 1. 읽기
+d2023 = pd.read_csv(DATA / &quot;sigungu_2023.csv&quot;)      # 229행
+d2013 = pd.read_csv(DATA / &quot;sigungu_tfr_2013.csv&quot;)  # 264행
+
+# 2. 진단 병합: 어디가 안 맞는지부터 확인한다
+diag = d2023.merge(d2013, on=[&quot;시도&quot;, &quot;시군구&quot;], how=&quot;outer&quot;, indicator=True)
+print(diag[&quot;_merge&quot;].value_counts())          # both 228 / right_only 36 / left_only 1
+print(diag.loc[diag[&quot;_merge&quot;] == &quot;left_only&quot;, [&quot;시도&quot;, &quot;시군구&quot;]])   # 인천 미추홀구
+print(diag.loc[diag[&quot;_merge&quot;] == &quot;right_only&quot;, [&quot;시도&quot;, &quot;시군구&quot;]])  # 일반구 33곳 등
+
+# 3. 불일치 해소: 인천 남구 -&gt; 미추홀구 (2018년 명칭 변경, 같은 지역)
+d2013_fix = d2013.copy()
+mask = (d2013_fix[&quot;시도&quot;] == &quot;인천&quot;) &amp; (d2013_fix[&quot;시군구&quot;] == &quot;남구&quot;)
+d2013_fix.loc[mask, &quot;시군구&quot;] = &quot;미추홀구&quot;
+
+# 4. 본 병합: 2023년 229곳 기준. validate가 1대1 대응을 강제한다
+merged = d2023.merge(d2013_fix, on=[&quot;시도&quot;, &quot;시군구&quot;], how=&quot;left&quot;,
+                     validate=&quot;one_to_one&quot;)
+
+# 5. 검증: 행 수가 기준 데이터와 같아야 한다
+assert len(merged) == len(d2023), &quot;병합 후 행 수가 달라졌다&quot;
+print(&quot;2013년 값이 안 붙은 곳:&quot;, merged[&quot;합계출산율_2013&quot;].isna().sum())  # 0곳
+
+# 6. 저장
+merged.to_csv(DATA / &quot;sigungu_tfr_2013_2023.csv&quot;, index=False,
+              encoding=&quot;utf-8-sig&quot;)
+</code></pre>
+<p>코드에서 눈여겨볼 곳은 세 군데다. <code>indicator=True</code>(진단 병합의 눈), <code>validate="one_to_one"</code>(동명이인 사고를 멈추는 안전장치), 그리고 <code>assert</code>(행 수 검증). 이 세 가지가 없는 병합 코드를 에이전트가 가져오면, 넣어 달라고 요구할 줄 아는 것이 오늘 배운 검증 감각이다.</p><div class="pager"><span><a href="w07-1.html">← 7주차 1회차. 데이터 정제: 지저분한 현실 다루기</a></span><span><a href="w08-1.html">8주차 1회차. 탐색적 데이터 분석과 시각화 →</a></span></div></main>
+</body></html>
