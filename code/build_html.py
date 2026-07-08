@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""26개 장 Markdown을 SNU 강의노트 형식의 HTML 웹교재로 빌드.
+"""26개 장 Markdown을 Kwangwoon University 강의 교재 웹사이트(HTML)로 빌드.
 통계학입문책 code/build_html.py를 계승, 4부·13주 구조로 확장.
 출력: 교재 루트의 index.html, w01-1.html - w13-2.html
 (figures/ 상대경로가 그대로 작동하도록 루트에 출력)
@@ -181,7 +181,7 @@ toc_html = [
     f"<h1>{BOOK_TITLE}</h1>",
     f"<p><strong>{BOOK_SUBTITLE}.</strong> "
     "이미 만들어진 AI 에이전트(VSCode + Claude Code)를 활용해 한국 공공데이터를 분석하는 "
-    "학부 교재입니다. 13개 주차가 각각 이론(1회차)과 실습(2회차)으로 나뉘며, "
+    "Kwangwoon University 강의 교재입니다. 13개 주차가 각각 이론(1회차)과 실습(2회차)으로 나뉘며, "
     "학생의 역할은 코딩이 아니라 에이전트에 대한 지시, 결과의 검증, 정책적 해석입니다. "
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
 ]
