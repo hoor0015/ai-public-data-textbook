@@ -9,7 +9,7 @@ VSCode + Claude Code 조합으로 AI 에이전트를 활용해 한국 공공데�
 
 ## 웹교재 (HTML)
 
-SNU 강의노트 형식의 웹교재로 빌드되어 있다. [index.html](index.html)을 브라우저로 열면 4부·13주 목차와 사이드바 내비게이션(이론/실습 태그, 현재 장의 절 목록 펼침)으로 26개 장을 읽을 수 있다. 본문(md)을 고친 뒤 `code/build_html.py`를 실행하면 다시 빌드된다 (index.html + w01-1.html - w13-2.html, 앞뒤 장 이동 링크 포함).
+SNU 강의노트 형식의 웹교재로 빌드되어 있으며, GitHub Pages로 게시된다: https://hoor0015.github.io/ai-public-data-textbook/ (main에 푸시하면 자동 재배포). [index.html](index.html)을 브라우저로 열면 4부·13주 목차와 사이드바 내비게이션(이론/실습 태그, 현재 장의 절 목록 펼침)으로 26개 장을 읽을 수 있다. 본문(md)을 고친 뒤 `code/build_html.py`를 실행하면 다시 빌드된다 (index.html + w01-1.html - w13-2.html, 앞뒤 장 이동 링크 포함).
 
 ## 진행 현황: 26개 장 전체 완성 (그림 46개, 전 장 검수 통과)
 
