@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12주차 2회차. 전 과정 파이프라인 구축하기 - AI 기반 공공데이터 분석</title>
+<style>
+:root { --accent:#2f6fb0; --sidebar-w:320px; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+       color:#1f2328; line-height:1.75; background:#fff; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+nav.sidebar { position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  overflow-y:auto; background:#f7f8fa; border-right:1px solid #e3e6ea; padding:22px 18px; }
+nav.sidebar h1 { font-size:1.02rem; line-height:1.45; margin:0 0 14px;
+  padding-bottom:12px; border-bottom:2px solid var(--accent); }
+nav.sidebar h1 a { color:#1f2328; }
+nav.sidebar ul { list-style:none; margin:0; padding:0; }
+nav.sidebar li.part { margin-top:14px; font-weight:700; font-size:.92rem; color:#57606a; }
+nav.sidebar li.chap { margin:4px 0 0 6px; font-size:.88rem; font-weight:600; }
+nav.sidebar li.sec { margin:2px 0 2px 20px; font-size:.83rem; font-weight:400; }
+nav.sidebar li.cur > a { color:#a33; }
+nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; border-radius:3px;
+  padding:0 5px; margin-right:5px; vertical-align:1px; }
+nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
+nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
+main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
+main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
+main h3 { font-size:1.12rem; margin-top:1.8em; }
+main h4 { font-size:1.0rem; margin-top:1.5em; }
+main img { max-width:100%; display:block; margin:20px auto; border:1px solid #eceef0; border-radius:4px; }
+main table { border-collapse:collapse; margin:18px 0; font-size:.92rem; }
+main th, main td { border:1px solid #d5d9de; padding:6px 12px; }
+main th { background:#f0f3f6; }
+main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
+main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
+  padding:14px 16px; overflow-x:auto; line-height:1.5; }
+main pre code { background:none; padding:0; }
+main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
+  background:#fafbfc; color:#4b5563; }
+main input[type=checkbox] { margin-right:6px; }
+.pager { display:flex; justify-content:space-between; margin-top:56px;
+  padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
+.pager a { max-width:46%; }
+.toc-part { margin-top:26px; font-size:1.1rem; }
+@media (max-width: 900px) {
+  nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
+  main { margin-left:0; padding:24px 20px 60px; }
+}
+</style></head>
+<body>
+<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<li class="part">1부. 에이전트와 도구</li>
+<li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
+<li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
+<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리</a></li>
+<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트가 일하는 모습 관찰하기</a></li>
+<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 에이전트에게 일 시키는 법: 지시 설계</a></li>
+<li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
+<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
+<li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="part">2부. 공공데이터의 수집과 정리</li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
+<li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="part">3부. 분석과 해석</li>
+<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="part">4부. 종합과 확장</li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap cur"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
+<li class="sec"><a href="w12-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
+<li class="sec"><a href="w12-2.html#준비물">준비물</a></li>
+<li class="sec"><a href="w12-2.html#21-파이프라인-설계하기-단계-정의서-작성">2.1 파이프라인 설계하기: 단계 정의서 작성</a></li>
+<li class="sec"><a href="w12-2.html#22-서브에이전트에게-단계-분업시키기">2.2 서브에이전트에게 단계 분업시키기</a></li>
+<li class="sec"><a href="w12-2.html#23-산출물-통합과-단계별-검증-검문소-운영">2.3 산출물 통합과 단계별 검증: 검문소 운영</a></li>
+<li class="sec"><a href="w12-2.html#24-재현성-테스트-처음부터-다시-돌려도-같은-결과인가">2.4 재현성 테스트: 처음부터 다시 돌려도 같은 결과인가</a></li>
+<li class="sec"><a href="w12-2.html#검증-체크리스트">검증 체크리스트</a></li>
+<li class="sec"><a href="w12-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
+<li class="sec"><a href="w12-2.html#제출-과제">제출 과제</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+</ul></nav>
+<main><h1>12주차 2회차. 전 과정 파이프라인 구축하기</h1>
+<h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
+<p>1회차에서 서브에이전트, 파이프라인, 검문소를 개념으로 배웠다. 오늘은 그것을 전부 실행한다. 6주차에 수집해 둔 시군구 데이터에서 출발해, 정제·병합(7주차) → 통계 분석(9주차) → 시각화(8주차) → 요약 보고까지를 <strong>하나의 지시</strong>로 묶어 에이전트 팀에게 맡기고, 단계마다 검문소에서 직접 확인한다. 마지막에는 빈 폴더에 데이터와 지시문만 복사해 처음부터 다시 돌리는 재현성 테스트로 마무리한다. 지난 몇 주 동안 따로따로 배운 기술이 한 줄로 꿰어지는 날이다.</p>
+<p>이 실습이 끝나면 다음 산출물이 폴더에 남는다.</p>
+<ul>
+<li><code>파이프라인.md</code>: 단계 정의서 (입력·처리·출력·검문 항목)</li>
+<li><code>지시문_파이프라인.md</code>: 전 과정을 한 번에 시키는 완결된 지시문</li>
+<li><code>output/</code> 폴더: 병합 데이터, 분석 결과표, 그림, 요약 보고서</li>
+<li><code>재현성테스트.md</code>: 두 번 실행한 결과가 같았는지의 기록</li>
+</ul>
+<p>이 산출물 묶음이 그대로 13주차 최종 보고서의 재료이자 재현 패키지의 뼈대가 된다.</p>
+<h2 id="준비물">준비물</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>폴더</td>
+<td>학기 프로젝트 폴더 <code>공공데이터분석</code></td>
+</tr>
+<tr>
+<td>데이터</td>
+<td><code>data/sigungu_2023.csv</code> (229개 시군구 인구·출산 지표, 출처: 행정안전부 주민등록인구통계·국가데이터처(옛 통계청) 인구동향조사, KOSIS 수집), <code>data/sigungu_tfr_2013.csv</code> (2013년 시군구 합계출산율, 같은 출처)</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>VSCode + Claude Code, uv 파이썬 환경 (4주차에 구축한 것)</td>
+</tr>
+<tr>
+<td>선수 내용</td>
+<td>12주차 1회차 (서브에이전트, 파이프라인, 검문소), 7주차 (병합), 8주차 (시각화), 9주차 (회귀)</td>
+</tr>
+</tbody>
+</table>
+<p>오늘의 공통 예제는 "지난 10년 사이 시군구 출산율은 어떻게 변했고, 고령화와 어떤 관계가 있는가"라는 질문이다. 두 데이터 파일은 이미 확보되어 있으므로 수집 단계는 확인만 하고 지나간다. 실습은 이 공통 예제로 진행하고, 제출 과제에서 같은 절차를 자기 프로젝트 데이터에 적용한다.</p>
+<h2 id="21-파이프라인-설계하기-단계-정의서-작성">2.1 파이프라인 설계하기: 단계 정의서 작성</h2>
+<p><strong>(a) 무엇을 왜 하는가.</strong> 팀을 부리려면 조직도가 먼저다. 에이전트에게 지시를 던지기 전에, 무엇을 몇 단계로 나누고 각 단계가 무엇을 받아 무엇을 내놓는지를 사람이 먼저 정한다. 이것이 1회차 표 12-1에서 본 단계 정의서다. 프로젝트 폴더에 <code>파이프라인.md</code> 파일을 만들고 아래 내용을 직접 작성하라. (타자가 힘들면 에이전트에게 틀을 만들게 해도 좋지만, 각 칸의 내용은 자기 판단으로 채운다.)</p>
+<p><strong>표 12-3. 오늘 실습의 단계 정의서 (<code>파이프라인.md</code>에 옮겨 적을 내용)</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>입력</th>
+<th>처리</th>
+<th>출력</th>
+<th>검문 항목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 수집 확인</td>
+<td><code>data/</code>의 CSV 2개</td>
+<td>파일 존재·행 수·열 목록 확인</td>
+<td>확인 보고</td>
+<td>2023년 229행, 2013년 264행이 맞는가</td>
+</tr>
+<tr>
+<td>② 정제·병합</td>
+<td>①의 CSV 2개</td>
+<td>시도·시군구 키로 병합, 결측 처리, 탈락 행 보고</td>
+<td><code>output/merged.csv</code>, <code>output/정제로그.md</code></td>
+<td>2023년 229개 시군구 중 몇 개가 살아남았나, 탈락은 왜인가</td>
+</tr>
+<tr>
+<td>③ 분석</td>
+<td><code>output/merged.csv</code></td>
+<td>수도권 vs 비수도권 비교, 고령인구비율과 출산율의 회귀</td>
+<td><code>output/analysis.md</code></td>
+<td>대표 수치 하나를 손으로 재검산</td>
+</tr>
+<tr>
+<td>④ 시각화</td>
+<td><code>output/merged.csv</code>, ③의 결과</td>
+<td>산점도+회귀선, 2013 대비 2023 변화 그림</td>
+<td><code>output/fig_scatter.png</code>, <code>output/fig_change.png</code></td>
+<td>그림의 값이 결과표와 일치하는가</td>
+</tr>
+<tr>
+<td>⑤ 보고</td>
+<td>②③④의 산출물</td>
+<td>개요·방법·결과·한계를 한 쪽으로 요약</td>
+<td><code>output/report.md</code></td>
+<td>보고서의 모든 숫자가 산출물에서 나왔는가</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(b) 지시문 예시.</strong> 정의서를 다 썼으면, 실행 전에 에이전트에게 설계 검토를 시킨다. 3주차에 배운 계획 모드의 응용이다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"파이프라인.md를 읽고 이 단계 정의서를 점검해 줘. 아직 아무것도 실행하지는 마. (1) 각 단계의 입력이 앞 단계의 출력과 정확히 이어지는지, (2) 출력 파일명이 서로 겹치거나 빠진 것이 없는지, (3) 이 데이터로 실행할 때 미리 예상되는 문제(병합 키, 결측, 인코딩 등)가 있는지 검토 의견만 말해 줘."
+</div>
+
+<p><strong>(c) 예상되는 에이전트의 행동.</strong> 에이전트가 <code>파이프라인.md</code>와 두 데이터 파일의 머리 부분을 읽고 검토 의견을 낸다. 두 파일의 행 수가 다르다는 점(229 대 264)을 지적하며 "병합에서 짝을 찾지 못하는 행이 생길 수 있다"고 예고할 가능성이 높다. 2013년 파일에는 큰 시의 일반구(예: 분당구, 덕양구) 단위 행이 들어 있어 행 수가 더 많다.</p>
+<p><strong>(d) 검증.</strong> 에이전트의 검토 의견 중 "예상되는 문제"를 정의서의 검문 항목과 대조하라. 정의서에 없던 위험을 에이전트가 짚었다면 검문 항목에 추가한다. 설계 단계에서 검문소를 보강하는 것이 실행 후에 사고를 수습하는 것보다 훨씬 싸다.</p>
+<h2 id="22-서브에이전트에게-단계-분업시키기">2.2 서브에이전트에게 단계 분업시키기</h2>
+<p><strong>(a) 무엇을 왜 하는가.</strong> 이제 파이프라인 전체를 하나의 지시로 묶어 실행한다. 지시문의 뼈대는 세 가지다. 단계를 서브에이전트에게 나눠 맡길 것, 단계 사이는 파일로 이을 것, 그리고 단계가 끝날 때마다 멈춰서 사람의 확인을 받을 것. 아래 지시문은 그대로 입력할 수 있는 완결된 형태다. 먼저 프로젝트 폴더에 <code>지시문_파이프라인.md</code>라는 파일로 저장해 두고, 그 내용을 대화창에 붙여 넣어 실행하라. 파일로 남겨 두는 이유는 2.4의 재현성 테스트에서 똑같은 지시문이 다시 필요하기 때문이다.</p>
+<p><strong>(b) 지시문 예시.</strong></p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시 (전 과정 파이프라인. `지시문_파이프라인.md`로 저장해 둘 것)</strong><br>
+"시군구 출산율 분석 파이프라인을 실행해 줘. 각 단계는 가능하면 별도의 서브에이전트에게 나눠 맡기고, 아래 공통 규칙을 지켜 줘.<br><br>
+[공통 규칙]<br>
+1. 모든 산출물은 output 폴더에 파일로 저장한다.<br>
+2. 각 단계의 입력은 반드시 앞 단계의 출력 파일만 사용한다.<br>
+3. 한 단계가 끝날 때마다 다음 단계로 넘어가지 말고 멈춰서, 산출물 파일명과 내가 확인해야 할 핵심 수치를 보고한 뒤 내 승인을 기다린다.<br>
+4. 그림의 한글은 koreanize_matplotlib로 처리하고, 모든 그림은 dpi 150의 PNG로 저장한다.<br><br>
+[단계]<br>
+① 수집 확인: data/sigungu_2023.csv와 data/sigungu_tfr_2013.csv를 열어 행 수와 열 목록을 보고해 줘. 데이터는 이미 확보되어 있으므로 새로 수집하지 마.<br>
+② 정제·병합: 두 파일을 시도와 시군구를 키로 병합해 output/merged.csv로 저장해 줘. 병합에서 짝을 찾지 못한 행은 마음대로 버리지 말고, 어느 쪽 파일의 어떤 행이 짝을 못 찾았는지 전부 목록으로 보고해 줘. 결측값은 삭제하지 말고 그대로 두되 개수를 보고해 줘. 무엇을 어떻게 처리했는지 output/정제로그.md에 기록해 줘.<br>
+③ 분석: output/merged.csv만 사용해서, (가) 수도권(서울·경기·인천)과 비수도권의 2023년 합계출산율 평균을 비교하고, (나) 고령인구비율을 설명변수, 2023년 합계출산율을 반응변수로 하는 단순회귀를 실행해 줘. 사용한 관측치 수, 기울기, p값, R제곱을 포함한 결과표를 output/analysis.md로 저장해 줘. 해석 문장은 상관과 인과를 구분해서 써 줘.<br>
+④ 시각화: output/merged.csv와 ③의 결과로, (가) 고령인구비율과 2023년 합계출산율의 산점도에 회귀선을 얹은 그림을 output/fig_scatter.png로, (나) 2013년과 2023년 합계출산율을 비교하는 그림을 output/fig_change.png로 저장해 줘. 제목과 축 이름, 단위를 반드시 넣어 줘.<br>
+⑤ 보고: 위 산출물만 근거로 output/report.md를 작성해 줘. 구성은 데이터 개요, 방법, 주요 결과(수치 인용), 한계 및 유의점의 네 부분, 분량은 한 쪽 이내. 산출물에 없는 숫자나 주장을 새로 만들어 넣지 마."
+</div>
+
+<p><strong>(c) 예상되는 에이전트의 행동.</strong> 대화창에 지금까지와는 다른 풍경이 펼쳐진다. 본 에이전트가 단계 ①의 작업을 서브에이전트에게 넘기면, 화면에 별도의 작업 항목이 생기고 그 안에서 파일 읽기와 확인이 진행된다. 서브에이전트가 끝나면 본 에이전트가 요약을 받아 여러분에게 보고하고, 공통 규칙 3에 따라 멈춰서 승인을 기다린다. "계속해"라고 답하면 다음 단계 담당이 투입된다. 1회차 그림 12-1(나)의 조직도가 화면에서 실제로 움직이는 셈이다. 에이전트가 서브에이전트를 쓰지 않고 직접 처리하는 단계가 있을 수도 있다. 그것 자체는 실패가 아니지만, 관찰 기록에는 남겨 두라.</p>
+<p><strong>(d) 검증.</strong> 이 절에서는 파이프라인이 설계대로 도는지만 확인한다. 단계 산출물의 내용 검증은 다음 절의 검문소에서 한다. 확인할 것은 두 가지다. 첫째, 각 단계가 끝날 때 정말 멈추는가. 멈추지 않고 내달리면 지시문의 공통 규칙 3이 지켜지지 않은 것이므로 중단시키고 규칙을 다시 강조한다. 둘째, <code>output</code> 폴더에 약속한 파일명으로 산출물이 쌓이는가.</p>
+<h2 id="23-산출물-통합과-단계별-검증-검문소-운영">2.3 산출물 통합과 단계별 검증: 검문소 운영</h2>
+<p><strong>(a) 무엇을 왜 하는가.</strong> 이제 여러분이 검문소장이다. 단계가 멈출 때마다 산출물 파일을 직접 열어 확인하고, 통과 또는 반려를 결정한다. 1회차 표 12-2의 확인 항목을 오늘 데이터에 맞게 적용한다.</p>
+<p><strong>검문소 1 (수집 확인 뒤).</strong> 에이전트가 보고한 행 수를 확인한다. <code>sigungu_2023.csv</code>는 229행, <code>sigungu_tfr_2013.csv</code>는 264행이어야 한다. VSCode에서 파일을 직접 열어 눈으로도 확인하라.</p>
+<p><strong>검문소 2 (정제·병합 뒤).</strong> 오늘 실습에서 가장 중요한 검문소다. <code>output/merged.csv</code>를 열어 행 수를 보고, 에이전트가 보고한 "짝을 못 찾은 행" 목록을 읽는다. 이 데이터에서는 실제로 문제가 하나 숨어 있다. 시도·시군구 이름을 그대로 키로 쓰면 2023년의 229개 시군구 중 <strong>228개만</strong> 짝을 찾고, 인천 미추홀구가 탈락한다. 미추홀구는 2013년 자료에는 옛 이름인 인천 "남구"로 실려 있기 때문이다(2018년에 이름이 바뀌었다). 7주차에 배운 행정구역 개편·명칭 불일치 문제가 실전에서 그대로 나타난 것이다.</p>
+<p>여기가 이번 실습의 갈림길이다. 에이전트가 이 탈락을 어떻게 다루는지 관찰하라. 목록으로 정직하게 보고했다면 지시문(공통 규칙과 ②의 "버리지 말고 보고")이 제 몫을 한 것이다. 반대로 "병합이 완료되었습니다. 228개 시군구입니다"라고만 매끄럽게 보고하고 넘어가려 한다면, 그럴듯한 보고 뒤에 데이터 손실이 숨은 장면을 목격한 것이다. 어느 쪽이든 사람이 판단해서 처리를 지시해야 한다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시 (검문소 2에서 반려할 때)</strong><br>
+"병합에서 인천 미추홀구가 탈락했다. 미추홀구는 2018년까지 인천 남구였으니, 2013년 파일의 인천 남구 값을 미추홀구의 2013년 값으로 연결해서 다시 병합해 줘. 이 결정과 근거를 output/정제로그.md에 기록하고, 병합 후 행 수가 229가 되는지 보고해 줘."
+</div>
+
+<p>수정 후 <code>merged.csv</code>가 229행이 되었는지 확인하고, 표본 대조도 한 번 한다. 아무 시군구나 하나 골라(예: 서울 종로구) <code>merged.csv</code>의 2013년 출산율 값이 원본 <code>sigungu_tfr_2013.csv</code>의 값과 같은지 두 파일을 열어 눈으로 비교하라. 2013년 파일 쪽의 짝 없는 행(분당구 같은 일반구 단위 행 36개)은 2023년 데이터에 대응하는 행이 없어 생기는 정상적인 잉여이므로, 목록만 정제로그에 남기고 통과시킨다.</p>
+<p><strong>검문소 3 (분석 뒤).</strong> <code>output/analysis.md</code>를 열어 세 가지를 본다. 첫째, 사용한 관측치 수가 병합 데이터와 앞뒤가 맞는가(229개에서 출산율 결측을 뺀 수인지, 몇 개를 왜 뺐는지가 적혀 있는가). 둘째, 대표 수치 하나를 재검산한다. 예를 들어 "2023년 합계출산율의 전체 평균"을 에이전트에게 다른 방법(예: 새 대화 또는 merged.csv를 직접 집계)으로 다시 계산하게 해서 값이 같은지 본다. 이 데이터에서는 0.8을 조금 넘는 값이 나와야 한다. 셋째, 9주차에서 훈련한 대로 해석문을 심사한다. 고령인구비율과 출산율의 회귀에서 기울기가 양수로 나왔다고 해서 "고령화가 출산율을 높인다"라고 쓰여 있다면 과잉해석이므로 반려하고 다시 쓰게 한다.</p>
+<p><strong>검문소 4 (시각화 뒤).</strong> 그림 두 장을 열어 결과표와 대조한다. 산점도의 회귀선 방향이 <code>analysis.md</code>의 기울기 부호와 일치하는가. 축 이름과 단위가 있는가. 2013 대비 2023 그림에서 거의 모든 시군구의 출산율이 내려간 것으로 보이는가(이 데이터에서 10년 사이 출산율이 오른 시군구는 손에 꼽는다). 8주차의 왜곡 점검 습관대로 축의 시작점도 확인한다.</p>
+<p><strong>검문소 5 (보고 뒤).</strong> <code>output/report.md</code>의 모든 숫자에 대해 출처 산출물을 짚어 본다. 보고서에 있는데 <code>analysis.md</code>나 그림에 없는 숫자가 하나라도 있으면, 에이전트가 만들어 넣은 것이다. 13주차에 배울 삼중 대조(숫자·인용·그림)의 예행연습이다.</p>
+<p><strong>(d) 검증의 기록.</strong> 검문소를 통과시킬 때마다 <code>파이프라인.md</code> 맨 아래에 한 줄씩 기록을 남긴다. "검문소 2: 미추홀구 탈락 발견, 남구와 연결 지시, 재병합 후 229행 확인, 통과." 이 기록이 곧 감사 대비용 품질 관리 일지가 된다.</p>
+<h2 id="24-재현성-테스트-처음부터-다시-돌려도-같은-결과인가">2.4 재현성 테스트: 처음부터 다시 돌려도 같은 결과인가</h2>
+<p><strong>(a) 무엇을 왜 하는가.</strong> 파이프라인이 한 번 돌았다고 끝이 아니다. 1회차에서 말했듯 재현성은 품질 관리의 최종 시험이다. 방법은 단순하다. 아무것도 없는 새 폴더에 원료(데이터)와 설계도(지시문)만 옮겨 놓고 전부 다시 실행해서, 같은 숫자가 나오는지 본다. 오늘 세운 파이프라인이 "그때 어쩌다 된 것"이 아니라 "언제든 다시 되는 것"임을 증명하는 절차다.</p>
+<p><strong>(b) 절차와 지시문.</strong> 다음 순서를 그대로 따른다.</p>
+<ol>
+<li>바탕화면에 새 폴더 <code>파이프라인_재현테스트</code>를 만든다.</li>
+<li>그 안에 <code>data</code> 폴더를 만들고, 원본 프로젝트에서 <code>sigungu_2023.csv</code>와 <code>sigungu_tfr_2013.csv</code> 두 파일만 복사해 넣는다.</li>
+<li><code>지시문_파이프라인.md</code> 파일을 새 폴더에 복사한다. <strong>output 폴더나 이전 산출물은 절대 복사하지 않는다.</strong> 남은 산출물이 있으면 에이전트가 그것을 재활용해 버려서 시험이 무효가 된다.</li>
+<li>VSCode에서 이 새 폴더를 열고(기존 창이 아니라 새 작업 폴더로), 새 대화를 시작한다. 새 폴더와 새 대화에서 시작해야 이전 대화의 기억 없이 지시문만으로 재현되는지를 시험할 수 있다.</li>
+<li>아래 지시문으로 실행한다. 2.3에서 내렸던 판단(미추홀구 처리)도 이번에는 지시문에 처음부터 들어간다는 점에 주목하라. 사람의 판단이 지시문에 성문화되는 것, 이것이 재현 가능한 분석의 핵심이다.</li>
+</ol>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시 (재현 실행)</strong><br>
+"이 폴더는 재현성 테스트용이다. 지시문_파이프라인.md를 읽고 그 지시를 처음부터 끝까지 그대로 실행해 줘. 추가 규칙 하나: 병합에서 인천 미추홀구가 2013년 파일과 짝을 못 찾으면, 2013년 파일의 인천 남구(미추홀구의 옛 이름) 값과 연결해 줘. 이번에는 단계마다 멈추지 말고 끝까지 실행한 뒤, 마지막에 (1) merged.csv의 행 수, (2) 회귀분석의 관측치 수·기울기·R제곱, (3) 2023년 합계출산율 전체 평균을 한 번에 보고해 줘."
+</div>
+
+<p>(참고: uv 환경이 프로젝트 폴더 기준으로 잡혀 있다면, 에이전트가 새 폴더에서 환경을 어떻게 잡는지도 관찰 대상이다. 4주차에 배운 대로 에이전트에게 환경 준비부터 맡기면 된다.)</p>
+<p><strong>(c) 예상되는 에이전트의 행동.</strong> 에이전트가 지시문 파일을 읽고 ①부터 ⑤까지 다시 실행한다. 이번에는 멈춤 없이 진행되고, 마지막에 핵심 수치 세 가지가 보고된다.</p>
+<p><strong>(d) 검증: 무엇이 같아야 하고 무엇은 달라도 되는가.</strong> 원본 프로젝트의 산출물과 나란히 놓고 비교해 <code>재현성테스트.md</code>에 기록한다.</p>
+<table>
+<thead>
+<tr>
+<th>비교 항목</th>
+<th>판정 기준</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>merged.csv의 행 수</td>
+<td>완전히 같아야 한다 (229)</td>
+</tr>
+<tr>
+<td>회귀의 관측치 수·기울기·p값·R제곱</td>
+<td>완전히 같아야 한다 (같은 데이터, 같은 계산이므로)</td>
+</tr>
+<tr>
+<td>2023년 출산율 전체 평균</td>
+<td>완전히 같아야 한다</td>
+</tr>
+<tr>
+<td>그림의 데이터(점의 위치, 회귀선)</td>
+<td>같아야 한다. 색이나 배치 같은 꾸밈은 달라도 된다</td>
+</tr>
+<tr>
+<td>report.md의 문장 표현</td>
+<td>달라도 된다 (2주차의 비결정성). 단, 인용된 숫자는 같아야 한다</td>
+</tr>
+</tbody>
+</table>
+<p>숫자가 하나라도 다르면 재현 실패다. 실패는 성적의 문제가 아니라 발견이다. 원인은 대부분 지시문 바깥에 있던 사람의 구두 지시(그때 대화로만 정한 처리 기준)가 성문화되지 않은 것이다. 그 기준을 <code>지시문_파이프라인.md</code>에 추가하고 다시 시험하라. 지시문이 완전해질 때까지 반복하는 이 과정 자체가 파이프라인을 단단하게 만든다.</p>
+<div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>유의 · 재현성 테스트가 통과해야 13주차가 편해진다</strong><br>
+13주차의 최종 제출물은 보고서만이 아니라 "데이터 + 코드 + 지시문 + 보고서"의 재현 패키지다. 오늘 재현성 테스트를 통과한 지시문과 데이터 묶음은 그 패키지의 절반을 미리 완성한 것과 같다. 반대로 오늘 이 시험을 대충 넘기면, 13주차에 "분명 됐었는데 왜 안 되지"를 마감 전날 겪게 된다.
+</div>
+
+<h2 id="검증-체크리스트">검증 체크리스트</h2>
+<ul>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>파이프라인.md</code>에 5단계의 입력·처리·출력·검문 항목을 모두 적었다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 전 과정 지시문을 <code>지시문_파이프라인.md</code> 파일로 저장했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 파이프라인 실행 중 각 단계가 끝날 때 에이전트가 멈추고 승인을 기다렸다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 검문소 2에서 병합 행 수를 확인했고, 미추홀구 탈락을 발견·처리했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>merged.csv</code>의 값 하나를 원본 CSV와 직접 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>analysis.md</code>의 대표 수치 하나를 다른 방법으로 재검산했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 그림의 회귀선 방향과 결과표의 기울기 부호가 일치함을 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>report.md</code>의 모든 숫자의 출처 산출물을 짚었다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 빈 폴더에서 재현 실행을 했고, 행 수·회귀 수치·평균이 원본과 같았다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 검문소 통과 기록과 <code>재현성테스트.md</code>를 작성했다</li>
+</ul>
+<h2 id="자주-겪는-문제">자주 겪는 문제</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>에이전트가 단계마다 멈추지 않고 끝까지 내달린다</td>
+<td>멈춤 규칙이 지시문에서 눈에 띄지 않았거나 잊힘</td>
+<td>실행을 중단시키고 "공통 규칙 3을 지켜라. 지금부터 단계가 끝나면 반드시 멈춰라"라고 다시 지시. 규칙을 CLAUDE.md에 넣어 두면 더 안정적이다</td>
+</tr>
+<tr>
+<td>병합 후 행 수가 228도 229도 아닌 이상한 값이다</td>
+<td>시군구 이름의 공백·표기 차이, 또는 키를 시군구 하나만 써서 동명 지역(예: 여러 시도의 "남구")이 뒤섞임</td>
+<td>"병합 키로 시도와 시군구를 함께 썼는지 확인하고, 키 값의 앞뒤 공백을 제거한 뒤 다시 병합해 줘"라고 지시</td>
+</tr>
+<tr>
+<td>서브에이전트가 이전 단계에서 정한 규칙을 모른다</td>
+<td>1회차에서 배운 대로 서브에이전트는 본 대화를 못 본다</td>
+<td>규칙을 대화가 아니라 지시문·CLAUDE.md·정제로그 같은 파일에 적고, 지시문에 "먼저 정제로그.md를 읽어라"를 포함</td>
+</tr>
+<tr>
+<td>재현 실행에서 회귀 수치가 미세하게 다르다</td>
+<td>두 실행의 입력이 실제로 달랐을 가능성이 크다 (미추홀구 처리 여부, 결측 처리 방식 차이)</td>
+<td>두 정제로그를 대조해 어느 단계에서 관측치 수가 갈라졌는지 추적. 처리 기준을 지시문에 성문화하고 재시험</td>
+</tr>
+<tr>
+<td>재현 실행에서 에이전트가 output 파일을 "이미 있다"며 건너뛴다</td>
+<td>새 폴더에 이전 산출물이 딸려 들어감</td>
+<td>새 폴더에는 data와 지시문 파일만 복사했는지 확인하고, output 폴더를 지우고 다시 실행</td>
+</tr>
+<tr>
+<td>그림의 한글이 네모로 깨진다</td>
+<td>한글 폰트 설정 누락</td>
+<td>8주차에서 한 대로 "koreanize_matplotlib를 임포트해서 다시 그려 줘"라고 지시</td>
+</tr>
+</tbody>
+</table>
+<h2 id="제출-과제">제출 과제</h2>
+<p><strong>과제 12-A. 공통 예제 파이프라인 패키지.</strong> 오늘 실습의 산출물 일체를 제출한다. <code>파이프라인.md</code>(검문소 통과 기록 포함), <code>지시문_파이프라인.md</code>, <code>output/</code> 폴더, <code>재현성테스트.md</code>. 평가 기준은 세 가지다. (1) 검문소 2에서 미추홀구 문제를 발견하고 근거 있게 처리했는가, (2) 검문 기록이 구체적인가, (3) 재현성 테스트에서 숫자 일치를 확인했는가.</p>
+<p><strong>과제 12-B. 내 프로젝트 파이프라인 설계서.</strong> 5주차에 정한 자기 학기 프로젝트 데이터에 대해 표 12-3 형식의 단계 정의서와 완결된 파이프라인 지시문을 작성해 제출한다. 실행까지 하면 가산점이 있지만, 이번 주의 필수는 설계다. 평가 기준은 단계 사이의 입력·출력이 파일로 정확히 이어지는가와 검문 항목이 그 데이터의 실제 위험(병합 키, 결측, 단위)을 겨냥하고 있는가이다. 이 설계서는 13주차 최종 보고서 실습에서 그대로 사용한다.</p><div class="pager"><span><a href="w12-1.html">← 12주차 1회차. 다중 에이전트와 분석 파이프라인</a></span><span><a href="w13-1.html">13주차 1회차. 분석 보고서와 책임 있는 AI 활용 →</a></span></div></main>
+</body></html>
