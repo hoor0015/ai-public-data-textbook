@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -75,20 +78,22 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="sec"><a href="w07-1.html#요약">요약</a></li>
 <li class="sec"><a href="w07-1.html#연습문제">연습문제</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>7주차 1회차. 데이터 정제: 지저분한 현실 다루기</h1>
 <blockquote>
@@ -98,7 +103,7 @@ main input[type=checkbox] { margin-right:6px; }
 <h2 id="이-장에서-배우는-것">이 장에서 배우는 것</h2>
 <p>1주차의 구청 인턴 이야기를 이어 가자. 과장이 새 과제를 준다. "우리나라 시군구 출산율이 지난 10년 사이 어떻게 변했는지 정리해 줄래요? 오른 곳도 있는지 궁금하네." 여러분은 5주차와 6주차에서 배운 대로 데이터를 구했다. 2023년 시군구 인구·출산율 파일 하나, 2013년 시군구 출산율 파일 하나. 두 파일을 나란히 놓고 시군구별로 붙이기만 하면 될 것 같다.</p>
 <p>그런데 막상 붙여 보면 이상한 일이 벌어진다. 한쪽 파일은 229개 시군구인데 다른 쪽은 264행이다. 2023년 파일에 있는 "인천 미추홀구"가 2013년 파일에는 없다. 반대로 2013년 파일의 "충북 청원군"은 2023년 파일 어디에도 없다. 게다가 2023년 파일을 열어 보니 경북 군위군의 합계출산율 칸은 아예 비어 있다. 어느 파일도 고장 난 것이 아니다. 지난 10년 사이에 실제로 행정구역이 바뀌었고, 데이터는 각자 자기 시점의 세상을 기록했을 뿐이다.</p>
-<p>현실의 공공데이터는 이렇다. 내려받은 그대로 분석에 넣을 수 있는 데이터는 교과서 안에만 있다. 빈 칸이 있고, 튀는 값이 있고, 숫자가 문자로 저장되어 있고, 이름이 어긋난다. 이 지저분함을 분석 가능한 상태로 다듬는 일이 데이터 정제이고, 이번 주의 주제다. 5주차에서 데이터의 건강 상태를 진단(프로파일링)했다면, 이번 주는 치료에 해당한다. 그리고 여기서 다듬은 데이터가 8주차 탐색적 분석의 재료가 된다.</p>
+<p>현실의 공공데이터는 이렇다. 내려받은 그대로 분석에 넣을 수 있는 데이터는 교과서 안에만 있다. 빈 칸이 있고, 튀는 값이 있고, 숫자가 문자로 저장되어 있고, 이름이 어긋난다. 이 지저분함을 분석 가능한 상태로 다듬는 일이 데이터 정제이고, 이번 주의 주제다. 5주차에서 데이터의 건강 상태를 진단(프로파일링)했다면, 이번 주는 치료에 해당한다. 그리고 여기서 다듬은 데이터가 9주차 탐색적 분석의 재료가 된다.</p>
 <p>이 장에서는 구체적으로 다음을 배운다.</p>
 <ul>
 <li>현실의 공공데이터가 지저분할 수밖에 없는 이유</li>
@@ -190,12 +195,12 @@ main input[type=checkbox] { margin-right:6px; }
 <p>어느 것을 고르든 순서는 같다. <strong>이유를 먼저 추적하고, 분석 목적에 비추어 선택하고, 무엇을 왜 했는지 기록한다.</strong> 군위군이라면 이렇게 판단할 수 있다. 출산율 분석에서는 군위군을 "값 없음"으로 보존하고 그 사실을 보고서에 명시한다. 반면 총인구 분석에서는 군위군 행을 살려 둔다. 인구 값은 멀쩡하게 있기 때문이다. "결측이 있는 행은 다 지운다"는 일괄 규칙이 왜 위험한지 보여 주는 대목이다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 에이전트는 결측을 조용히 "해결"해 버릴 수 있다</strong><br>
-"결측값을 처리해 줘"라고만 지시하면, 에이전트는 흔히 <code>fillna(0)</code>(0으로 채우기)이나 <code>dropna()</code>(결측 행 삭제)를 스스로 골라 실행한다. 우리 데이터로 그 결과를 따라가 보자. 군위군의 출산율을 0으로 채우면, 군위군은 실제 전국 최저인 부산 중구(0.320)를 제치고 "출산율 0의 전국 최저 시군구"가 된다. 존재한 적 없는 숫자가 8주차의 그래프와 순위표에 그대로 올라가는 것이다. 반대로 결측 행을 통째로 지우면, 주민 23,340명이 실제로 사는 군위군이 인구 분석에서도 소리 없이 사라진다. 두 경우 모두 에이전트는 "결측 처리를 완료했습니다"라고 명랑하게 보고한다. <strong>결측 처리는 위임하되, 방법의 선택은 위임하지 않는다.</strong> 2회차 실습에서 이 장면을 직접 재현해 본다.
+"결측값을 처리해 줘"라고만 지시하면, 에이전트는 흔히 <code>fillna(0)</code>(0으로 채우기)이나 <code>dropna()</code>(결측 행 삭제)를 스스로 골라 실행한다. 우리 데이터로 그 결과를 따라가 보자. 군위군의 출산율을 0으로 채우면, 군위군은 실제 전국 최저인 부산 중구(0.320)를 제치고 "출산율 0의 전국 최저 시군구"가 된다. 존재한 적 없는 숫자가 9주차의 그래프와 순위표에 그대로 올라가는 것이다. 반대로 결측 행을 통째로 지우면, 주민 23,340명이 실제로 사는 군위군이 인구 분석에서도 소리 없이 사라진다. 두 경우 모두 에이전트는 "결측 처리를 완료했습니다"라고 명랑하게 보고한다. <strong>결측 처리는 위임하되, 방법의 선택은 위임하지 않는다.</strong> 2회차 실습에서 이 장면을 직접 재현해 본다.
 </div>
 
 <div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>왜 평균으로 채우는 것도 위험한가?</strong><br>
-0보다는 평균이 낫지 않을까? 그래 보이지만 함정은 남는다. 첫째, 평균 대치는 <strong>존재하지 않는 관측값을 창조</strong>한다. 군위군에 전국 평균 출산율(약 0.82)을 채워 넣는 순간, 고령인구비율이 44.2%로 전국에서 두 번째로 높은 초고령 군이 "전국 평균만큼 아이가 태어나는 곳"으로 기록된다. 실제 이웃한 농촌 군들의 출산율 패턴과도, 군위군의 인구구조와도 무관한 값이다. 둘째, 평균으로 채워진 값들은 퍼짐(분산)을 실제보다 작아 보이게 만들어 9주차에 배울 통계 분석을 미묘하게 왜곡한다. 대치가 필요한 상황은 분명히 있지만, "무엇으로 채웠고 왜 그 값인지"를 설명할 수 없다면 채우지 않는 것이 낫다.
+0보다는 평균이 낫지 않을까? 그래 보이지만 함정은 남는다. 첫째, 평균 대치는 <strong>존재하지 않는 관측값을 창조</strong>한다. 군위군에 전국 평균 출산율(약 0.82)을 채워 넣는 순간, 고령인구비율이 44.2%로 전국에서 두 번째로 높은 초고령 군이 "전국 평균만큼 아이가 태어나는 곳"으로 기록된다. 실제 이웃한 농촌 군들의 출산율 패턴과도, 군위군의 인구구조와도 무관한 값이다. 둘째, 평균으로 채워진 값들은 퍼짐(분산)을 실제보다 작아 보이게 만들어 10주차에 배울 통계 분석을 미묘하게 왜곡한다. 대치가 필요한 상황은 분명히 있지만, "무엇으로 채웠고 왜 그 값인지"를 설명할 수 없다면 채우지 않는 것이 낫다.
 </div>
 
 <h2 id="13-이상치와-오류값-삭제가-아니라-판단">1.3 이상치와 오류값: 삭제가 아니라 판단</h2>
@@ -207,7 +212,7 @@ main input[type=checkbox] { margin-right:6px; }
 
 <p>실제 데이터에서 튀는 값을 찾아보자.</p>
 <p><img alt="그림 7-2. 이상치 판단 예시: 2023년 시군구 합계출산율과 인구증가율의 박스플롯" src="figures/fig07_outlier.png" /></p>
-<p>그림 7-2는 박스플롯(box plot)이라는 그림이다. 자세한 문법은 8주차에서 배우고, 오늘은 읽는 법만 알면 된다. 가운데 상자는 전체 시군구의 가운데 절반이 모여 있는 범위이고, 상자에서 뻗은 수염 바깥의 점들은 무리에서 떨어져 "튀는" 값들이다. 왼쪽(가)의 합계출산율을 보면 오른쪽 끝에 전남 영광군(1.651)이 있고 왼쪽 끝에 부산 중구(0.320)가 있다. 오른쪽(나)의 인구증가율에서는 대구 중구(+11.05%)와 경기 양주시(+10.1%)가 유난히 크다. 시군구 대부분의 인구가 제자리이거나 줄어드는 가운데 1년 새 인구가 10% 넘게 늘어난 곳이 두 곳 있는 것이다.</p>
+<p>그림 7-2는 박스플롯(box plot)이라는 그림이다. 자세한 문법은 9주차에서 배우고, 오늘은 읽는 법만 알면 된다. 가운데 상자는 전체 시군구의 가운데 절반이 모여 있는 범위이고, 상자에서 뻗은 수염 바깥의 점들은 무리에서 떨어져 "튀는" 값들이다. 왼쪽(가)의 합계출산율을 보면 오른쪽 끝에 전남 영광군(1.651)이 있고 왼쪽 끝에 부산 중구(0.320)가 있다. 오른쪽(나)의 인구증가율에서는 대구 중구(+11.05%)와 경기 양주시(+10.1%)가 유난히 크다. 시군구 대부분의 인구가 제자리이거나 줄어드는 가운데 1년 새 인구가 10% 넘게 늘어난 곳이 두 곳 있는 것이다.</p>
 <h3>지우기 전에 물어야 할 질문</h3>
 <p>에이전트에게 "이상치를 제거해 줘"라고 지시하면, 에이전트는 흔히 통계적 규칙(수염 바깥의 점)을 기준으로 그림 7-2의 빨간 점들을 기계적으로 걸러낸다. 그 결과는 어떤가. 전국에서 출산율이 가장 높은 군과 가장 낮은 구, 인구가 가장 빠르게 느는 지역들이 분석에서 사라진다. 저출산과 인구이동을 다루는 분석이라면 가장 흥미로운 사례들만 골라서 버린 셈이 된다.</p>
 <p>이상치 앞에서 던져야 할 질문은 "지울까 말까"가 아니라 다음 세 가지다.</p>

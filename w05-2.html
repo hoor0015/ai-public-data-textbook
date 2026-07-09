@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -75,25 +78,27 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>5주차 2회차. 데이터 찾고 첫 개관하기</h1>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
 <p>1회차에서 공공데이터의 지도(어디에 있나), 형식(어떤 모양인가), 메타데이터(무슨 뜻인가), 이용허락(써도 되나)을 배웠다. 이번 실습은 그 지도를 들고 실제로 길을 나선다. 그리고 4주차에서 구축한 uv 파이썬 환경이 오늘부터 본격적으로 일을 시작한다. 에이전트가 pandas로 데이터를 열고, 행·열·자료형·결측을 진단하는 프로파일링 보고서를 만들어 준다.</p>
-<p>오늘이 이 과목에서 특별히 중요한 이유가 하나 더 있다. 실습 마지막에 여러분 각자의 학기 프로젝트 주제와 데이터를 정한다. 오늘 정한 주제와 데이터는 일회용이 아니다. 7주차(정제), 8주차(EDA), 9주차(통계 분석), 12주차(파이프라인), 13주차(최종 보고서)에서 계속 같은 데이터를 다듬고 파고들게 된다. 오늘의 선택이 한 학기 분석의 출발점이다.</p>
+<p>오늘이 이 과목에서 특별히 중요한 이유가 하나 더 있다. 실습 마지막에 여러분 각자의 학기 프로젝트 주제와 데이터를 정한다. 오늘 정한 주제와 데이터는 일회용이 아니다. 7주차(정제), 9주차(EDA), 10주차(통계 분석), 13주차(파이프라인), 14주차(최종 보고서)에서 계속 같은 데이터를 다듬고 파고들게 된다. 오늘의 선택이 한 학기 분석의 출발점이다.</p>
 <p>이 실습이 끝나면 다음 산출물이 남는다.</p>
 <ul>
 <li>포털·에이전트 병행 검색으로 찾은 데이터 후보 목록</li>
@@ -193,7 +198,7 @@ info 출력을 잘 본 사람은 이상한 점을 하나 발견했을 것이다.
 </div>
 
 <p><strong>예상되는 에이전트의 행동과 결과.</strong> 후보별로 필요 데이터와 가용성, 난이도가 정리된 비교표가 나온다. 지시문의 마지막 문장에 주목하라. 결정은 에이전트의 몫이 아니다. 1주차에서 배운 위임의 원칙 그대로, 재료 조사는 맡기고 판단은 내가 한다.</p>
-<p><strong>검증과 마무리.</strong> 에이전트가 "존재한다"고 한 핵심 데이터는 2.1에서 한 것처럼 링크를 직접 열어 확인한다. 특히 분석 단위(시군구인가 시도인가)와 기간(몇 년 치가 있는가)을 확인해야 한다. 단위가 어긋나면 주제 자체를 바꿔야 할 수 있다. 확인이 끝나면 주제를 하나로 정하고, 메모 폴더에 '프로젝트계획서_5주차.md'를 다음 표 형식으로 작성한다. 이 문서는 이후 매 실습(7·8·9·12·13주차)에서 계속 꺼내 보고 고쳐 쓰게 된다.</p>
+<p><strong>검증과 마무리.</strong> 에이전트가 "존재한다"고 한 핵심 데이터는 2.1에서 한 것처럼 링크를 직접 열어 확인한다. 특히 분석 단위(시군구인가 시도인가)와 기간(몇 년 치가 있는가)을 확인해야 한다. 단위가 어긋나면 주제 자체를 바꿔야 할 수 있다. 확인이 끝나면 주제를 하나로 정하고, 메모 폴더에 '프로젝트계획서_5주차.md'를 다음 표 형식으로 작성한다. 이 문서는 이후 매 실습(7·8·9·12·14주차)에서 계속 꺼내 보고 고쳐 쓰게 된다.</p>
 <p><strong>표 5-4. 프로젝트 계획서 양식</strong></p>
 <table>
 <thead>

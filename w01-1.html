@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -74,20 +77,22 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>1주차 1회차. AI 에이전트 시대의 공공데이터 분석</h1>
 <blockquote>
@@ -220,7 +225,7 @@ main input[type=checkbox] { margin-right:6px; }
 </tr>
 </tbody>
 </table>
-<p>네 기둥은 이 교재의 구조와 그대로 맞물린다. 위임과 기술은 3주차(지시 설계)에서, 분별은 매주 실습의 검증 절차에서, 성실은 13주차(책임 있는 AI 활용)에서 집중적으로 다룬다. 지금 기억할 것은 하나다. AI를 잘 쓴다는 것은 신기한 답을 받아내는 요령이 아니라, 맡기고·설명하고·따지고·책임지는 네 가지 습관의 묶음이라는 점이다.</p>
+<p>네 기둥은 이 교재의 구조와 그대로 맞물린다. 위임과 기술은 3주차(지시 설계)에서, 분별은 매주 실습의 검증 절차에서, 성실은 14주차(책임 있는 AI 활용)에서 집중적으로 다룬다. 지금 기억할 것은 하나다. AI를 잘 쓴다는 것은 신기한 답을 받아내는 요령이 아니라, 맡기고·설명하고·따지고·책임지는 네 가지 습관의 묶음이라는 점이다.</p>
 <h2 id="15-이-교재의-로드맵과-학습법">1.5 이 교재의 로드맵과 학습법</h2>
 <h3>한 학기의 지도</h3>
 <p><img alt="그림 1-3. 교재 4부 구성" src="figures/fig01_roadmap.png" /></p>
@@ -228,10 +233,10 @@ main input[type=checkbox] { margin-right:6px; }
 <ul>
 <li><strong>1부 (1-4주) 에이전트와 도구.</strong> 에이전트가 무엇이고 어떻게 작동하는지 이해하고, 일 시키는 법(지시 설계)을 훈련하고, 내 노트북에 분석 환경을 갖춘다. 환경 구축조차 에이전트에게 지시해서 한다.</li>
 <li><strong>2부 (5-7주) 공공데이터의 수집과 정리.</strong> 한국 공공데이터가 어디에 어떤 형태로 있는지 익히고, 오픈API로 자동 수집하고, 지저분한 데이터를 분석 가능한 상태로 정제한다.</li>
-<li><strong>3부 (8-11주) 분석과 해석.</strong> 데이터를 그림으로 탐색하고(EDA), 통계로 차이의 의미를 따지고, 민원 같은 텍스트 데이터를 분석하고, 법령·문서에 근거해 답하는 에이전트를 만든다.</li>
-<li><strong>4부 (12-13주) 종합과 확장.</strong> 수집부터 보고까지 전 과정을 에이전트 파이프라인으로 묶고, 자기 주제로 분석 보고서를 완성한다.</li>
+<li><strong>3부 (9-12주) 분석과 해석.</strong> 데이터를 그림으로 탐색하고(EDA), 통계로 차이의 의미를 따지고, 민원 같은 텍스트 데이터를 분석하고, 법령·문서에 근거해 답하는 에이전트를 만든다.</li>
+<li><strong>4부 (13-14주) 종합과 확장.</strong> 수집부터 보고까지 전 과정을 에이전트 파이프라인으로 묶고, 자기 주제로 분석 보고서를 완성한다.</li>
 </ul>
-<p>5주차 실습에서 각자 학기 프로젝트의 주제와 데이터를 정하고, 이후 실습에서 그 데이터를 계속 다듬어 13주차의 최종 보고서로 완성한다. 매주의 실습이 서로 남남이 아니라 한 편의 분석으로 쌓이는 구조다.</p>
+<p>5주차 실습에서 각자 학기 프로젝트의 주제와 데이터를 정하고, 이후 실습에서 그 데이터를 계속 다듬어 14주차의 최종 보고서로 완성한다. 매주의 실습이 서로 남남이 아니라 한 편의 분석으로 쌓이는 구조다.</p>
 <h3>이 교재로 공부하는 법</h3>
 <p>첫째, 실습 장의 지시문 예시를 그대로 입력하는 데서 시작하되, 반드시 한 번은 바꿔서 다시 시켜 본다. 지시를 바꾸면 결과가 어떻게 달라지는지 관찰하는 것이 에이전트 감각을 기르는 가장 빠른 길이다.</p>
 <p>둘째, 에이전트가 실패하는 장면을 아까워하지 않는다. 오류, 오해, 환각은 이 과목에서 가장 좋은 교재다. 실습 장의 "자주 겪는 문제"는 실제로 자주 일어난다.</p>
