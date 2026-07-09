@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -77,24 +80,26 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="sec"><a href="w07-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li class="sec"><a href="w07-2.html#제출-과제">제출 과제</a></li>
 <li class="sec"><a href="w07-2.html#부록-병합-예제-코드-전문">부록: 병합 예제 코드 전문</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>7주차 2회차. 에이전트로 데이터 정제하기</h1>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
-<p>1회차에서 결측·이상치·자료형·병합 키의 원리를 배웠다. 이번 실습에서는 그 원리를 실제 데이터 두 개에 적용한다. 2023년 시군구 인구 파일과 2013년 시군구 합계출산율 파일을 진단하고, 결측과 이상치를 판단하고, 두 파일을 병합해 "10년 치 출산율 비교"가 가능한 데이터 한 장을 만든다. 이 데이터가 8주차 탐색적 분석의 재료다.</p>
+<p>1회차에서 결측·이상치·자료형·병합 키의 원리를 배웠다. 이번 실습에서는 그 원리를 실제 데이터 두 개에 적용한다. 2023년 시군구 인구 파일과 2013년 시군구 합계출산율 파일을 진단하고, 결측과 이상치를 판단하고, 두 파일을 병합해 "10년 치 출산율 비교"가 가능한 데이터 한 장을 만든다. 이 데이터가 9주차 탐색적 분석의 재료다.</p>
 <p>오늘의 진행 순서는 1회차에서 배운 원칙 그대로다. 진단 없이 치료 없고, 처리에는 근거를 남기고, 결과는 표본으로 대조한다. 특히 오늘은 에이전트가 결측을 그럴듯하게 망치는 장면을 일부러 만들어서 관찰한다. 2주차의 환각 실험이 "묻는 방식"의 실험이었다면, 오늘은 "맡기는 방식"의 실험이다.</p>
 <p>이 실습이 끝나면 다음 산출물이 남는다.</p>
 <ul>
@@ -155,7 +160,7 @@ main input[type=checkbox] { margin-right:6px; }
 "실험을 하나 해 보자. sigungu_2023.csv를 읽어서 합계출산율의 결측값을 0으로 채운 사본을 메모리에서만 만들고(파일 저장은 하지 마), 그 사본 기준으로 합계출산율이 낮은 시군구 5곳을 출력해 줘. 그다음, 결측을 채우지 않은 원본 기준으로도 같은 5곳을 출력해서 두 결과를 비교해 줘."
 </div>
 
-<p><strong>예상되는 에이전트의 행동과 결과.</strong> 두 개의 순위표가 나온다. 결측을 0으로 채운 쪽에서는 경북 군위군이 출산율 0.000으로 전국 최저 1위에 오른다. 원본 기준 최저는 부산 중구(0.320)다. 군위군의 출산율은 낮은 것이 아니라 없는 것인데, 0으로 채우는 순간 "전국에서 아이가 가장 안 태어나는 곳"이라는 거짓 사실이 만들어진다. 이 사본이 파일로 저장되어 8주차 분석에 흘러들었다면, 그래프와 보고서까지 오염되었을 것이다. 에이전트는 이 모든 과정에서 한 번도 거짓말을 하지 않았다는 점에 주목하자. 시킨 일을 정확히 했을 뿐이다. 문제는 지시, 곧 위임의 방식에 있었다.</p>
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 두 개의 순위표가 나온다. 결측을 0으로 채운 쪽에서는 경북 군위군이 출산율 0.000으로 전국 최저 1위에 오른다. 원본 기준 최저는 부산 중구(0.320)다. 군위군의 출산율은 낮은 것이 아니라 없는 것인데, 0으로 채우는 순간 "전국에서 아이가 가장 안 태어나는 곳"이라는 거짓 사실이 만들어진다. 이 사본이 파일로 저장되어 9주차 분석에 흘러들었다면, 그래프와 보고서까지 오염되었을 것이다. 에이전트는 이 모든 과정에서 한 번도 거짓말을 하지 않았다는 점에 주목하자. 시킨 일을 정확히 했을 뿐이다. 문제는 지시, 곧 위임의 방식에 있었다.</p>
 <p><strong>검증.</strong> 두 순위표에서 군위군의 위치를 확인하고, 관찰한 내용을 한 문장으로 기록해 둔다(2.5의 정제 로그에 "하지 않기로 한 처리"로 남길 것이다).</p>
 <h3>본 처리: 근거를 함께 기록하게 한다</h3>
 <p><strong>무엇을 왜.</strong> 이제 올바른 방식으로 처리를 지시한다. 핵심은 두 가지다. 처리 방법을 에이전트가 아니라 내가 정한다는 것, 그리고 모든 처리에 근거를 함께 기록하게 한다는 것이다. 1회차에서 판단한 대로 군위군의 결측은 보존한다. 이상치 후보는 삭제하지 않고 "조사 목록"으로 만든다.</p>
@@ -184,7 +189,7 @@ main input[type=checkbox] { margin-right:6px; }
 <p><strong>예상되는 에이전트의 행동과 결과.</strong> 에이전트가 코드를 작성·실행하고 다음을 보고한다. 병합 결과는 229행이고, 미추홀구 수정 덕분에 229곳 모두 2013년 출산율이 붙었다. 다만 군위군은 2023년 쪽 출산율이 결측이므로 10년 비교가 가능한 시군구는 사실상 228곳이다. 참고로 이 교재의 <code>code/ch07_merge.py</code>가 바로 이 작업의 완성본이며, 전문이 이 장의 부록에 있다. 에이전트가 만든 코드와 비교해 보면 좋다.</p>
 <p><strong>검증.</strong> 세 가지를 본다. 첫째, 행 수. <code>sigungu_tfr_2013_2023.csv</code>를 열어 데이터가 229행인지 확인한다(1회차에서 배운 병합 검증의 제1규칙). 둘째, 새 열. 오른쪽 끝에 <code>합계출산율_2013</code> 열이 생겼는지 본다. 셋째, 청주시 문제. 병합은 성공했지만 2013년의 청주시 값(1.341)은 통합 전 옛 청주시의 값이라는 점을 에이전트가 스스로 언급했는지 확인한다. 언급하지 않았다면 "2013년과 2023년의 청주시는 관할 범위가 같은가?"라고 물어보라. 이름이 맞으면 만족하는 기계와 실체를 묻는 사람의 차이가 여기서 갈린다.</p>
 <h2 id="24-정제-결과-검증-에이전트를-믿지-말고-표본-대조">2.4 정제 결과 검증: 에이전트를 믿지 말고 표본 대조</h2>
-<p><strong>무엇을 왜.</strong> 병합이 "성공했다"는 보고와 병합이 "옳다"는 것은 다르다. 행 수가 맞아도 값이 엉뚱한 행에 붙었을 수 있다. 최종 확인은 표본 대조다. 몇 개 시군구를 골라, 병합 결과의 값이 원본 두 파일의 값과 정확히 일치하는지 사람이 직접 본다. 13주차에 배울 "숫자 삼중 대조"의 예행연습이기도 하다.</p>
+<p><strong>무엇을 왜.</strong> 병합이 "성공했다"는 보고와 병합이 "옳다"는 것은 다르다. 행 수가 맞아도 값이 엉뚱한 행에 붙었을 수 있다. 최종 확인은 표본 대조다. 몇 개 시군구를 골라, 병합 결과의 값이 원본 두 파일의 값과 정확히 일치하는지 사람이 직접 본다. 14주차에 배울 "숫자 삼중 대조"의 예행연습이기도 하다.</p>
 <p>표본은 아무렇게나 고르지 않는다. 병합이 틀렸다면 티가 날 만한 곳, 곧 이번 병합에서 문제가 있었던 지점을 포함해 고른다.</p>
 <ul>
 <li><strong>평범한 표본 1곳.</strong> 예: 서울 종로구. 아무 문제 없이 붙었어야 정상.</li>
@@ -240,7 +245,7 @@ main input[type=checkbox] { margin-right:6px; }
 </tbody>
 </table>
 <p>네 곳이 모두 일치하면 병합의 구조가 건강하다고 볼 수 있다. 하나라도 어긋나면 병합 키 처리에 문제가 있는 것이므로, 2.3으로 돌아가 원인을 찾는다. 특히 두 고성군의 값이 서로 바뀌어 있다면 키에서 시도가 빠졌다는 결정적 증거다.</p>
-<p>대조를 마쳤으면 마지막으로 가벼운 맛보기 분석을 한 번 시켜 보자. "228곳 중 2013년보다 2023년 출산율이 오른 시군구가 몇 곳인지 세어 줘"라고 지시하면, 인천 강화군, 전남 영광군, 경북 의성군, 전북 김제시 단 4곳이라는 답이 나온다(실제 실행 결과다). 나머지 224곳은 내렸다. 과장의 질문("오른 곳도 있는지")에 대한 답이 벌써 나왔다. 이 발견을 제대로 그림으로 탐색하는 것이 8주차다.</p>
+<p>대조를 마쳤으면 마지막으로 가벼운 맛보기 분석을 한 번 시켜 보자. "228곳 중 2013년보다 2023년 출산율이 오른 시군구가 몇 곳인지 세어 줘"라고 지시하면, 인천 강화군, 전남 영광군, 경북 의성군, 전북 김제시 단 4곳이라는 답이 나온다(실제 실행 결과다). 나머지 224곳은 내렸다. 과장의 질문("오른 곳도 있는지")에 대한 답이 벌써 나왔다. 이 발견을 제대로 그림으로 탐색하는 것이 9주차다.</p>
 <h2 id="25-정제-로그-무엇을-왜-바꿨는지-남기기">2.5 정제 로그: 무엇을 왜 바꿨는지 남기기</h2>
 <p><strong>무엇을 왜.</strong> 오늘 우리는 데이터에 여러 번 손을 댔다. 반년 뒤의 나, 혹은 내 분석을 검토하는 다른 사람이 "왜 군위군만 출산율이 비어 있죠?", "왜 청원군이 없죠?"라고 물으면 답할 수 있어야 한다. 그 답을 담는 문서가 정제 로그다. 공공부문에서 데이터 근거를 요구받는 일은 흔하며, 정제 로그는 분석의 신뢰성을 지키는 최소한의 문서다. 좋은 소식은 이 기록을 에이전트가 아주 잘 쓴다는 것이다. 오늘 대화에 모든 재료가 있기 때문이다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
@@ -346,5 +351,5 @@ print(&quot;2013년 값이 안 붙은 곳:&quot;, merged[&quot;합계출산율_2
 merged.to_csv(DATA / &quot;sigungu_tfr_2013_2023.csv&quot;, index=False,
               encoding=&quot;utf-8-sig&quot;)
 </code></pre>
-<p>코드에서 눈여겨볼 곳은 세 군데다. <code>indicator=True</code>(진단 병합의 눈), <code>validate="one_to_one"</code>(동명이인 사고를 멈추는 안전장치), 그리고 <code>assert</code>(행 수 검증). 이 세 가지가 없는 병합 코드를 에이전트가 가져오면, 넣어 달라고 요구할 줄 아는 것이 오늘 배운 검증 감각이다.</p><div class="pager"><span><a href="w07-1.html">← 7주차 1회차. 데이터 정제: 지저분한 현실 다루기</a></span><span><a href="w08-1.html">8주차 1회차. 탐색적 데이터 분석과 시각화 →</a></span></div></main>
+<p>코드에서 눈여겨볼 곳은 세 군데다. <code>indicator=True</code>(진단 병합의 눈), <code>validate="one_to_one"</code>(동명이인 사고를 멈추는 안전장치), 그리고 <code>assert</code>(행 수 검증). 이 세 가지가 없는 병합 코드를 에이전트가 가져오면, 넣어 달라고 요구할 줄 아는 것이 오늘 배운 검증 감각이다.</p><div class="pager"><span><a href="w07-1.html">← 7주차 1회차. 데이터 정제: 지저분한 현실 다루기</a></span><span><a href="w09-1.html">9주차 1회차. 탐색적 데이터 분석과 시각화 →</a></span></div></main>
 </body></html>

@@ -1,4 +1,4 @@
-# 9주차 분석 코드: 집단 비교(t검정)와 단순회귀
+# 10주차 분석 코드: 집단 비교(t검정)와 단순회귀
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

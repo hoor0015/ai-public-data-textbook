@@ -1,5 +1,5 @@
 # 12주차 1회차 개념도 생성
-# 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -28,95 +28,96 @@ def arrow(ax, x1, y1, x2, y2, color="#555", style="-|>", lw=1.6, ls="-"):
 
 
 # ---------------------------------------------------------------- 그림 12-1
-# 단일 에이전트 vs 서브에이전트 분업
-fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.4))
+# 그라운딩 유무 비교: 기억에서 답하기 vs 문서에서 답하기
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.2))
 for ax in axes:
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
     ax.axis("off")
 
 ax = axes[0]
-ax.set_title("(가) 혼자 일하는 에이전트: 맥락창 하나에 전부 쌓인다", fontsize=12.5, pad=12)
-box(ax, 3.1, 7.9, 3.8, 1.5, "사용자 지시", fc="#fdf9f4", ec="#c77b2f")
-box(ax, 1.6, 1.0, 6.8, 6.0, "", fc="#f5f9fd", ec="#2f6fb0")
-ax.text(5.0, 6.5, "에이전트의 맥락창(책상 하나)", ha="center", fontsize=11, fontweight="bold")
-for i, t in enumerate(["정제 로그 전체", "분석 코드와 출력 전체", "그림 코드와 시행착오", "보고서 초안"]):
-    box(ax, 2.1, 5.0 - i * 1.05, 5.8, 0.8, t, fc="white", ec="#9bb8d4", fontsize=9.5)
-arrow(ax, 5.0, 7.8, 5.0, 7.2)
-ax.text(5.0, 0.35, "긴 작업일수록 책상이 서류로 덮여 앞 내용이 밀려난다",
-        ha="center", fontsize=10.5, color="#a04747")
+ax.set_title("(가) 그라운딩 없음: 기억에서 답한다", fontsize=13, pad=12)
+box(ax, 0.5, 7.6, 4.2, 1.7, "질문\n\"공공데이터법의\n제공 원칙은?\"", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 5.6, 7.6, 4.0, 1.7, "모델의 기억\n(학습데이터의 패턴)", fc="#eeeeee", ec="#888888", fontsize=10)
+arrow(ax, 4.8, 8.45, 5.5, 8.45)
+box(ax, 2.6, 4.2, 5.2, 1.9, "답변\n그럴듯한 요약\n(조문 번호가 틀려도 모른다)", fc="white", ec="#c0392b", fontsize=10)
+arrow(ax, 7.4, 7.5, 6.0, 6.2, color="#888888")
+ax.text(5.0, 2.4, "근거 확인 불가. 환각이 섞여도\n답변만 보고는 가려낼 수 없다.",
+        ha="center", fontsize=10.5, color="#c0392b")
 
 ax = axes[1]
-ax.set_title("(나) 서브에이전트 분업: 각자 자기 책상에서 일한다", fontsize=12.5, pad=12)
-box(ax, 3.1, 7.9, 3.8, 1.5, "본 에이전트\n(팀장)", fc="#f5f9fd", ec="#2f6fb0", weight="bold")
-subs = [("정제 담당", 0.4), ("분석 담당", 3.7), ("시각화 담당", 7.0)]
-for t, xx in subs:
-    box(ax, xx, 3.6, 2.6, 1.9, t + "\n독립된 맥락창", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
-    arrow(ax, 5.0, 7.8, xx + 1.3, 5.7, color="#2f8f4e")
-    arrow(ax, xx + 1.3, 3.5, 5.0, 2.2, color="#7a5fa8")
-box(ax, 3.2, 0.9, 3.6, 1.3, "요약 결과만 보고", fc="#faf8fc", ec="#7a5fa8", fontsize=10)
-ax.text(5.0, 0.35, "본 에이전트의 책상에는 각 담당의 요약만 올라온다",
-        ha="center", fontsize=10.5, color="#2f6fb0")
+ax.set_title("(나) 그라운딩 있음: 문서에서 답한다", fontsize=13, pad=12)
+box(ax, 0.4, 7.6, 3.6, 1.7, "질문 + 문서\n\"이 법률 파일에서\n찾아 답해 줘\"", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 5.8, 7.6, 3.8, 1.7, "문서 읽기\n(법률 전문이\n맥락창에 들어간다)", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 4.2, 8.45, 5.7, 8.45)
+box(ax, 2.4, 4.2, 5.6, 2.1, "답변 + 인용\n\"제17조 제1항에 따라 ...\"\n(근거 조문을 함께 제시)", fc="white", ec="#2f8f4e", fontsize=10)
+arrow(ax, 7.6, 7.5, 6.2, 6.4, color="#2f8f4e")
+ax.text(5.1, 2.4, "인용된 조문을 원문과 대조하면\n답이 맞는지 사람이 검증할 수 있다.",
+        ha="center", fontsize=10.5, color="#1e6b3a")
 fig.tight_layout()
-fig.savefig(FIG / "fig12_single_vs_subagents.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig12_grounding.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 12-2
-# 파이프라인 5단계와 검문소
-fig, ax = plt.subplots(figsize=(12.5, 4.6))
-ax.set_xlim(0, 14)
-ax.set_ylim(0, 8)
+# 일회성 지시, Skill, CLAUDE.md의 3층 구조
+fig, ax = plt.subplots(figsize=(11, 5.8))
+ax.set_xlim(0, 13)
+ax.set_ylim(0, 9)
 ax.axis("off")
-stages = [
-    ("수집", "원자료 CSV\n(6주차)", "#f5f9fd", "#2f6fb0"),
-    ("정제·병합", "분석용 데이터\n(7주차)", "#f4fbf6", "#2f8f4e"),
-    ("분석", "통계 결과표\n(9주차)", "#faf8fc", "#7a5fa8"),
-    ("시각화", "그림 파일\n(8주차)", "#fdf9f4", "#c77b2f"),
-    ("보고", "요약 보고서\n(13주차로)", "#f7f7fc", "#5b6ee1"),
+
+layers = [
+    (6.3, "일회성 지시 (대화창)", "이번 한 번만 필요한 요청",
+     "\"이 표를 오름차순으로 다시 정렬해 줘\"", "#fdf9f4", "#c77b2f"),
+    (3.5, "Skill (.claude/skills/이름/SKILL.md)", "부르면 실행되는 절차. 필요할 때만 본문이 로드된다",
+     "\"/csv-profile data/민원.csv\" 또는 관련 요청 시 자동 사용", "#f4fbf6", "#2f8f4e"),
+    (0.7, "CLAUDE.md (프로젝트 규칙)", "항상 적용되는 규칙. 매 대화에 자동으로 로드된다",
+     "\"표의 숫자는 천 단위 쉼표\", \"그림은 figures 폴더에 저장\"", "#f5f9fd", "#2f6fb0"),
 ]
-for i, (t1, t2, fc, ec) in enumerate(stages):
-    x = 0.4 + i * 2.75
-    box(ax, x, 4.6, 2.2, 1.7, t1, fc=fc, ec=ec, fontsize=12, weight="bold")
-    box(ax, x, 2.6, 2.2, 1.5, t2, fc="white", ec=ec, fontsize=9.5)
-    if i < 4:
-        arrow(ax, x + 2.3, 5.45, x + 2.65, 5.45)
-        # 검문소 표시
-        cx = x + 2.475
-        ax.plot([cx], [6.7], marker="v", color="#a04747", markersize=9)
-        ax.text(cx, 7.2, f"검문소 {i + 1}", ha="center", fontsize=9.5,
-                color="#a04747", fontweight="bold")
-checks = [
-    "행 수·표본 대조", "병합 손실·요약통계 확인", "수치 재검산·과잉해석 점검", "그림-수치 대조",
-]
-for i, c in enumerate(checks):
-    cx = 0.4 + i * 2.75 + 2.475
-    ax.text(cx, 1.7, c, ha="center", fontsize=8.8, color="#a04747")
-ax.text(7.0, 0.5, "화살표 위의 붉은 표시가 사람이 멈춰서 확인하는 검문소다. 단계 산출물은 모두 파일로 남긴다.",
-        ha="center", fontsize=10.5, color="#333")
-fig.savefig(FIG / "fig12_pipeline_checkpoints.png", dpi=150, bbox_inches="tight")
+for y, t1, t2, ex, fc, ec in layers:
+    box(ax, 0.6, y, 7.6, 2.2, "", fc=fc, ec=ec)
+    ax.text(4.4, y + 1.72, t1, ha="center", fontsize=12, fontweight="bold")
+    ax.text(4.4, y + 1.12, t2, ha="center", fontsize=10, color="#333")
+    ax.text(4.4, y + 0.48, "예: " + ex, ha="center", fontsize=9.5, color="#555")
+
+ax.annotate("", xy=(9.2, 8.4), xytext=(9.2, 0.8),
+            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
+ax.text(9.55, 4.6, "위로 갈수록\n일회적·즉흥적", fontsize=10.5, color="#555", va="center")
+ax.text(11.5, 4.6, "아래로 갈수록\n반복적·영구적", fontsize=10.5, color="#555", va="center")
+ax.annotate("", xy=(11.2, 0.8), xytext=(11.2, 8.4),
+            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
+ax.text(4.4, 8.75, "같은 지시를 세 번째 쓰고 있다면 아래층으로 내릴 때다",
+        ha="center", fontsize=11, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+fig.savefig(FIG / "fig12_three_layers.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 12-3
-# MCP 개념도
-fig, ax = plt.subplots(figsize=(11, 5.0))
-ax.set_xlim(0, 13)
-ax.set_ylim(0, 8)
+# Skill 작동 흐름
+fig, ax = plt.subplots(figsize=(12, 5.4))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
 ax.axis("off")
-box(ax, 0.5, 3.0, 3.0, 2.2, "에이전트\n(Claude Code)", fc="#f5f9fd", ec="#2f6fb0", weight="bold")
-box(ax, 4.6, 3.2, 2.6, 1.8, "MCP\n(공통 규격)", fc="#f4fbf6", ec="#2f8f4e", weight="bold")
-arrow(ax, 3.6, 4.1, 4.5, 4.1)
-arrow(ax, 4.5, 3.7, 3.6, 3.7)
-ext = [
-    ("데이터베이스", 6.6), ("업무 시스템\n(일정·문서)", 4.45), ("통계 포털 등\n외부 서비스", 2.3),
-]
-for t, yy in ext:
-    box(ax, 9.3, yy - 0.75, 3.2, 1.5, t, fc="#fdf9f4", ec="#c77b2f", fontsize=10)
-    arrow(ax, 7.3, 4.1, 9.2, yy, color="#2f8f4e")
-ax.text(4.4, 0.7, "MCP가 없으면 시스템마다 연결 방식을 따로 만들어야 한다.\n"
-                  "MCP는 콘센트 규격처럼, 규격만 맞으면 어떤 기기든 꽂아 쓸 수 있게 한다.",
-        ha="center", fontsize=10.5, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
-fig.savefig(FIG / "fig12_mcp.png", dpi=150, bbox_inches="tight")
+
+box(ax, 0.4, 5.6, 3.2, 2.4, "평소\n\nSkill의 이름과 설명만\n목록으로 알고 있다\n(본문은 안 읽은 상태)",
+    fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 5.2, 6.9, 3.6, 1.5, "호출 방법 1\n사용자가 /skill-name 입력", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 5.2, 4.9, 3.6, 1.5, "호출 방법 2\n요청이 설명과 맞으면\n에이전트가 스스로 사용", fc="#fdf9f4", ec="#c77b2f", fontsize=9.5)
+box(ax, 10.2, 5.6, 3.4, 2.4, "실행\n\nSKILL.md 본문이\n맥락창에 로드되고\n적힌 절차대로 작업",
+    fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 3.7, 7.2, 5.1, 7.55)
+arrow(ax, 3.7, 6.2, 5.1, 5.75)
+arrow(ax, 8.9, 7.55, 10.1, 7.2)
+arrow(ax, 8.9, 5.75, 10.1, 6.2)
+
+box(ax, 2.2, 1.0, 9.6, 2.6, "", fc="white", ec="#7a5fa8")
+ax.text(7.0, 3.1, "SKILL.md의 두 부분", ha="center", fontsize=11, fontweight="bold", color="#4a3a68")
+ax.text(4.6, 1.95, "머리말(frontmatter)\nname: 이름\ndescription: 언제 쓰는 스킬인지", ha="center",
+        fontsize=9.5, color="#333")
+ax.text(9.6, 1.95, "본문(markdown)\n에이전트가 따를 절차를\n단계별로 적은 지시문", ha="center",
+        fontsize=9.5, color="#333")
+ax.plot([7.0, 7.0], [1.2, 2.8], color="#d9d9e3", lw=1)
+arrow(ax, 11.9, 5.5, 8.4, 3.75, color="#7a5fa8", ls="--")
+fig.savefig(FIG / "fig12_skill_flow.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("saved:", [p.name for p in sorted(FIG.glob("fig12_*.png"))])
+print("saved:", [p.name for p in sorted(FIG.glob('fig12_*.png'))])

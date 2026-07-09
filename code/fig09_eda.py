@@ -1,4 +1,4 @@
-# 8주차 1회차(이론) 그림 생성: 그림 8-1부터 8-5까지
+# 9주차 1회차(이론) 그림 생성: 그림 9-1부터 8-5까지
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -18,7 +18,7 @@ FIG.mkdir(exist_ok=True)
 df = pd.read_csv(BASE / "data" / "sigungu_2023.csv", encoding="utf-8-sig")
 inc = pd.read_csv(BASE / "data" / "income_dist.csv", encoding="utf-8-sig")
 
-# ---------------------------------------------------------------- 그림 8-1
+# ---------------------------------------------------------------- 그림 9-1
 # 고령인구비율 히스토그램
 fig, ax = plt.subplots(figsize=(8, 5))
 bins = np.arange(10, 47.5, 2.5)
@@ -38,10 +38,10 @@ ax.annotate("오른쪽으로 길게 뻗은 꼬리:\n고령화가 극심한 농�
             arrowprops=dict(arrowstyle="->", color="#555"),
             fontsize=10, color="#333")
 fig.tight_layout()
-fig.savefig(FIG / "fig08_hist_aging.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_hist_aging.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 8-2
+# ---------------------------------------------------------------- 그림 9-2
 # 시도별 고령인구비율 박스플롯 (중앙값 오름차순)
 order = (df.groupby("시도")["고령인구비율"].median()
            .sort_values().index.tolist())
@@ -53,10 +53,10 @@ ax.set_title("시도별 고령인구비율 분포 (2023년)", fontsize=13)
 ax.set_xlabel("고령인구비율 (%)")
 ax.set_ylabel("")
 fig.tight_layout()
-fig.savefig(FIG / "fig08_box_sido.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_box_sido.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 8-3
+# ---------------------------------------------------------------- 그림 9-3
 # 산점도: 고령인구비율 vs 합계출산율
 sub = df.dropna(subset=["합계출산율"])
 r = sub["고령인구비율"].corr(sub["합계출산율"])
@@ -83,10 +83,10 @@ ax.set_xlabel("고령인구비율 (%)")
 ax.set_ylabel("합계출산율 (명)")
 ax.legend(loc="lower right")
 fig.tight_layout()
-fig.savefig(FIG / "fig08_scatter_aging_tfr.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_scatter_aging_tfr.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 8-4
+# ---------------------------------------------------------------- 그림 9-4
 # 지니계수 시계열
 fig, ax = plt.subplots(figsize=(8, 4.8))
 ax.plot(inc["연도"], inc["지니계수"], marker="o", color="#2f6fb0", lw=2)
@@ -101,10 +101,10 @@ ax.annotate(f"{first:.3f}", xy=(2011, first), xytext=(2011, first + 0.006),
 ax.annotate(f"{last:.3f}", xy=(2023, last), xytext=(2023, last + 0.006),
             fontsize=10, ha="center", color="#2f6fb0")
 fig.tight_layout()
-fig.savefig(FIG / "fig08_line_gini.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_line_gini.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 8-5
+# ---------------------------------------------------------------- 그림 9-5
 # 정직한 그래프 vs 축 자른 왜곡 그래프 (막대)
 cap = df["시도"].isin(["서울", "경기", "인천"])
 v_cap = df.loc[cap, "합계출산율"].mean()
@@ -128,9 +128,9 @@ for ax, title, ylim in [(axes[0], "(가) 정직한 그래프: 세로축이 0에�
 fig.suptitle("같은 데이터, 다른 인상: 시군구 평균 합계출산율 (2023년)",
              fontsize=13, y=1.02)
 fig.tight_layout()
-fig.savefig(FIG / "fig08_axis_trunc.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_axis_trunc.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("그림 8-1부터 8-5 저장 완료")
+print("그림 9-1부터 8-5 저장 완료")
 print(f"검증용 수치: 평균 {mean_v:.2f}, 중앙값 {med_v:.2f}, r={r:.3f}, "
       f"수도권 {v_cap:.3f}, 비수도권 {v_non:.3f}")

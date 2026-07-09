@@ -1,4 +1,4 @@
-# 10주차 텍스트 분석: 소비자 민원 상담 사례 코퍼스
+# 11주차 텍스트 분석: 소비자 민원 상담 사례 코퍼스
 # 데이터: 공정거래위원회_소비자 민원학습데이터 모범상담 사례_20211227
 #         (공공데이터포털 www.data.go.kr/data/15098335/fileData.do, 로그인 없이 내려받음)
 # 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"

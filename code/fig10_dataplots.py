@@ -1,4 +1,4 @@
-# 9주차 데이터 그림 생성 (집단 비교 박스플롯, 산점도와 회귀선)
+# 10주차 데이터 그림 생성 (집단 비교 박스플롯, 산점도와 회귀선)
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -22,7 +22,7 @@ df["권역"] = np.where(df["시도"].isin(capital), "수도권", "비수도권")
 order = ["수도권", "비수도권"]
 pal = {"수도권": "#2f6fb0", "비수도권": "#c77b2f"}
 
-# ---------------------------------------------------------------- 그림 9-2
+# ---------------------------------------------------------------- 그림 10-2
 # 수도권 vs 비수도권 고령인구비율 분포 비교
 fig, ax = plt.subplots(figsize=(8.5, 5.5))
 sns.boxplot(data=df, x="권역", y="고령인구비율", order=order, palette=pal,
@@ -38,10 +38,10 @@ ax.set_ylabel("고령인구비율 (%)")
 ax.set_xlabel("")
 ax.set_title("수도권과 비수도권 시군구의 고령인구비율 분포 (2023)", fontsize=13)
 fig.tight_layout()
-fig.savefig(FIG / "fig09_group_compare.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig10_group_compare.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 9-3
+# ---------------------------------------------------------------- 그림 10-3
 # 고령인구비율과 합계출산율: 산점도 + 회귀선
 sub = df.dropna(subset=["고령인구비율", "합계출산율"])
 reg = stats.linregress(sub["고령인구비율"], sub["합계출산율"])
@@ -63,7 +63,7 @@ ax.set_ylabel("합계출산율 (명)")
 ax.set_title("시군구의 고령인구비율과 합계출산율 (2023, 228개)", fontsize=13)
 ax.legend(loc="lower right")
 fig.tight_layout()
-fig.savefig(FIG / "fig09_scatter_reg.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig10_scatter_reg.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("saved:", [p.name for p in sorted(FIG.glob('fig09_*.png'))])
+print("saved:", [p.name for p in sorted(FIG.glob('fig10_*.png'))])

@@ -1,4 +1,4 @@
-# 8주차 2회차(실습) 그림 생성: 그림 8-6, 8-7
+# 9주차 2회차(실습) 그림 생성: 그림 9-6, 8-7
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -19,7 +19,7 @@ inc = pd.read_csv(BASE / "data" / "income_dist.csv", encoding="utf-8-sig")
 sub = df.dropna(subset=["합계출산율"])
 r = sub["고령인구비율"].corr(sub["합계출산율"])
 
-# ---------------------------------------------------------------- 그림 8-6
+# ---------------------------------------------------------------- 그림 9-6
 # 그래프 다듬기 전과 후
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
 
@@ -39,10 +39,10 @@ ax.text(0.03, 0.95, f"상관계수 r = {r:.2f}  (n = {len(sub)})",
         transform=ax.transAxes, fontsize=10, va="top",
         bbox=dict(fc="white", ec="#bbb", boxstyle="round,pad=0.3"))
 fig.tight_layout()
-fig.savefig(FIG / "fig08_polish.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_polish.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 8-7
+# ---------------------------------------------------------------- 그림 9-7
 # 왜곡된 시계열 그래프와 고친 그래프
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
 
@@ -71,7 +71,7 @@ ax.annotate("0.323", xy=(2023, 0.323), xytext=(2021.0, 0.22),
 fig.suptitle("같은 지니계수 시계열, 두 가지 인상 (2011-2023년)",
              fontsize=13, y=1.02)
 fig.tight_layout()
-fig.savefig(FIG / "fig08_distort_fix.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_distort_fix.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("그림 8-6, 8-7 저장 완료")
+print("그림 9-6, 8-7 저장 완료")

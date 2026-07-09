@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -75,20 +78,22 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>2주차 1회차. AI 에이전트의 작동 원리</h1>
 <blockquote>
@@ -135,7 +140,7 @@ main input[type=checkbox] { margin-right:6px; }
 <p><strong>둘째, "그럴듯함"과 "옳음"은 다르다.</strong> 모델이 최적화하는 것은 어디까지나 말의 그럴듯함이다. 세상 지식의 대부분에서는 그럴듯한 말이 옳은 말과 일치한다("수도는 서울"). 그러나 둘이 갈라지는 지점이 반드시 있고, 그 지점에서 환각이 태어난다. 2.3절에서 자세히 본다.</p>
 <h3>학습데이터의 그림자</h3>
 <p>LLM의 지식은 학습에 쓰인 텍스트에서 온다. 여기서 세 가지 한계가 나온다. 첫째, 지식의 마감일이 있다. 학습데이터가 어느 시점까지의 텍스트라면 그 뒤에 일어난 일(작년의 인구 통계, 지난달의 법 개정)은 모델 안에 없다. 둘째, 텍스트가 적은 영역에서는 약하다. 영어 자료가 풍부한 주제에 비해, 한국의 특정 시군구 조례나 소규모 통계처럼 문서 자체가 드문 주제에서는 패턴 학습이 얕다. 셋째, 학습데이터의 편향이 스며든다. 데이터에 많이 등장한 관점이 "그럴듯한 답"이 되기 쉽다.</p>
-<p>다행히 에이전트는 이 한계를 도구로 보완할 수 있다. 최신 통계가 필요하면 웹을 검색하거나 KOSIS에서 데이터를 받아 오면 되고(2.5절), 특정 문서에 근거해야 하면 그 문서를 직접 읽히면 된다(11주차의 그라운딩). 중요한 것은 "모델의 기억"과 "방금 확인한 사실"을 구별하는 감각이다.</p>
+<p>다행히 에이전트는 이 한계를 도구로 보완할 수 있다. 최신 통계가 필요하면 웹을 검색하거나 KOSIS에서 데이터를 받아 오면 되고(2.5절), 특정 문서에 근거해야 하면 그 문서를 직접 읽히면 된다(12주차의 그라운딩). 중요한 것은 "모델의 기억"과 "방금 확인한 사실"을 구별하는 감각이다.</p>
 <h2 id="22-맥락창-에이전트의-작업-기억">2.2 맥락창: 에이전트의 작업 기억</h2>
 <h3>지금 책상 위에 놓인 것만 보인다</h3>
 <p>LLM에게는 사람의 장기 기억 같은 것이 없다. 대화를 하면 할수록 나를 알아 가는 친구를 기대하기 쉽지만, 실제 구조는 다르다. 모델이 답을 만들 때 참고할 수 있는 것은 맥락창(context window)이라 부르는 한정된 공간에 지금 들어 있는 내용뿐이다.</p>

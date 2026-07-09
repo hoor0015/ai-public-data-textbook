@@ -1,5 +1,5 @@
-# 10주차 데이터 그림: 소비자 민원 상담 사례 코퍼스 (실제 데이터)
-# 그림 10-2 핵심어 빈도, 그림 10-3 유형별 TF-IDF 특징어, 그림 10-4 유형 문서 간 유사도
+# 11주차 데이터 그림: 소비자 민원 상담 사례 코퍼스 (실제 데이터)
+# 그림 11-2 핵심어 빈도, 그림 11-3 유형별 TF-IDF 특징어, 그림 11-4 유형 문서 간 유사도
 # 데이터: 공정거래위원회_소비자 민원학습데이터 모범상담 사례_20211227 (공공데이터포털 15098335)
 # 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 import re
@@ -85,7 +85,7 @@ df = df.dropna(subset=["제목", "내용"]).reset_index(drop=True)
 docs = (df["제목"] + " " + df["내용"]).tolist()
 df["유형_규칙"] = [classify(t, c) for t, c in zip(df["제목"], df["내용"])]
 
-# ---------------------------------------------------------------- 그림 10-2
+# ---------------------------------------------------------------- 그림 11-2
 # 핵심어 빈도 상위 20개 막대그래프
 cv = CountVectorizer(analyzer=tokenize)
 dtm = cv.fit_transform(docs)
@@ -101,10 +101,10 @@ for i, v in enumerate(top20.values):
     ax.text(v + 2, i, str(v), va="center", fontsize=9, color="#333")
 sns.despine(left=True)
 fig.tight_layout()
-fig.savefig(FIG / "fig10_freq.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig11_freq.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 10-3
+# ---------------------------------------------------------------- 그림 11-3
 # 유형별 TF-IDF 특징어 (6개 유형 문서)
 grouped = df.groupby("유형_규칙")["내용"].apply(lambda s: " ".join(s.astype(str)))
 order = ["의료", "보험", "통신·인터넷", "여행·운송", "자동차", "기타"]
@@ -126,10 +126,10 @@ for i, (label, ax) in enumerate(zip(order, axes.ravel())):
 fig.suptitle("민원 유형별 TF-IDF 상위 특징어 5개 (유형별로 이어 붙인 문서 기준)",
              fontsize=13, y=1.00)
 fig.tight_layout()
-fig.savefig(FIG / "fig10_tfidf.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig11_tfidf.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 10-4
+# ---------------------------------------------------------------- 그림 11-4
 # 유형 문서 간 코사인 유사도 히트맵
 sim = cosine_similarity(tfidf)
 fig, ax = plt.subplots(figsize=(7.2, 5.8))
@@ -140,7 +140,7 @@ ax.set_title("민원 유형 문서 간 코사인 유사도", fontsize=13)
 plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
 plt.setp(ax.get_yticklabels(), rotation=0)
 fig.tight_layout()
-fig.savefig(FIG / "fig10_similarity.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig11_similarity.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("saved:", [p.name for p in sorted(FIG.glob("fig10_*.png"))])
+print("saved:", [p.name for p in sorted(FIG.glob("fig11_*.png"))])

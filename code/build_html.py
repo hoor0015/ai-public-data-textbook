@@ -16,11 +16,34 @@ BOOK_TITLE = "AI 기반 공공데이터 분석"
 BOOK_SUBTITLE = "VSCode와 Claude Code로 배우는 공공데이터 분석"
 
 PARTS = [
-    ("1부. 에이전트와 도구", range(1, 5)),
-    ("2부. 공공데이터의 수집과 정리", range(5, 8)),
-    ("3부. 분석과 해석", range(8, 12)),
-    ("4부. 종합과 확장", range(12, 14)),
+    ("1부. 에이전트와 도구", [1, 2, 3, 4]),
+    ("2부. 공공데이터의 수집과 정리", [5, 6, 7]),
+    ("3부. 분석과 해석", [9, 10, 11, 12]),
+    ("4부. 종합과 확장", [13, 14]),
 ]
+
+EXAMS = {8: "중간고사", 15: "기말고사"}
+
+
+def display_units():
+    """부 제목·시험 주차·콘텐츠 주차를 화면 순서대로 나열."""
+    emitted = set()
+    for part_title, weeks in PARTS:
+        for ex in sorted(EXAMS):
+            if ex not in emitted and ex < weeks[0]:
+                emitted.add(ex)
+                yield ("exam", ex)
+        yield ("part", part_title)
+        for w in weeks:
+            for ex in sorted(EXAMS):
+                if ex not in emitted and ex < w:
+                    emitted.add(ex)
+                    yield ("exam", ex)
+            yield ("week", w)
+    for ex in sorted(EXAMS):
+        if ex not in emitted:
+            yield ("exam", ex)
+
 
 CSS = """
 :root { --accent:#2f6fb0; --sidebar-w:320px; }
@@ -59,6 +82,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -121,18 +147,23 @@ def convert(md_text):
 
 
 def sidebar(chapters, tocs, current):
+    by_week = {}
+    for ch in chapters:
+        by_week.setdefault(ch["week"], []).append(ch)
     items = [f'<h1><a href="index.html">{BOOK_TITLE}</a></h1><ul>']
-    for part_title, weeks in PARTS:
-        items.append(f'<li class="part">{part_title}</li>')
-        for ch in chapters:
-            if ch["week"] not in weeks:
-                continue
+    for kind_, val in display_units():
+        if kind_ == "part":
+            items.append(f'<li class="part">{val}</li>')
+            continue
+        if kind_ == "exam":
+            items.append(f'<li class="exam">{val}주차 · {EXAMS[val]}</li>')
+            continue
+        for ch in by_week.get(val, []):
             tag = ('<span class="tag t1">이론</span>' if ch["sess"] == 1
                    else '<span class="tag t2">실습</span>')
             cur = ' cur' if ch["out"] == current else ''
-            items.append(
-                f'<li class="chap{cur}"><a href="{ch["out"]}">'
-                f'{tag}{ch["week"]}주차 {ch["short"]}</a></li>')
+            items.append(f'<li class="chap{cur}"><a href="{ch["out"]}">'
+                         f'{tag}{ch["week"]}주차 {ch["short"]}</a></li>')
             if ch["out"] == current:
                 for t, hid in tocs[ch["out"]]:
                     items.append(f'<li class="sec"><a href="{ch["out"]}#{hid}">{t}</a></li>')
@@ -186,15 +217,23 @@ toc_html = [
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
     "<p>광운대학교 행정학과 조교수 김경동(kdkim@kw.ac.kr)</p>",
 ]
-for part_title, weeks in PARTS:
-    toc_html.append(f'<h2 class="toc-part">{part_title}</h2><ul>')
-    for ch in chapters:
-        if ch["week"] not in weeks:
-            continue
+by_week = {}
+for ch in chapters:
+    by_week.setdefault(ch["week"], []).append(ch)
+for kind_, val in display_units():
+    if kind_ == "part":
+        toc_html.append(f'<h2 class="toc-part">{val}</h2>')
+        continue
+    if kind_ == "exam":
+        toc_html.append(f'<p class="toc-exam">{val}주차 · {EXAMS[val]}</p>')
+        continue
+    toc_html.append("<ul>")
+    for ch in by_week.get(val, []):
         kind = "이론" if ch["sess"] == 1 else "실습"
+        label = f'{ch["week"]}주차 {ch["sess"]}회차 ({kind}) · {ch["short"]}' 
         toc_html.append(
             f'<li style="margin-top:10px"><strong><a href="{ch["out"]}">'
-            f'{ch["week"]}주차 {ch["sess"]}회차 ({kind}) · {ch["short"]}</a></strong><ul>')
+            f'{label}</a></strong><ul>')
         for t, hid in tocs[ch["out"]]:
             toc_html.append(f'<li><a href="{ch["out"]}#{hid}">{t}</a></li>')
         toc_html.append("</ul></li>")

@@ -39,6 +39,9 @@ main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
 main input[type=checkbox] { margin-right:6px; }
+nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
+  font-weight:700; color:#a33; }
+.toc-exam { margin-top:24px; font-size:1.05rem; font-weight:700; color:#a33; }
 .pager { display:flex; justify-content:space-between; margin-top:56px;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
@@ -74,20 +77,22 @@ main input[type=checkbox] { margin-right:6px; }
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
+<li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
-<li class="chap"><a href="w08-1.html"><span class="tag t1">이론</span>8주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w08-2.html"><span class="tag t2">실습</span>8주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>5주차 1회차. 공공데이터 생태계</h1>
 <blockquote>
@@ -214,7 +219,7 @@ main input[type=checkbox] { margin-right:6px; }
 <p><strong>한국은행 경제통계시스템 ECOS(ecos.bok.or.kr).</strong> 한국은행이 운영하며, 한국은행이 직접 작성하는 통계(통화·금융, 국민소득, 국제수지)를 중심으로 국내외 여러 기관의 경제통계를 모아 제공한다. 기준금리, 환율, GDP 같은 거시지표의 시계열이 필요할 때 가장 정확한 원천이다. 예를 들어 "지역내총생산과 지방재정의 관계"를 본다면 한 축은 ECOS나 KOSIS에서, 다른 축은 지방재정365에서 가져오게 된다.</p>
 <p><strong>지방재정365(lofin365.go.kr).</strong> 행정안전부의 지방재정 통합공개시스템이다. 지방자치단체의 예산·결산 내역과 재정자립도 같은 재정지표를 유사 자치단체끼리 비교할 수 있게 공개한다. 앞의 "우리 시 재정자립도" 질문의 답이 있는 곳이 바로 여기다. 행정학 전공자에게는 앞으로 가장 자주 드나들 포털 중 하나가 될 것이다.</p>
 <p><strong>ALIO 공공기관 경영정보 공개시스템(alio.go.kr).</strong> 재정경제부(옛 기획재정부)가 운영하며, 공기업·준정부기관 등 공공기관의 경영정보(임직원 수, 평균 보수, 부채, 채용 현황 등)를 공시한다. 지자체가 아니라 공공기관이 분석 대상일 때 가는 곳이다. "공공기관 신입 초임은 기관 유형별로 얼마나 다른가" 같은 질문의 재료가 있다.</p>
-<p><strong>국가법령정보센터(law.go.kr).</strong> 법제처가 운영하는 법령 정보의 원천이다. 법률, 시행령, 행정규칙, 자치법규, 판례를 한곳에서 검색할 수 있다. 숫자 데이터는 아니지만 공공데이터 분석에서 뜻밖에 자주 쓰인다. 데이터의 열 이름에 등장하는 제도 용어(예: "재정자립도"의 산식, "공공기관"의 범위)가 법령과 규칙에 정의되어 있기 때문이다. 이 교재 후반(10-11주차)에서 법령·문서 텍스트를 직접 분석 재료로 쓰기도 한다.</p>
+<p><strong>국가법령정보센터(law.go.kr).</strong> 법제처가 운영하는 법령 정보의 원천이다. 법률, 시행령, 행정규칙, 자치법규, 판례를 한곳에서 검색할 수 있다. 숫자 데이터는 아니지만 공공데이터 분석에서 뜻밖에 자주 쓰인다. 데이터의 열 이름에 등장하는 제도 용어(예: "재정자립도"의 산식, "공공기관"의 범위)가 법령과 규칙에 정의되어 있기 때문이다. 이 교재 후반(11-12주차)에서 법령·문서 텍스트를 직접 분석 재료로 쓰기도 한다.</p>
 <p><strong>정보공개포털(open.go.kr).</strong> 행정안전부가 운영하는 정보공개 청구 창구다. 앞의 여섯 포털이 "이미 개방된 것"을 다룬다면, 여기는 "아직 개방되지 않은 것"을 요청하는 곳이다. 온라인으로 청구서를 내면 해당 기관이 원칙적으로 10일 이내에 공개 여부를 결정한다. 다른 기관이 이미 청구해 공개된 문서를 열람할 수도 있다. 분석에 필요한 데이터가 어느 포털에도 없을 때 남는 마지막 카드다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 포털 화면은 바뀐다, 성격은 남는다</strong><br>
@@ -353,7 +358,7 @@ main input[type=checkbox] { margin-right:6px; }
 <h3>쓸 때 조심해야 할 것들</h3>
 <p>이용허락이 허용해도, 분석가로서 스스로 점검해야 할 유의점이 있다.</p>
 <ul>
-<li><strong>개인정보가 아닌지 본다.</strong> 개방 데이터는 개인을 식별할 수 없게 가공된 것이 원칙이지만, 작은 지역 x 드문 특성의 조합(예: 어느 면 단위의 특정 국적 외국인 수)은 사실상 개인을 가리킬 수 있다. 이런 데이터를 다른 데이터와 결합해 개인을 추정하는 것은 기술적으로 가능하더라도 해서는 안 되는 일이다. 13주차(윤리)에서 다시 다룬다.</li>
+<li><strong>개인정보가 아닌지 본다.</strong> 개방 데이터는 개인을 식별할 수 없게 가공된 것이 원칙이지만, 작은 지역 x 드문 특성의 조합(예: 어느 면 단위의 특정 국적 외국인 수)은 사실상 개인을 가리킬 수 있다. 이런 데이터를 다른 데이터와 결합해 개인을 추정하는 것은 기술적으로 가능하더라도 해서는 안 되는 일이다. 14주차(윤리)에서 다시 다룬다.</li>
 <li><strong>공개된 데이터가 곧 정확한 데이터는 아니다.</strong> 개방 파일에도 입력 오류, 누락, 갱신 지연이 있다. "정부 데이터니까 맞겠지"는 검증을 건너뛸 이유가 되지 않는다. 다음 회차 실습에서 바로 확인하겠지만, 우리가 쓰는 229개 시군구 데이터에도 결측값이 있다.</li>
 <li><strong>원본을 보존하고, 가공본과 구분한다.</strong> 내려받은 원본 파일은 그대로 두고, 정제·가공은 사본으로 한다. 4주차에서 만든 프로젝트 폴더 구조에서 data 폴더에 원본을, 별도 폴더에 가공 결과를 두는 이유다. 문제가 생겼을 때 원본으로 되돌아갈 수 있어야 분석 전체가 재현 가능해진다.</li>
 <li><strong>약관이 있는 창구는 약관을 따른다.</strong> 오픈API는 활용신청 시 이용약관에 동의하게 되어 있고, 하루 호출 횟수 같은 제한이 있다. 자동 수집을 하더라도 상대 서버에 부담을 주지 않는 범위에서 한다(6주차에서 API와 크롤링의 경계와 함께 다룬다).</li>
