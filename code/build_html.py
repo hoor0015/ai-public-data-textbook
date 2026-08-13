@@ -8,6 +8,8 @@
 import os
 import re
 import glob
+import subprocess
+from datetime import date
 
 import markdown
 
@@ -78,6 +80,10 @@ main th { background:#f0f3f6; }
 main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
 main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
   padding:14px 16px; overflow-x:auto; line-height:1.5; }
+p.moddate { color:#7a828a; font-size:.85rem; margin:-6px 0 22px; }
+span.moddate-inline { color:#8a929a; font-size:.8rem; font-weight:400; margin-left:6px; }
+div.update-notice { border:1px solid #d9d9e3; border-left:5px solid #5b6ee1; background:#f7f7fc;
+  padding:12px 16px; margin:18px 0; border-radius:4px; font-size:.95rem; }
 main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
@@ -96,6 +102,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 """
 
 
+def mod_date(md_path):
+    """장 md 파일의 최종 수정일(YYYY-MM-DD).
+    커밋되지 않은 변경이 있으면 오늘(빌드일), 아니면 마지막 커밋일. git이 없으면 파일 mtime."""
+    rel = os.path.relpath(md_path, ROOT)
+    try:
+        dirty = subprocess.run(["git", "-C", ROOT, "status", "--porcelain", "--", rel],
+                               capture_output=True, text=True).stdout.strip()
+        if dirty:
+            return date.today().isoformat()
+        out = subprocess.run(["git", "-C", ROOT, "log", "-1", "--format=%cs", "--", rel],
+                             capture_output=True, text=True).stdout.strip()
+        if out:
+            return out
+    except OSError:
+        pass
+    return date.fromtimestamp(os.path.getmtime(md_path)).isoformat()
+
+
 def find_chapters():
     """NN-S_*.md 파일을 (주차, 회차) 순으로 수집하고 h1 제목을 뽑는다."""
     chapters = []
@@ -111,7 +135,7 @@ def find_chapters():
         chapters.append({
             "week": week, "sess": sess, "md": path,
             "out": f"w{week:02d}-{sess}.html",
-            "title": title, "short": short,
+            "title": title, "short": short, "date": mod_date(path),
         })
     return chapters
 
@@ -202,7 +226,11 @@ for i, ch in enumerate(chapters):
               else ("index.html", "목차"))
     next_l = ((chapters[i + 1]["out"], chapters[i + 1]["title"])
               if i < len(chapters) - 1 else None)
-    out = page(ch["title"], bodies[ch["out"]],
+    body = bodies[ch["out"]].replace(
+        "</h1>",
+        f'</h1>\n<p class="moddate">최종 수정: {ch["date"]} · '
+        '이 교재는 학기 중에도 계속 업데이트됩니다</p>', 1)
+    out = page(ch["title"], body,
                sidebar(chapters, tocs, ch["out"]), prev_l, next_l)
     open(os.path.join(ROOT, ch["out"]), "w", encoding="utf-8").write(out)
 print(f"built {len(chapters)} chapter pages")
@@ -216,6 +244,10 @@ toc_html = [
     "학생의 역할은 코딩이 아니라 에이전트에 대한 지시, 결과의 검증, 정책적 해석입니다. "
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
     "<p>광운대학교 행정학과 조교수 김경동(kdkim@kw.ac.kr)</p>",
+    '<div class="update-notice"><strong>업데이트 안내</strong><br>'
+    "이 교재는 완성 후 멈춘 책이 아니라 학기 중에도 계속 업데이트되는 살아 있는 문서입니다. "
+    "각 장 제목 아래와 아래 목차의 날짜가 그 장의 최종 수정일이니, "
+    "수업 전에 자신이 읽은 판이 최신인지 확인해 주세요.</div>",
 ]
 by_week = {}
 for ch in chapters:
@@ -233,7 +265,8 @@ for kind_, val in display_units():
         label = f'{ch["week"]}주차 {ch["sess"]}회차 ({kind}) · {ch["short"]}' 
         toc_html.append(
             f'<li style="margin-top:10px"><strong><a href="{ch["out"]}">'
-            f'{label}</a></strong><ul>')
+            f'{label}</a></strong>'
+            f'<span class="moddate-inline">{ch["date"]} 수정</span><ul>')
         for t, hid in tocs[ch["out"]]:
             toc_html.append(f'<li><a href="{ch["out"]}#{hid}">{t}</a></li>')
         toc_html.append("</ul></li>")

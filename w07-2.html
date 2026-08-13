@@ -35,6 +35,10 @@ main th { background:#f0f3f6; }
 main code { background:#f2f3f5; padding:1px 5px; border-radius:3px; font-size:.9em; }
 main pre { background:#f6f8fa; border:1px solid #e3e6ea; border-radius:6px;
   padding:14px 16px; overflow-x:auto; line-height:1.5; }
+p.moddate { color:#7a828a; font-size:.85rem; margin:-6px 0 22px; }
+span.moddate-inline { color:#8a929a; font-size:.8rem; font-weight:400; margin-left:6px; }
+div.update-notice { border:1px solid #d9d9e3; border-left:5px solid #5b6ee1; background:#f7f7fc;
+  padding:12px 16px; margin:18px 0; border-radius:4px; font-size:.95rem; }
 main pre code { background:none; padding:0; }
 main blockquote { margin:18px 0; padding:8px 18px; border-left:4px solid #c8ccd2;
   background:#fafbfc; color:#4b5563; }
@@ -98,6 +102,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>7주차 2회차. 에이전트로 데이터 정제하기</h1>
+<p class="moddate">최종 수정: 2026-08-13 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
 <p>1회차에서 결측·이상치·자료형·병합 키의 원리를 배웠다. 이번 실습에서는 그 원리를 실제 데이터 두 개에 적용한다. 2023년 시군구 인구 파일과 2013년 시군구 합계출산율 파일을 진단하고, 결측과 이상치를 판단하고, 두 파일을 병합해 "10년 치 출산율 비교"가 가능한 데이터 한 장을 만든다. 이 데이터가 9주차 탐색적 분석의 재료다.</p>
 <p>오늘의 진행 순서는 1회차에서 배운 원칙 그대로다. 진단 없이 치료 없고, 처리에는 근거를 남기고, 결과는 표본으로 대조한다. 특히 오늘은 에이전트가 결측을 그럴듯하게 망치는 장면을 일부러 만들어서 관찰한다. 2주차의 환각 실험이 "묻는 방식"의 실험이었다면, 오늘은 "맡기는 방식"의 실험이다.</p>
