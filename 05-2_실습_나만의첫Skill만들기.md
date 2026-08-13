@@ -70,7 +70,7 @@ Data columns (total 12 columns):
 
 ## 2.2 SKILL.md 작성: csv-profile
 
-**무엇을 왜 하는가.** 2.1의 절차를 SKILL.md로 저장한다. 먼저 프로젝트 폴더 안에 스킬 폴더를 만든다. VSCode 탐색기에서 직접 만들어도 되고, 에이전트에게 시켜도 된다. 위치는 `.claude/skills/csv-profile/`이다 (`.claude` 폴더는 3주차에 CLAUDE.md를 만들며 이미 생겼을 것이다). 그 안에 `SKILL.md` 파일을 만들고 아래 내용을 그대로 입력한다. 1회차에서 배운 구조 그대로, `---` 사이의 머리말과 그 아래 본문으로 되어 있다.
+**무엇을 왜 하는가.** 2.1의 절차를 SKILL.md로 저장한다. 먼저 프로젝트 폴더 안에 스킬 폴더를 만든다. 에이전트에게 "`.claude/skills/csv-profile/` 폴더를 만들어 줘"라고 시키면 되고, VSCode 탐색기에서 직접 만들어도 된다. 위치는 `.claude/skills/csv-profile/`이다 (`.claude` 폴더는 3주차에 CLAUDE.md를 만들며 이미 생겼을 것이다). 그 안에 `SKILL.md` 파일을 만들고 아래 내용을 그대로 입력한다. 1회차에서 배운 구조 그대로, `---` 사이의 머리말과 그 아래 본문으로 되어 있다.
 
 ```markdown
 ---

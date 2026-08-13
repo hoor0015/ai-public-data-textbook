@@ -149,14 +149,17 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <h2 id="22-kosis-MCP-등록하고-연결-확인하기">2.2 kosis MCP 등록하고 연결 확인하기</h2>
 <p><strong>무엇을 왜 하는가.</strong> 이제 1회차 1.5절에서 배운 등록을 실제로 한다. kosis MCP 서버는 KOSIS의 통계를 검색·조회하는 도구들을 에이전트에게 더해 주는 시범서비스로, 인증키 발급도 회원가입도 필요 없이 주소만으로 등록된다.</p>
 <p>등록 전에 1회차의 신뢰 점검을 그대로 적용해 보자. ① 운영 주체: 수업에서 안내한, 국가통계포털(KOSIS) 기반으로 운영되는 실습용 시범서비스다. ② 기능 범위: 통계를 검색하고 조회하는 읽기 전용 도구들이다. 내 파일을 고치거나 지우는 능력은 없다. ③ 필요성: 오늘 수집 실습의 핵심 도구다. 세 점검을 통과했으니 꽂는다.</p>
-<p>VSCode에서 터미널을 열고(2주차에서 배운 그 터미널이다) 다음 한 줄을 입력한다.</p>
+<p>등록도 이 과목의 방식대로 에이전트에게 시킨다. 등록 명령(<code>claude mcp add</code>)은 터미널 명령이지만, 터미널을 다루는 것이야말로 에이전트의 일이다(2주차). 대화창에 다음과 같이 지시한다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
-<strong>지시문 예시 (터미널 명령)</strong><br>
-"claude mcp add --transport http kosis https://kosismcp2026.vercel.app/api/mcp"
+<strong>지시문 예시</strong><br>
+"kosis MCP 서버를 등록해 줘. 원격 HTTP 서버이고, 이름은 kosis, 주소는 https://kosismcp2026.vercel.app/api/mcp 야. claude mcp add 명령으로 등록하고, 실행한 명령과 결과 메시지를 그대로 보여 줘."
 </div>
 
-<p><strong>예상되는 결과.</strong> 터미널에 서버가 추가되었다는 확인 메시지가 나온다. 이어서 Claude Code 대화창에 <code>/mcp</code>를 입력하면 등록된 서버 목록에 kosis가 보이고, 연결 상태와 이 서버가 제공하는 도구들(통계 검색, 통계값 조회, 통계표 구조 확인 등)을 확인할 수 있다.</p>
-<p><strong>검증.</strong> ① <code>/mcp</code> 화면에서 kosis 서버의 상태가 연결됨으로 표시되는지 확인한다. ② 도구 목록에 검색과 조회에 해당하는 도구가 보이는지 훑어본다. ③ 마지막으로 등록 명령의 의미를 자기 말로 설명할 수 있는지 점검한다. <code>kosis</code>는 내가 붙인 별명이고, 주소는 서버의 위치이며, 이 서버는 읽기 전용 통계 도구를 제공한다. 무엇을 꽂았는지 모른 채 꽂는 것이 1회차에서 경고한 가장 나쁜 습관이다.</p>
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 에이전트가 터미널에서 다음 한 줄을 실행한다. 실행 전에 승인 요청이 뜨는데, 4주차에서 기른 승인 기준을 그대로 적용하자. 명령 속 주소가 내가 알려 준 바로 그 주소인지 읽고 승인한다.</p>
+<pre><code class="language-bash">claude mcp add --transport http kosis https://kosismcp2026.vercel.app/api/mcp
+</code></pre>
+<p>터미널에 서버가 추가되었다는 확인 메시지가 나온다. 새로 등록한 서버는 새 세션부터 인식되므로 Claude Code를 재시작한다(5주차에서 스킬 폴더를 새로 만들었을 때와 같다). 그다음 대화창에 <code>/mcp</code>를 입력하면 등록된 서버 목록에 kosis가 보이고, 연결 상태와 이 서버가 제공하는 도구들(통계 검색, 통계값 조회, 통계표 구조 확인 등)을 확인할 수 있다.</p>
+<p><strong>검증.</strong> ① 에이전트가 실행한 명령을 눈으로 읽는다. 이름(kosis)과 주소가 지시한 그대로인지 확인한다. ② 재시작 후 <code>/mcp</code> 화면에서 kosis 서버의 상태가 연결됨으로 표시되는지 확인한다. ③ 도구 목록에 검색과 조회에 해당하는 도구가 보이는지 훑어본다. ④ 마지막으로 등록 명령의 의미를 자기 말로 설명할 수 있는지 점검한다. <code>kosis</code>는 내가 붙인 별명이고, 주소는 서버의 위치이며, 이 서버는 읽기 전용 통계 도구를 제공한다. 무엇을 꽂았는지 모른 채 꽂는 것이 1회차에서 경고한 가장 나쁜 습관이다.</p>
 <h2 id="23-MCP로-통계-검색수집하기">2.3 MCP로 통계 검색·수집하기</h2>
 <p><strong>무엇을 왜 하는가.</strong> 이제 에이전트에게 수집을 시킨다. 연습 주제는 시도별 주민등록 총인구(2023년)로 정한다. 결과를 포털 화면과 대조하기 쉬운, 검증 연습에 알맞은 데이터이기 때문이다. 3주차에서 배운 대로 검증 가능한 단위로 쪼개서, 먼저 "제대로 받아지는가"만 확인하고 저장은 다음 절에서 잇는다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
@@ -304,7 +307,8 @@ kosis MCP를 쓴 답변에는 "시범서비스 안내"라는 문구와 통계표
 <h2 id="검증-체크리스트">검증 체크리스트</h2>
 <ul>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.1에서 에이전트가 제시한 링크를 전부 클릭해 (1) 정상 (2) 불일치 (3) 불통으로 분류했다</li>
-<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>/mcp</code> 화면에서 kosis 서버가 연결됨 상태이고 도구 목록이 보이는 것을 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 등록을 에이전트에게 지시했고, 실행된 명령의 이름·주소가 지시와 일치하는 것을 눈으로 확인했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 재시작 후 <code>/mcp</code> 화면에서 kosis 서버가 연결됨 상태이고 도구 목록이 보이는 것을 확인했다</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 수집 대화의 도구 사용 로그에서 kosis 도구 호출을 확인했다 (기억으로 답하지 않았다)</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 수신 건수(18)가 전국 1 + 시도 17로 설명됨을 확인했다</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 값 하나 이상(예: 서울 9,386,034)을 KOSIS 웹 화면과 자릿수까지 대조했다</li>
@@ -324,14 +328,14 @@ kosis MCP를 쓴 답변에는 "시범서비스 안내"라는 문구와 통계표
 </thead>
 <tbody>
 <tr>
-<td>터미널에서 <code>claude</code> 명령을 찾을 수 없다고 나온다</td>
-<td>Claude Code CLI가 설치되지 않았거나 터미널을 새로 열지 않음</td>
-<td>1주차 설치 절차를 다시 확인하고, 설치 후에는 터미널을 새로 연다</td>
+<td>에이전트가 <code>claude</code> 명령을 찾을 수 없다고 보고한다</td>
+<td>Claude Code CLI가 인식되지 않는 터미널</td>
+<td>"새 터미널에서 다시 실행해 줘"라고 지시. 계속 실패하면 1주차 설치 절차를 다시 확인</td>
 </tr>
 <tr>
 <td><code>/mcp</code>에 kosis 서버가 안 보인다</td>
-<td>등록 명령을 다른 폴더에서 실행했거나 오타</td>
-<td>프로젝트 폴더의 터미널에서 등록 명령을 다시 실행. 주소 철자를 그대로 복사해 붙인다</td>
+<td>등록 후 재시작하지 않았거나 이름·주소 오타</td>
+<td>Claude Code를 재시작하고 다시 확인. 그래도 없으면 에이전트에게 "등록된 MCP 서버 목록을 확인해 줘"라고 시켜 등록 여부부터 점검</td>
 </tr>
 <tr>
 <td>서버는 보이는데 연결 실패로 표시된다</td>
