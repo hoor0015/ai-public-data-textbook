@@ -70,11 +70,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="exam">8주차 · 중간고사</li>
@@ -85,8 +85,8 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
 <li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
 <li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
 <li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
 <li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
@@ -130,7 +130,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </ul>
 <p>두 사람 다 진심이지만, 근거는 둘 다 "내 주변"이다. 내 주변은 전체가 아니다. 국장의 주변에는 청년이 많고 과장의 주변에는 학부모가 많다면, 같은 도시를 보고도 정반대 진단이 나온다. 이렇게 개인의 경험과 인상에 기대어 정책을 정하면, 목소리 큰 사람의 경험이 곧 정책이 되어 버린다.</p>
 <p>대안은 전체를 직접 세어 보는 것이다. 우리 시에서 작년에 나간 사람이 몇 명인지, 그중 20대가 몇 명이고 40대가 몇 명인지는 실제로 기록되어 있다. 주민등록 전출입 신고가 모두 데이터로 쌓이기 때문이다. 이 기록을 열어 보면 논쟁은 짧아진다. 숫자가 20대 순유출이 가장 크다고 말하면 청년 정책에 힘이 실리고, 40대가 크다면 교육 정책이 우선이 된다.</p>
-<p>이처럼 정책을 인상이 아니라 데이터와 증거에 기대어 설계하고 평가하자는 흐름을 증거기반 정책(evidence-based policy)이라 부른다. 한국 정부도 이 방향으로 움직여 왔다. 각종 통계를 한곳에 모은 KOSIS 국가통계포털, 행정기관이 보유한 데이터를 개방하는 공공데이터포털 같은 창구가 만들어졌고, 법(공공데이터의 제공 및 이용 활성화에 관한 법률)으로 공공데이터 개방이 의무화되었다. 자세한 내용은 5주차에서 다룬다.</p>
+<p>이처럼 정책을 인상이 아니라 데이터와 증거에 기대어 설계하고 평가하자는 흐름을 증거기반 정책(evidence-based policy)이라 부른다. 한국 정부도 이 방향으로 움직여 왔다. 각종 통계를 한곳에 모은 KOSIS 국가통계포털, 행정기관이 보유한 데이터를 개방하는 공공데이터포털 같은 창구가 만들어졌고, 법(공공데이터의 제공 및 이용 활성화에 관한 법률)으로 공공데이터 개방이 의무화되었다. 자세한 내용은 6주차에서 다룬다.</p>
 <div style="border:1px solid #cdd9e5;border-left:5px solid #2f6fb0;background:#f5f9fd;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>정의 · 공공데이터와 증거기반 정책</strong><br>
 <strong>공공데이터</strong>(public data)는 정부·지자체·공공기관이 업무 과정에서 만들거나 수집해 국민에게 개방한 데이터다. 인구, 예산, 민원, 버스 노선, 미세먼지 측정값이 모두 여기에 든다.<br>
@@ -231,12 +231,12 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <p><img alt="그림 1-3. 교재 4부 구성" src="figures/fig01_roadmap.png" /></p>
 <p>그림 1-3이 한 학기의 지도다. 교재는 4부, 13개 주로 구성되며 각 주는 이론(1회차)과 실습(2회차)으로 나뉜다.</p>
 <ul>
-<li><strong>1부 (1-4주) 에이전트와 도구.</strong> 에이전트가 무엇이고 어떻게 작동하는지 이해하고, 일 시키는 법(지시 설계)을 훈련하고, 내 노트북에 분석 환경을 갖춘다. 환경 구축조차 에이전트에게 지시해서 한다.</li>
-<li><strong>2부 (5-7주) 공공데이터의 수집과 정리.</strong> 한국 공공데이터가 어디에 어떤 형태로 있는지 익히고, 오픈API로 자동 수집하고, 지저분한 데이터를 분석 가능한 상태로 정제한다.</li>
+<li><strong>1부 (1-5주) 에이전트와 도구.</strong> 에이전트가 무엇이고 어떻게 작동하는지 이해하고, 일 시키는 법(지시 설계)을 훈련하고, 내 노트북에 분석 환경을 갖추고, 반복 작업을 Skill로 표준화한다. 환경 구축조차 에이전트에게 지시해서 한다.</li>
+<li><strong>2부 (6-7주) 공공데이터의 수집과 정리.</strong> 한국 공공데이터가 어디에 어떤 형태로 있는지 익히고, MCP로 에이전트가 직접 수집하게 하고, 지저분한 데이터를 분석 가능한 상태로 정제한다.</li>
 <li><strong>3부 (9-12주) 분석과 해석.</strong> 데이터를 그림으로 탐색하고(EDA), 통계로 차이의 의미를 따지고, 민원 같은 텍스트 데이터를 분석하고, 법령·문서에 근거해 답하는 에이전트를 만든다.</li>
 <li><strong>4부 (13-14주) 종합과 확장.</strong> 수집부터 보고까지 전 과정을 에이전트 파이프라인으로 묶고, 자기 주제로 분석 보고서를 완성한다.</li>
 </ul>
-<p>5주차 실습에서 각자 학기 프로젝트의 주제와 데이터를 정하고, 이후 실습에서 그 데이터를 계속 다듬어 14주차의 최종 보고서로 완성한다. 매주의 실습이 서로 남남이 아니라 한 편의 분석으로 쌓이는 구조다.</p>
+<p>6주차 실습에서 각자 학기 프로젝트의 주제와 데이터를 정하고, 이후 실습에서 그 데이터를 계속 다듬어 14주차의 최종 보고서로 완성한다. 매주의 실습이 서로 남남이 아니라 한 편의 분석으로 쌓이는 구조다.</p>
 <h3>이 교재로 공부하는 법</h3>
 <p>첫째, 실습 장의 지시문 예시를 그대로 입력하는 데서 시작하되, 반드시 한 번은 바꿔서 다시 시켜 본다. 지시를 바꾸면 결과가 어떻게 달라지는지 관찰하는 것이 에이전트 감각을 기르는 가장 빠른 길이다.</p>
 <p>둘째, 에이전트가 실패하는 장면을 아까워하지 않는다. 오류, 오해, 환각은 이 과목에서 가장 좋은 교재다. 실습 장의 "자주 겪는 문제"는 실제로 자주 일어난다.</p>

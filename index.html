@@ -62,11 +62,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="exam">8주차 · 중간고사</li>
@@ -77,8 +77,8 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
 <li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
 <li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
 <li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
 <li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
@@ -187,53 +187,52 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li><a href="w04-2.html#제출-과제">제출 과제</a></li>
 </ul></li>
 </ul>
-<h2 class="toc-part">2부. 공공데이터의 수집과 정리</h2>
 <ul>
-<li style="margin-top:10px"><strong><a href="w05-1.html">5주차 1회차 (이론) · 공공데이터 생태계</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w05-1.html">5주차 1회차 (이론) · 반복 작업의 표준화: Skill</a></strong><ul>
 <li><a href="w05-1.html#이-장에서-배우는-것">이 장에서 배우는 것</a></li>
-<li><a href="w05-1.html#11-개방형-정부와-공공데이터법-데이터는-왜-공개되는가">1.1 개방형 정부와 공공데이터법: 데이터는 왜 공개되는가</a></li>
-<li><a href="w05-1.html#12-공공데이터-지도-어디에-무엇이-있는가">1.2 공공데이터 지도: 어디에 무엇이 있는가</a></li>
-<li><a href="w05-1.html#13-데이터-형식-읽기-CSV-XLSX-JSON-오픈API">1.3 데이터 형식 읽기: CSV, XLSX, JSON, 오픈API</a></li>
-<li><a href="w05-1.html#14-메타데이터와-코드북-숫자보다-먼저-읽을-것">1.4 메타데이터와 코드북: 숫자보다 먼저 읽을 것</a></li>
-<li><a href="w05-1.html#15-이용허락과-유의점-쓸-수-있는-데이터-조심할-데이터">1.5 이용허락과 유의점: 쓸 수 있는 데이터, 조심할 데이터</a></li>
+<li><a href="w05-1.html#11-같은-지시를-세-번째-치고-있다면-반복의-비용">1.1 같은 지시를 세 번째 치고 있다면: 반복의 비용</a></li>
+<li><a href="w05-1.html#12-규칙의-그릇-절차의-그릇-CLAUDEmd와-Skill">1.2 규칙의 그릇, 절차의 그릇: CLAUDE.md와 Skill</a></li>
+<li><a href="w05-1.html#13-SKILLmd-해부-머리말과-본문">1.3 SKILL.md 해부: 머리말과 본문</a></li>
+<li><a href="w05-1.html#14-부르는-법-슬래시-커맨드와-자동-호출">1.4 부르는 법: 슬래시 커맨드와 자동 호출</a></li>
+<li><a href="w05-1.html#15-자동화의-경계-무엇을-맡기고-무엇을-남길-것인가">1.5 자동화의 경계: 무엇을 맡기고 무엇을 남길 것인가</a></li>
 <li><a href="w05-1.html#요약">요약</a></li>
 <li><a href="w05-1.html#연습문제">연습문제</a></li>
 </ul></li>
-<li style="margin-top:10px"><strong><a href="w05-2.html">5주차 2회차 (실습) · 데이터 찾고 첫 개관하기</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w05-2.html">5주차 2회차 (실습) · 나만의 첫 Skill 만들기</a></strong><ul>
 <li><a href="w05-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
 <li><a href="w05-2.html#준비물">준비물</a></li>
-<li><a href="w05-2.html#21-포털-검색-전략-사람의-탐색--에이전트의-웹-검색">2.1 포털 검색 전략: 사람의 탐색 + 에이전트의 웹 검색</a></li>
-<li><a href="w05-2.html#22-파일-데이터-내려받아-프로젝트에-넣기">2.2 파일 데이터 내려받아 프로젝트에 넣기</a></li>
-<li><a href="w05-2.html#23-에이전트로-데이터-프로파일링-행열자료형결측-한눈에">2.3 에이전트로 데이터 프로파일링: 행·열·자료형·결측 한눈에</a></li>
-<li><a href="w05-2.html#24-학기-프로젝트-내-분석-주제와-데이터-정하기">2.4 학기 프로젝트: 내 분석 주제와 데이터 정하기</a></li>
+<li><a href="w05-2.html#21-반복-작업-고르기-데이터-프로파일링">2.1 반복 작업 고르기: 데이터 프로파일링</a></li>
+<li><a href="w05-2.html#22-SKILLmd-작성-csv-profile">2.2 SKILL.md 작성: csv-profile</a></li>
+<li><a href="w05-2.html#23-실행과-검증-슬래시-커맨드로-부르기">2.3 실행과 검증: 슬래시 커맨드로 부르기</a></li>
+<li><a href="w05-2.html#24-자동-호출-시험과-개선">2.4 자동 호출 시험과 개선</a></li>
 <li><a href="w05-2.html#검증-체크리스트">검증 체크리스트</a></li>
 <li><a href="w05-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li><a href="w05-2.html#제출-과제">제출 과제</a></li>
 </ul></li>
 </ul>
+<h2 class="toc-part">2부. 공공데이터의 수집과 정리</h2>
 <ul>
-<li style="margin-top:10px"><strong><a href="w06-1.html">6주차 1회차 (이론) · 오픈API와 자동 수집</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w06-1.html">6주차 1회차 (이론) · 공공데이터 생태계와 MCP</a></strong><ul>
 <li><a href="w06-1.html#이-장에서-배우는-것">이 장에서 배우는 것</a></li>
-<li><a href="w06-1.html#11-API란-무엇인가-요청과-응답의-약속">1.1 API란 무엇인가: 요청과 응답의 약속</a></li>
-<li><a href="w06-1.html#12-인증키-엔드포인트-파라미터">1.2 인증키, 엔드포인트, 파라미터</a></li>
-<li><a href="w06-1.html#13-JSON-읽는-법">1.3 JSON 읽는 법</a></li>
-<li><a href="w06-1.html#14-KOSIS와-공공데이터포털의-API-구조">1.4 KOSIS와 공공데이터포털의 API 구조</a></li>
-<li><a href="w06-1.html#15-파일-내려받기-대신-API를-쓰는-이유-재현성과-갱신">1.5 파일 내려받기 대신 API를 쓰는 이유: 재현성과 갱신</a></li>
-<li><a href="w06-1.html#16-크롤링과-API의-차이-법적윤리적-경계">1.6 크롤링과 API의 차이, 법적·윤리적 경계</a></li>
+<li><a href="w06-1.html#11-공공데이터의-지도-왜-공개되고-어디에-있는가">1.1 공공데이터의 지도: 왜 공개되고, 어디에 있는가</a></li>
+<li><a href="w06-1.html#12-받기-전에-읽을-것-형식-메타데이터-이용허락">1.2 받기 전에 읽을 것: 형식, 메타데이터, 이용허락</a></li>
+<li><a href="w06-1.html#13-클릭-수집의-한계-자동-수집과-재현성">1.3 클릭 수집의 한계: 자동 수집과 재현성</a></li>
+<li><a href="w06-1.html#14-MCP-에이전트에-도구를-꽂는-표준">1.4 MCP: 에이전트에 도구를 꽂는 표준</a></li>
+<li><a href="w06-1.html#15-MCP-서버의-등록과-신뢰-주소-한-줄-확인은-사람">1.5 MCP 서버의 등록과 신뢰: 주소 한 줄, 확인은 사람</a></li>
 <li><a href="w06-1.html#요약">요약</a></li>
 <li><a href="w06-1.html#연습문제">연습문제</a></li>
 </ul></li>
-<li style="margin-top:10px"><strong><a href="w06-2.html">6주차 2회차 (실습) · 에이전트로 API 수집 파이프라인 만들기</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w06-2.html">6주차 2회차 (실습) · kosis MCP로 데이터 찾고 수집하기</a></strong><ul>
 <li><a href="w06-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
 <li><a href="w06-2.html#준비물">준비물</a></li>
-<li><a href="w06-2.html#21-인증키-발급받기">2.1 인증키 발급받기</a></li>
-<li><a href="w06-2.html#22-API-문서를-에이전트에게-주고-수집-스크립트-작성-지시">2.2 API 문서를 에이전트에게 주고 수집 스크립트 작성 지시</a></li>
-<li><a href="w06-2.html#23-수집-결과-검증-건수-맞나-값이-포털-화면과-같나">2.3 수집 결과 검증: 건수 맞나, 값이 포털 화면과 같나</a></li>
-<li><a href="w06-2.html#24-CSV로-저장하고-수집-기록-남기기">2.4 CSV로 저장하고 수집 기록 남기기</a></li>
+<li><a href="w06-2.html#21-포털에서-데이터-찾기-사람의-탐색--에이전트의-웹-검색">2.1 포털에서 데이터 찾기: 사람의 탐색 + 에이전트의 웹 검색</a></li>
+<li><a href="w06-2.html#22-kosis-MCP-등록하고-연결-확인하기">2.2 kosis MCP 등록하고 연결 확인하기</a></li>
+<li><a href="w06-2.html#23-MCP로-통계-검색수집하기">2.3 MCP로 통계 검색·수집하기</a></li>
+<li><a href="w06-2.html#24-수집-결과-검증과-저장-화면-대조-CSV-수집기록">2.4 수집 결과 검증과 저장: 화면 대조, CSV, 수집기록</a></li>
+<li><a href="w06-2.html#25-학기-프로젝트-내-분석-주제와-데이터-정하기">2.5 학기 프로젝트: 내 분석 주제와 데이터 정하기</a></li>
 <li><a href="w06-2.html#검증-체크리스트">검증 체크리스트</a></li>
 <li><a href="w06-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li><a href="w06-2.html#제출-과제">제출 과제</a></li>
-<li><a href="w06-2.html#부록-완성된-수집-스크립트-예시">부록: 완성된 수집 스크립트 예시</a></li>
 </ul></li>
 </ul>
 <ul>
@@ -337,23 +336,22 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </ul></li>
 </ul>
 <ul>
-<li style="margin-top:10px"><strong><a href="w12-1.html">12주차 1회차 (이론) · 문서 그라운딩과 작업 자동화 (Skill)</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w12-1.html">12주차 1회차 (이론) · 문서 그라운딩과 RAG</a></strong><ul>
 <li><a href="w12-1.html#이-장에서-배우는-것">이 장에서 배우는 것</a></li>
 <li><a href="w12-1.html#11-그라운딩-문서에-근거해-답하게-만들기">1.1 그라운딩: 문서에 근거해 답하게 만들기</a></li>
 <li><a href="w12-1.html#12-법령정책문서-해석-에이전트-인용과-출처">1.2 법령·정책문서 해석 에이전트: 인용과 출처</a></li>
-<li><a href="w12-1.html#13-반복-작업의-표준화-Skill과-SKILLmd">1.3 반복 작업의 표준화: Skill과 SKILL.md</a></li>
-<li><a href="w12-1.html#14-슬래시-커맨드-자주-쓰는-지시를-명령으로">1.4 슬래시 커맨드: 자주 쓰는 지시를 명령으로</a></li>
-<li><a href="w12-1.html#15-자동화의-경계-무엇을-맡기고-무엇을-남길-것인가">1.5 자동화의 경계: 무엇을 맡기고 무엇을 남길 것인가</a></li>
+<li><a href="w12-1.html#13-RAG-서고가-클-때는-검색해서-근거를-찾는다">1.3 RAG: 서고가 클 때는 검색해서 근거를 찾는다</a></li>
+<li><a href="w12-1.html#14-근거의-삼각대-문서그라운딩-데이터MCP-절차Skill">1.4 근거의 삼각대: 문서(그라운딩), 데이터(MCP), 절차(Skill)</a></li>
 <li><a href="w12-1.html#요약">요약</a></li>
 <li><a href="w12-1.html#연습문제">연습문제</a></li>
 </ul></li>
-<li style="margin-top:10px"><strong><a href="w12-2.html">12주차 2회차 (실습) · 그라운딩과 나만의 Skill 만들기</a></strong><ul>
+<li style="margin-top:10px"><strong><a href="w12-2.html">12주차 2회차 (실습) · Skill과 MCP로 근거 있는 답 만들기</a></strong><ul>
 <li><a href="w12-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
 <li><a href="w12-2.html#준비물">준비물</a></li>
 <li><a href="w12-2.html#21-법령지침-문서를-주고-근거-있는-답-받기">2.1 법령·지침 문서를 주고 근거 있는 답 받기</a></li>
 <li><a href="w12-2.html#22-그라운딩-없는-답변과-비교-무엇이-달라지나">2.2 그라운딩 없는 답변과 비교: 무엇이 달라지나</a></li>
-<li><a href="w12-2.html#23-반복-분석-작업을-SKILLmd로-만들기">2.3 반복 분석 작업을 SKILL.md로 만들기</a></li>
-<li><a href="w12-2.html#24-내-Skill-테스트와-개선">2.4 내 Skill 테스트와 개선</a></li>
+<li><a href="w12-2.html#23-kosis-MCP로-통계-근거-붙이기">2.3 kosis MCP로 통계 근거 붙이기</a></li>
+<li><a href="w12-2.html#24-근거-메모-절차를-Skill로-표준화하기">2.4 근거 메모 절차를 Skill로 표준화하기</a></li>
 <li><a href="w12-2.html#검증-체크리스트">검증 체크리스트</a></li>
 <li><a href="w12-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li><a href="w12-2.html#제출-과제">제출 과제</a></li>
@@ -365,7 +363,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li><a href="w13-1.html#이-장에서-배우는-것">이 장에서 배우는 것</a></li>
 <li><a href="w13-1.html#11-분업하는-에이전트-서브에이전트의-개념">1.1 분업하는 에이전트: 서브에이전트의 개념</a></li>
 <li><a href="w13-1.html#12-파이프라인-설계-수집--정제--분석--시각화--보고">1.2 파이프라인 설계: 수집 → 정제 → 분석 → 시각화 → 보고</a></li>
-<li><a href="w13-1.html#13-MCP-에이전트를-외부-시스템과-연결하기-개념">1.3 MCP: 에이전트를 외부 시스템과 연결하기 (개념)</a></li>
+<li><a href="w13-1.html#13-파이프라인-속의-MCP-수집을-도구로-잇기-6주차-연결">1.3 파이프라인 속의 MCP: 수집을 도구로 잇기 (6주차 연결)</a></li>
 <li><a href="w13-1.html#14-자동화-파이프라인의-품질-관리-어디서-사람이-확인하는가">1.4 자동화 파이프라인의 품질 관리: 어디서 사람이 확인하는가</a></li>
 <li><a href="w13-1.html#15-에이전트-팀-시대의-분석가">1.5 에이전트 팀 시대의 분석가</a></li>
 <li><a href="w13-1.html#요약">요약</a></li>

@@ -62,11 +62,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="exam">8주차 · 중간고사</li>
@@ -87,8 +87,8 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="sec"><a href="w11-2.html#검증-체크리스트">검증 체크리스트</a></li>
 <li class="sec"><a href="w11-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li class="sec"><a href="w11-2.html#제출-과제">제출 과제</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
 <li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
 <li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
@@ -138,7 +138,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </tbody>
 </table>
 <h2 id="21-텍스트-데이터-입수">2.1 텍스트 데이터 입수</h2>
-<p>첫 단계는 데이터 확보다. 민원 원문 데이터는 사실 구하기가 쉽지 않다. 개인정보 때문에 민원 원문 자체는 대부분 기관 내부에만 있고, 포털에는 건수 통계만 개방된 경우가 많다. 이번 데이터는 그 가운데 원문이 공개된 드문 사례로, 소비자 상담이라는 민원의 실제 텍스트(제목, 내용, 답변)를 담고 있다. 공공데이터포털에서 "민원"으로 검색해 보면 이런 텍스트형 데이터와 통계형 데이터가 섞여 나오는데, 5주차에서 배운 대로 미리보기와 메타데이터를 확인해 원문이 든 쪽을 고르는 눈이 필요하다.</p>
+<p>첫 단계는 데이터 확보다. 민원 원문 데이터는 사실 구하기가 쉽지 않다. 개인정보 때문에 민원 원문 자체는 대부분 기관 내부에만 있고, 포털에는 건수 통계만 개방된 경우가 많다. 이번 데이터는 그 가운데 원문이 공개된 드문 사례로, 소비자 상담이라는 민원의 실제 텍스트(제목, 내용, 답변)를 담고 있다. 공공데이터포털에서 "민원"으로 검색해 보면 이런 텍스트형 데이터와 통계형 데이터가 섞여 나오는데, 6주차에서 배운 대로 미리보기와 메타데이터를 확인해 원문이 든 쪽을 고르는 눈이 필요하다.</p>
 <p>파일을 data 폴더에 넣었으면, 에이전트에게 첫 개관을 시킨다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>지시문 예시</strong><br>
@@ -306,5 +306,5 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 11-A. 민원 텍스트 분석 미니 보고서.</strong> 오늘의 산출물을 2쪽 이내로 정리한다. (1) 데이터 출처와 전처리 규칙(불용어 목록 포함), (2) 핵심어 빈도 그래프와 세 문장 해석, (3) 규칙 분류와 에이전트 분류의 비교표, (4) 불일치 사례에 대한 나의 판정과 근거. 평가 기준은 그래프의 완성도가 아니라 검증 절차의 충실함, 특히 (4)에서 판정의 근거를 원문에서 끌어왔는지다.</p>
 <p><strong>과제 11-B. 규칙 개선 실험.</strong> 2.5절의 발견을 반영해 키워드 규칙을 한 군데 이상 수정하고(예: "인터넷" 키워드 제거), 표본 30건에 대한 일치율이 어떻게 달라지는지 실행해 보라. 일치율이 오르든 내리든, 왜 그렇게 되었는지 불일치 목록의 변화로 설명하라.</p>
-<p><strong>과제 11-C (선택). 내 프로젝트에 적용.</strong> 학기 프로젝트 데이터에 텍스트 열(기관명, 사업명, 비고 등)이 있다면, 오늘 배운 빈도 분석을 적용해 보고 흥미로운 단어 3개를 골라 그 단어가 든 행을 직접 확인해 보라.</p><div class="pager"><span><a href="w11-1.html">← 11주차 1회차. 텍스트 데이터 분석 (Text-as-Data)</a></span><span><a href="w12-1.html">12주차 1회차. 문서 그라운딩과 작업 자동화 (Skill) →</a></span></div></main>
+<p><strong>과제 11-C (선택). 내 프로젝트에 적용.</strong> 학기 프로젝트 데이터에 텍스트 열(기관명, 사업명, 비고 등)이 있다면, 오늘 배운 빈도 분석을 적용해 보고 흥미로운 단어 3개를 골라 그 단어가 든 행을 직접 확인해 보라.</p><div class="pager"><span><a href="w11-1.html">← 11주차 1회차. 텍스트 데이터 분석 (Text-as-Data)</a></span><span><a href="w12-1.html">12주차 1회차. 문서 그라운딩과 RAG →</a></span></div></main>
 </body></html>

@@ -62,11 +62,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap cur"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="sec"><a href="w07-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
@@ -88,8 +88,8 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
 <li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
 <li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
 <li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
 <li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
@@ -314,7 +314,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </table>
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 7-A. 정제 패키지.</strong> 다음 세 파일을 제출한다. (1) 진단보고서_7주차.md, (2) sigungu_tfr_2013_2023.csv, (3) 정제로그_7주차.md. 평가 기준은 병합의 정확성(행 수와 표본 대조)과 로그의 "왜" 항목의 충실성이다.</p>
-<p><strong>과제 7-B. 내 데이터 진단.</strong> 5주차에 정한 학기 프로젝트 데이터에 오늘의 2.1(진단 보고서)을 그대로 적용한다. 결측·이상치·자료형 문제·병합 키 후보를 정리하고, 다음 주까지 처리 방침(무엇을 보존하고 무엇을 고칠지)을 각 항목당 한 문장의 근거와 함께 제출한다. 발견된 문제가 하나도 없다면 "왜 이 데이터는 깨끗한가"(가공된 통계인지, 원천 행정데이터인지)를 추정해 제출해도 된다.</p>
+<p><strong>과제 7-B. 내 데이터 진단.</strong> 6주차에 정한 학기 프로젝트 데이터에 오늘의 2.1(진단 보고서)을 그대로 적용한다. 결측·이상치·자료형 문제·병합 키 후보를 정리하고, 다음 주까지 처리 방침(무엇을 보존하고 무엇을 고칠지)을 각 항목당 한 문장의 근거와 함께 제출한다. 발견된 문제가 하나도 없다면 "왜 이 데이터는 깨끗한가"(가공된 통계인지, 원천 행정데이터인지)를 추정해 제출해도 된다.</p>
 <h2 id="부록-병합-예제-코드-전문">부록: 병합 예제 코드 전문</h2>
 <p>아래는 2.3의 병합 작업을 담은 <code>code/ch07_merge.py</code>의 전문이다. 학생이 이 코드를 작성할 필요는 없다. 다만 에이전트가 만든 코드가 이런 얼개(진단 병합 → 불일치 해소 → 안전장치를 건 본 병합 → 검증 → 저장)를 갖추었는지 알아보는 눈은 길러 두자.</p>
 <pre><code class="language-python"># 7주차 병합 예제: 2023년 시군구 인구 데이터와 2013년 합계출산율 데이터 병합

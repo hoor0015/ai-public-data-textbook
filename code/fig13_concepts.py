@@ -96,27 +96,4 @@ ax.text(7.0, 0.5, "화살표 위의 붉은 표시가 사람이 멈춰서 확인�
 fig.savefig(FIG / "fig13_pipeline_checkpoints.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 13-3
-# MCP 개념도
-fig, ax = plt.subplots(figsize=(11, 5.0))
-ax.set_xlim(0, 13)
-ax.set_ylim(0, 8)
-ax.axis("off")
-box(ax, 0.5, 3.0, 3.0, 2.2, "에이전트\n(Claude Code)", fc="#f5f9fd", ec="#2f6fb0", weight="bold")
-box(ax, 4.6, 3.2, 2.6, 1.8, "MCP\n(공통 규격)", fc="#f4fbf6", ec="#2f8f4e", weight="bold")
-arrow(ax, 3.6, 4.1, 4.5, 4.1)
-arrow(ax, 4.5, 3.7, 3.6, 3.7)
-ext = [
-    ("데이터베이스", 6.6), ("업무 시스템\n(일정·문서)", 4.45), ("통계 포털 등\n외부 서비스", 2.3),
-]
-for t, yy in ext:
-    box(ax, 9.3, yy - 0.75, 3.2, 1.5, t, fc="#fdf9f4", ec="#c77b2f", fontsize=10)
-    arrow(ax, 7.3, 4.1, 9.2, yy, color="#2f8f4e")
-ax.text(4.4, 0.7, "MCP가 없으면 시스템마다 연결 방식을 따로 만들어야 한다.\n"
-                  "MCP는 콘센트 규격처럼, 규격만 맞으면 어떤 기기든 꽂아 쓸 수 있게 한다.",
-        ha="center", fontsize=10.5, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
-fig.savefig(FIG / "fig13_mcp.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-
 print("saved:", [p.name for p in sorted(FIG.glob("fig13_*.png"))])

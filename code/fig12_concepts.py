@@ -59,65 +59,60 @@ fig.savefig(FIG / "fig12_grounding.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 12-2
-# 일회성 지시, Skill, CLAUDE.md의 3층 구조
-fig, ax = plt.subplots(figsize=(11, 5.8))
-ax.set_xlim(0, 13)
-ax.set_ylim(0, 9)
-ax.axis("off")
-
-layers = [
-    (6.3, "일회성 지시 (대화창)", "이번 한 번만 필요한 요청",
-     "\"이 표를 오름차순으로 다시 정렬해 줘\"", "#fdf9f4", "#c77b2f"),
-    (3.5, "Skill (.claude/skills/이름/SKILL.md)", "부르면 실행되는 절차. 필요할 때만 본문이 로드된다",
-     "\"/csv-profile data/민원.csv\" 또는 관련 요청 시 자동 사용", "#f4fbf6", "#2f8f4e"),
-    (0.7, "CLAUDE.md (프로젝트 규칙)", "항상 적용되는 규칙. 매 대화에 자동으로 로드된다",
-     "\"표의 숫자는 천 단위 쉼표\", \"그림은 figures 폴더에 저장\"", "#f5f9fd", "#2f6fb0"),
-]
-for y, t1, t2, ex, fc, ec in layers:
-    box(ax, 0.6, y, 7.6, 2.2, "", fc=fc, ec=ec)
-    ax.text(4.4, y + 1.72, t1, ha="center", fontsize=12, fontweight="bold")
-    ax.text(4.4, y + 1.12, t2, ha="center", fontsize=10, color="#333")
-    ax.text(4.4, y + 0.48, "예: " + ex, ha="center", fontsize=9.5, color="#555")
-
-ax.annotate("", xy=(9.2, 8.4), xytext=(9.2, 0.8),
-            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
-ax.text(9.55, 4.6, "위로 갈수록\n일회적·즉흥적", fontsize=10.5, color="#555", va="center")
-ax.text(11.5, 4.6, "아래로 갈수록\n반복적·영구적", fontsize=10.5, color="#555", va="center")
-ax.annotate("", xy=(11.2, 0.8), xytext=(11.2, 8.4),
-            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
-ax.text(4.4, 8.75, "같은 지시를 세 번째 쓰고 있다면 아래층으로 내릴 때다",
-        ha="center", fontsize=11, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.4"))
-fig.savefig(FIG / "fig12_three_layers.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-
-# ---------------------------------------------------------------- 그림 12-3
-# Skill 작동 흐름
-fig, ax = plt.subplots(figsize=(12, 5.4))
+# RAG의 세 단계: 검색, 증강, 생성
+fig, ax = plt.subplots(figsize=(12.5, 5.6))
 ax.set_xlim(0, 14)
 ax.set_ylim(0, 9)
 ax.axis("off")
 
-box(ax, 0.4, 5.6, 3.2, 2.4, "평소\n\nSkill의 이름과 설명만\n목록으로 알고 있다\n(본문은 안 읽은 상태)",
-    fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
-box(ax, 5.2, 6.9, 3.6, 1.5, "호출 방법 1\n사용자가 /skill-name 입력", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
-box(ax, 5.2, 4.9, 3.6, 1.5, "호출 방법 2\n요청이 설명과 맞으면\n에이전트가 스스로 사용", fc="#fdf9f4", ec="#c77b2f", fontsize=9.5)
-box(ax, 10.2, 5.6, 3.4, 2.4, "실행\n\nSKILL.md 본문이\n맥락창에 로드되고\n적힌 절차대로 작업",
-    fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
-arrow(ax, 3.7, 7.2, 5.1, 7.55)
-arrow(ax, 3.7, 6.2, 5.1, 5.75)
-arrow(ax, 8.9, 7.55, 10.1, 7.2)
-arrow(ax, 8.9, 5.75, 10.1, 6.2)
+box(ax, 0.4, 5.6, 2.8, 2.0, "질문\n\"주차장 사용료\n감면 규정은?\"", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 4.2, 5.4, 3.0, 2.4, "① 검색\n서고에서 질문과\n관련된 조각을\n찾아낸다", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 8.0, 5.6, 2.6, 2.0, "② 증강\n질문 + 찾은 조각을\n함께 모델에 전달", fc="#faf8fc", ec="#7a5fa8", fontsize=10)
+box(ax, 11.2, 5.5, 2.5, 2.2, "③ 생성\n답변 + 인용\n(어느 문서\n어느 부분인지)", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 3.3, 6.6, 4.1, 6.6)
+arrow(ax, 7.3, 6.6, 7.9, 6.6)
+arrow(ax, 10.7, 6.6, 11.1, 6.6)
 
-box(ax, 2.2, 1.0, 9.6, 2.6, "", fc="white", ec="#7a5fa8")
-ax.text(7.0, 3.1, "SKILL.md의 두 부분", ha="center", fontsize=11, fontweight="bold", color="#4a3a68")
-ax.text(4.6, 1.95, "머리말(frontmatter)\nname: 이름\ndescription: 언제 쓰는 스킬인지", ha="center",
-        fontsize=9.5, color="#333")
-ax.text(9.6, 1.95, "본문(markdown)\n에이전트가 따를 절차를\n단계별로 적은 지시문", ha="center",
-        fontsize=9.5, color="#333")
-ax.plot([7.0, 7.0], [1.2, 2.8], color="#d9d9e3", lw=1)
-arrow(ax, 11.9, 5.5, 8.4, 3.75, color="#7a5fa8", ls="--")
-fig.savefig(FIG / "fig12_skill_flow.png", dpi=150, bbox_inches="tight")
+# 아래: 문서 저장소(서고)
+box(ax, 3.6, 1.2, 4.2, 2.6, "", fc="white", ec="#2f6fb0")
+ax.text(5.7, 3.35, "문서 저장소 (서고)", ha="center", fontsize=10.5, fontweight="bold", color="#2f6fb0")
+for i, t in enumerate(["조례집", "지침서", "매뉴얼", "회의록"]):
+    box(ax, 3.85 + i * 0.95, 1.55, 0.85, 1.3, t, fc="#f5f9fd", ec="#9db8d2", fontsize=8.5)
+ax.text(5.7, 0.6, "수백·수천 건: 맥락창(책상)에 다 올릴 수 없다", ha="center", fontsize=9.5, color="#555")
+arrow(ax, 5.7, 3.9, 5.5, 5.3, color="#2f6fb0")
+arrow(ax, 5.9, 5.3, 6.1, 3.95, color="#2f6fb0", ls="--")
+ax.text(6.9, 4.6, "관련 조각만\n추출", ha="center", fontsize=9, color="#2f6fb0")
+
+ax.text(10.6, 2.4, "서고 전체를 읽지 않는다.\n질문마다 관련 조각만 찾아\n책상(맥락창)에 올린다.",
+        ha="center", fontsize=10.5, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
+fig.savefig(FIG / "fig12_rag.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+# ---------------------------------------------------------------- 그림 12-3
+# 근거의 삼각대: 문서(그라운딩), 데이터(MCP), 절차(Skill)
+fig, ax = plt.subplots(figsize=(11.5, 5.8))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis("off")
+
+box(ax, 4.0, 6.5, 6.0, 1.9, "보고서의 주장\n\"고령화가 빠르므로 대응이 필요하다\"",
+    fc="white", ec="#c0392b", fontsize=11, weight="bold")
+
+legs = [
+    (0.7, "문서 근거", "#2f6fb0", "#f5f9fd", "법령·지침의 조문 인용\n(그라운딩, 12주차)\n검증: 원문과 대조"),
+    (5.15, "데이터 근거", "#2f8f4e", "#f4fbf6", "통계 수치와 출처\n(kosis MCP, 6주차)\n검증: 포털 화면과 대조"),
+    (9.6, "절차 근거", "#7a5fa8", "#faf8fc", "만든 과정의 기록\n(Skill·수집기록, 5-6주차)\n검증: 같은 절차로 재현"),
+]
+for x, title, ec, fc, body in legs:
+    ax.text(x + 1.85, 3.85, title, ha="center", fontsize=11.5, fontweight="bold", color=ec)
+    box(ax, x, 1.0, 3.7, 2.5, body, fc=fc, ec=ec, fontsize=9.5)
+    ax.plot([7.0, x + 1.85], [6.5, 3.6], color="#999", lw=1.4)
+
+ax.text(12.4, 7.4, "다리 하나가 빠지면\n주장은 기울어진다",
+        ha="center", fontsize=10, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
+fig.savefig(FIG / "fig12_triangle.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 print("saved:", [p.name for p in sorted(FIG.glob('fig12_*.png'))])

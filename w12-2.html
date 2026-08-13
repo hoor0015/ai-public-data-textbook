@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>12주차 2회차. 그라운딩과 나만의 Skill 만들기 - AI 기반 공공데이터 분석</title>
+<title>12주차 2회차. Skill과 MCP로 근거 있는 답 만들기 - AI 기반 공공데이터 분석</title>
 <style>
 :root { --accent:#2f6fb0; --sidebar-w:320px; }
 * { box-sizing:border-box; }
@@ -62,11 +62,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="exam">8주차 · 중간고사</li>
@@ -77,14 +77,14 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
 <li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
 <li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap cur"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap cur"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="sec"><a href="w12-2.html#이-실습에서-하는-것">이 실습에서 하는 것</a></li>
 <li class="sec"><a href="w12-2.html#준비물">준비물</a></li>
 <li class="sec"><a href="w12-2.html#21-법령지침-문서를-주고-근거-있는-답-받기">2.1 법령·지침 문서를 주고 근거 있는 답 받기</a></li>
 <li class="sec"><a href="w12-2.html#22-그라운딩-없는-답변과-비교-무엇이-달라지나">2.2 그라운딩 없는 답변과 비교: 무엇이 달라지나</a></li>
-<li class="sec"><a href="w12-2.html#23-반복-분석-작업을-SKILLmd로-만들기">2.3 반복 분석 작업을 SKILL.md로 만들기</a></li>
-<li class="sec"><a href="w12-2.html#24-내-Skill-테스트와-개선">2.4 내 Skill 테스트와 개선</a></li>
+<li class="sec"><a href="w12-2.html#23-kosis-MCP로-통계-근거-붙이기">2.3 kosis MCP로 통계 근거 붙이기</a></li>
+<li class="sec"><a href="w12-2.html#24-근거-메모-절차를-Skill로-표준화하기">2.4 근거 메모 절차를 Skill로 표준화하기</a></li>
 <li class="sec"><a href="w12-2.html#검증-체크리스트">검증 체크리스트</a></li>
 <li class="sec"><a href="w12-2.html#자주-겪는-문제">자주 겪는 문제</a></li>
 <li class="sec"><a href="w12-2.html#제출-과제">제출 과제</a></li>
@@ -95,15 +95,15 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
-<main><h1>12주차 2회차. 그라운딩과 나만의 Skill 만들기</h1>
+<main><h1>12주차 2회차. Skill과 MCP로 근거 있는 답 만들기</h1>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
-<p>1회차에서 그라운딩(문서에 근거해 답하게 만들기)과 Skill(반복 절차의 표준화)을 원리로 배웠다. 오늘은 둘 다 직접 만들어 본다. 전반부에서는 실제 법률 전문을 에이전트에게 주고 조문을 인용하는 답을 받아 본 뒤, 같은 질문을 그라운딩 없이 던져 두 답이 어떻게 다른지 비교 실험을 한다. 후반부에서는 학기 내내 반복해 온 데이터 프로파일링 작업을 SKILL.md 파일로 만들어 슬래시 커맨드 한 줄로 실행되게 하고, 테스트와 개선까지 해 본다.</p>
+<p>1회차에서 그라운딩(문서에 근거해 답하게 만들기)과 RAG, 그리고 근거의 삼각대(문서·데이터·절차)를 배웠다. 오늘은 그 삼각대를 실제로 조립한다. 전반부에서는 실제 법률 전문을 에이전트에게 주고 조문을 인용하는 답을 받아 본 뒤, 같은 질문을 그라운딩 없이 던져 두 답이 어떻게 다른지 비교 실험을 한다. 후반부에서는 6주차에 등록해 둔 kosis MCP로 통계 근거를 붙이고, 마지막으로 이 근거 만들기 절차 전체를 5주차에서 배운 방식대로 하나의 Skill로 표준화한다.</p>
 <p>이 실습이 끝나면 다음 산출물이 남는다.</p>
 <ul>
 <li><code>data/laws/공공데이터법.txt</code>: 그라운딩 재료로 쓴 법률 전문</li>
 <li>그라운딩 유무 비교 기록표 (관찰일지 형식)</li>
-<li><code>.claude/skills/csv-profile/SKILL.md</code>: 나의 첫 Skill</li>
-<li><code>reports/</code> 폴더의 프로파일링 보고서: 스킬이 만든 표준 형식 산출물</li>
+<li><code>reports/근거메모_인구.md</code>: kosis MCP 통계 근거가 붙은 메모</li>
+<li><code>.claude/skills/evidence-memo/SKILL.md</code>: 근거 메모 절차를 표준화한 Skill</li>
 </ul>
 <p>오늘도 2주차 실습처럼 "예상을 적고 → 실험하고 → 관찰을 기록"하는 자세로 진행한다. 특히 2.2의 비교 실험은 에이전트가 틀리는 장면을 포착하는 것이 목적이므로, 틀린 답이 나오면 실망할 일이 아니라 기록할 일이다.</p>
 <h2 id="준비물">준비물</h2>
@@ -125,7 +125,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </tr>
 <tr>
 <td>데이터 2</td>
-<td><code>data/sigungu_2023.csv</code> (2주차부터 쓴 전국 229개 시군구 인구 지표)</td>
+<td>kosis MCP로 실습 중 직접 조회 (6주차에 등록한 서버. <code>/mcp</code>로 연결 상태 미리 확인)</td>
 </tr>
 <tr>
 <td>도구</td>
@@ -133,7 +133,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </tr>
 <tr>
 <td>선수 내용</td>
-<td>12주차 1회차 (그라운딩, SKILL.md), 2주차 2회차 (환각 실험), 3주차 (지시 설계, CLAUDE.md)</td>
+<td>12주차 1회차 (그라운딩, RAG, 근거의 삼각대), 6주차 (kosis MCP 등록·수집), 5주차 (SKILL.md 만들기), 2주차 2회차 (환각 실험)</td>
 </tr>
 </tbody>
 </table>
@@ -202,91 +202,107 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 이 실험의 교훈은 2주차와 이어진다. 묻는 방식이 답의 신뢰도를 결정한다. 다만 오늘 한 가지가 추가되었다. 그라운딩의 진짜 이득은 정답률이 아니라 <strong>검증 비용</strong>에 있다는 것이다. 실험 B의 답은 인용과 위치가 붙어 있어 1분이면 대조가 끝난다. 보고서에 들어갈 법령·지침 인용은 앞으로 반드시 실험 B의 방식으로 받는다.
 </div>
 
-<h2 id="23-반복-분석-작업을-SKILLmd로-만들기">2.3 반복 분석 작업을 SKILL.md로 만들기</h2>
-<p>이제 후반부, 자동화다. 5주차부터 새 CSV를 받을 때마다 반복해 온 프로파일링 지시를 Skill로 만든다.</p>
-<p>먼저 프로젝트 폴더 안에 스킬 폴더를 만든다. VSCode 탐색기에서 직접 만들어도 되고, 에이전트에게 시켜도 된다. 위치는 <code>.claude/skills/csv-profile/</code>이다 (<code>.claude</code> 폴더는 3주차에 CLAUDE.md를 만들며 이미 생겼을 것이다). 그 안에 <code>SKILL.md</code> 파일을 만들고 아래 내용을 그대로 입력한다. 1회차에서 배운 구조 그대로, <code>---</code> 사이의 머리말과 그 아래 본문으로 되어 있다.</p>
+<h2 id="23-kosis-MCP로-통계-근거-붙이기">2.3 kosis MCP로 통계 근거 붙이기</h2>
+<p><strong>무엇을 왜 하는가.</strong> 삼각대의 두 번째 다리, 데이터 근거다. 과장이 후속 요청을 보냈다고 하자. "다음 보고서에 '우리나라 인구는 감소 추세다'라는 문장이 들어가는데, 뒷받침할 숫자를 붙여 줄래요?" 이 문장의 근거는 법조문이 아니라 통계다. 그리고 통계 근거를 만드는 가장 안전한 길은, 6주차에서 배운 대로 에이전트가 원천(KOSIS)에서 직접 조회해 출처와 함께 가져오게 하는 것이다. 법령 그라운딩에서 "파일을 읽고 답하라"고 했던 것과 같은 원리로, 이번에는 "MCP로 조회해서 답하라"고 못박는다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"보고서에 '우리나라 인구는 감소 추세다'라는 문장을 쓰려고 해. kosis MCP로 최근 5년(2019-2023) 전국 주민등록 총인구를 조회해서 근거 메모를 만들어 줘.<br><br>
+규칙: (1) 수치는 반드시 kosis MCP 조회 결과만 쓸 것. 기억으로 보충하지 말 것. (2) 메모에는 연도별 수치 표, 이 수치가 위 문장을 뒷받침하는지에 대한 판단(수치 제시와 판단을 구분해서), 통계표 이름·ID와 출처 링크, 그리고 이 통계의 기준(주민등록 기준이라는 점)을 담을 것. (3) 결과는 reports/근거메모_인구.md 로 저장해 줘."
+</div>
+
+<p><strong>예상되는 에이전트의 행동과 결과.</strong> 도구 사용 로그에 kosis 도구 호출이 나타나고, 저자가 실제로 수행했을 때 조회 결과는 다음과 같았다 (통계표 "행정구역(시군구)별 성별 인구수", DT_1B040A3, 단위 명).</p>
+<table>
+<thead>
+<tr>
+<th>연도</th>
+<th>전국 주민등록 총인구 (명)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019</td>
+<td>51,849,861</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>51,829,023</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>51,638,809</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>51,439,038</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>51,325,329</td>
+</tr>
+</tbody>
+</table>
+<p>2019년 이후 4년 연속 감소했고, 2023년은 2019년보다 약 52만 명 적다. "인구는 감소 추세다"라는 문장이 수치로 뒷받침되는 것이다. 메모에는 이 표와 판단, 그리고 KOSIS 출처 링크가 담겨 있어야 한다.</p>
+<p><strong>검증.</strong> ① 도구 사용 로그에 kosis 도구 호출이 실제로 있는지 확인한다. 없다면 기억으로 답한 것이므로 재지시한다(6주차에서 연습한 그 검증이다). ② 값 하나(예: 2023년 51,325,329명)를 KOSIS 웹 화면과 대조한다. ③ 해석이 수치에서 따라 나오는지 본다. 법령 그라운딩의 "해석 분리" 원칙이 통계에도 그대로 적용된다. 수치는 수치대로 제시되고, "감소 추세"라는 판단이 그 수치로부터 나오는 구조인가.</p>
+<p>한 가지 함정도 확인해 두자. 지시문에서 "주민등록 기준이라는 점"을 명시하게 한 이유다. 이 통계는 주민등록표에 올라 있는 사람의 수이며, 국내 거주 외국인 등은 다른 통계로 잡힌다. 6주차 메타데이터 원칙("같은 인구라도 기준에 따라 값이 다르다")이 근거 메모에서도 살아 있어야, "인구"라는 한 단어가 뜻하는 바를 놓고 생기는 오해를 막을 수 있다. 근거는 수치만이 아니라 수치의 정의까지 포함해야 완전해진다.</p>
+<h2 id="24-근거-메모-절차를-Skill로-표준화하기">2.4 근거 메모 절차를 Skill로 표준화하기</h2>
+<p><strong>무엇을 왜 하는가.</strong> 오늘 2.1과 2.3에서 한 일을 돌아보면, 이것은 앞으로 계속 반복될 절차다. 질문을 받는다, 관련 법령을 그라운딩해 조문을 인용한다, 필요한 통계를 MCP로 조회해 출처와 함께 붙인다, 해석과 한계를 구분해 적는다. 5주차의 기준으로 말하면 "같은 지시를 세 번째 치기" 전에 스킬로 내릴 때다. 이번에는 5주차 과제에서 연습한 분업을 쓴다. 초안은 에이전트에게 맡기고, 기준은 사람이 다듬는다.</p>
+<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
+<strong>지시문 예시</strong><br>
+"오늘 이 대화에서 한 작업(법령 파일 그라운딩 답변, kosis MCP 통계 근거)을 표준 절차로 묶은 스킬을 만들려고 해. .claude/skills/evidence-memo/SKILL.md 초안을 작성해 줘.<br><br>
+요구사항: (1) $ARGUMENTS 로 질문을 받는다. (2) 절차에 다음을 포함할 것. 질문과 관련된 법령 파일이 data/laws 폴더에 있으면 읽고 조문 번호와 원문을 인용한다. 통계 근거가 필요한 질문이면 kosis MCP 도구로 조회하고 통계표 이름·ID·링크를 남긴다. 원문 인용과 해석을 구분한다. 문서와 조회 결과에 없는 내용은 없다고 쓴다. (3) 산출물은 reports/근거메모_<주제>.md 로 저장하고, 형식은 질문, 문서 근거, 데이터 근거, 해석, 확인 필요(사람 검토용), 한계 고지의 여섯 절로 할 것. (4) 초안을 만든 뒤 내가 다듬을 테니, 절차마다 왜 넣었는지 한 줄씩 설명해 줘."
+</div>
+
+<p><strong>예상되는 결과와 다듬기.</strong> 에이전트가 SKILL.md 초안을 만들어 준다(에이전트가 만드는 초안은 그때그때 조금씩 다르다. 2주차의 비결정성이다). 여러분이 할 일은 1회차에서 배운 기준들이 절차에 박혀 있는지 검토하고 다듬는 것이다. 다듬은 뒤의 모습은 대략 다음과 같아야 한다.</p>
 <pre><code class="language-markdown">---
-name: csv-profile
-description: CSV 파일을 받아 표준 형식의 데이터 프로파일링 보고서를 만든다.
-  새 데이터 파일을 받았을 때, 데이터 개요·품질 진단·프로파일링을 요청받았을 때 사용.
-argument-hint: [CSV 파일 경로]
+name: evidence-memo
+description: 질문을 받아 법령(문서 근거)과 KOSIS 통계(데이터 근거)를 갖춘
+  근거 메모를 만든다. 근거 메모, 근거 붙여, 조문과 통계로 답해 달라는 요청에 사용.
+argument-hint: [질문]
 ---
 
-다음 CSV 파일의 프로파일링 보고서를 작성하라: $ARGUMENTS
+다음 질문에 대한 근거 메모를 작성하라: $ARGUMENTS
 
 ## 절차
 
-1. 파일을 읽기 전에 파일이 실제로 존재하는지 확인한다. 한글이 깨져 보이면
-   인코딩을 바꿔 다시 읽는다.
-2. 기본 정보를 확인한다: 행 수, 열 수, 열 이름 목록.
-3. 열 정보 표를 만든다: 열 이름, 자료형, 결측 개수, 결측 비율(%), 고유값 개수.
-4. 수치형 열의 요약표를 만든다: 평균, 표준편차, 최솟값, 중앙값, 최댓값.
-   문자로 저장된 숫자(천 단위 쉼표, 단위 문자 포함 등)가 의심되면 지적한다.
-5. 문자형 열은 최빈값과 그 빈도를 정리한다.
-6. 품질 경고를 모은다: 결측 비율 30% 이상인 열, 값이 하나뿐인 열, 중복 행.
-7. 보고서를 reports/프로파일_&lt;파일이름&gt;.md 로 저장한다. 아래 산출물 형식을
-   그대로 따른다.
+1. data/laws 폴더에서 질문과 관련된 법령 파일을 찾아 읽는다. 관련 파일이
+   없으면 &quot;관련 법령 파일 없음&quot;이라고 메모에 적는다.
+2. 문서 근거: 근거 조문의 번호와 원문을 그대로 인용한다. 파일에 없는 내용은
+   &quot;문서에서 확인되지 않는다&quot;라고 쓴다.
+3. 데이터 근거: 통계로 뒷받침할 부분이 있으면 kosis MCP 도구로 조회한다.
+   통계표 이름, 표 ID, 출처 링크, 수치의 기준(정의)을 함께 남긴다.
+   기억 속의 수치를 쓰지 않는다.
+4. 해석: 인용·수치와 구분되는 별도 절에 쓴다.
+5. 판단이 필요한 사항은 결정하지 말고 &quot;확인 필요&quot; 절에 질문 형태로 남긴다.
+6. 메모 끝에 이 문서가 참고자료이며 법적 자문이 아니라는 한계를 밝힌다.
+7. reports/근거메모_&lt;주제&gt;.md 로 저장한다.
 
 ## 산출물 형식
 
-# 데이터 프로파일링: &lt;파일이름&gt;
-- 작성일 / 원본 파일 경로 / 사용한 인코딩
-
-## 1. 기본 정보
-## 2. 열 정보 (표)
-## 3. 수치형 요약 (표)
-## 4. 품질 경고
+# 근거 메모: &lt;질문 요약&gt;
+## 1. 질문
+## 2. 문서 근거 (조문 인용)
+## 3. 데이터 근거 (출처 링크 포함)
+## 4. 해석
 ## 5. 확인 필요 (사람 검토용)
-
-## 규칙
-
-- 모든 수치는 파일에서 직접 계산한 값만 쓴다. 추측으로 채우지 않는다.
-- 계산에 사용한 코드는 code/profile_&lt;파일이름&gt;.py 로 저장해 재현 가능하게 한다.
-- 판단이 필요한 사항(이상치를 지울지, 결측을 어떻게 처리할지 등)은 결정하지
-  말고 &quot;5. 확인 필요&quot; 절에 질문 형태로 남긴다.
+## 6. 한계 고지
 </code></pre>
-<p>이 SKILL.md를 뜯어 보자. 머리말의 <code>description</code>은 "무엇을 하는지"와 "언제 쓰는지"를 함께 적어, 에이전트가 자동 사용 여부를 판단할 근거를 준다. 본문 첫 줄의 <code>$ARGUMENTS</code>는 슬래시 커맨드 뒤에 붙인 파일 경로가 끼워지는 자리다. "절차"는 7주차 정제 진단과 5주차 프로파일링에서 배운 단계들의 표준판이고, "산출물 형식"이 있어 매달 같은 꼴의 보고서가 나온다. 그리고 "규칙"의 마지막 항목이 1회차 1.5절에서 강조한 사람의 확인 지점이다. 스킬은 판단하지 않고, 판단할 거리를 사람 앞에 모아 놓는다.</p>
-<p>파일을 저장했으면 에이전트에게 확인을 부탁한다.</p>
-<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
-<strong>지시문 예시</strong><br>
-"지금 사용할 수 있는 스킬 목록을 알려 줘. csv-profile이라는 스킬이 보이면, 그 스킬의 설명이 뭐라고 되어 있는지도 알려 줘."
-</div>
-
-<p><strong>예상되는 결과.</strong> 목록에 csv-profile이 나타나고, 설명이 여러분이 적은 <code>description</code>과 같아야 한다. 대화창에 <code>/</code>를 입력했을 때 자동완성 목록에 <code>/csv-profile</code>이 뜨는지도 확인하라.</p>
-<div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
-<strong>왜 에이전트에게 스킬을 만들게 하지 않았는가?</strong><br>
-"프로파일링 스킬 만들어 줘"라고 에이전트에게 통째로 맡길 수도 있고, 실제로 잘 만들어 준다. 그런데 첫 스킬만큼은 손으로 만들어 보길 권한다. 이유는 두 가지다. 첫째, SKILL.md가 신비한 설정 파일이 아니라 <strong>그냥 지시문을 적은 텍스트 파일</strong>임을 몸으로 확인하는 것이 중요하다. 둘째, 스킬의 절차와 규칙은 1회차에서 본 "기준의 설정"에 해당한다. 무엇을 표준으로 삼을지는 사람이 정해서 적어 넣는 것이고, 그 감각은 직접 써 봐야 생긴다. 두 번째 스킬부터는 초안 작성을 에이전트에게 맡기고 여러분이 기준을 다듬는 분업이 효율적이다.
-</div>
-
-<h2 id="24-내-Skill-테스트와-개선">2.4 내 Skill 테스트와 개선</h2>
-<p>스킬은 만들었다고 끝이 아니다. 1회차의 표어를 빌리면, 스킬도 에이전트의 산출물처럼 검증 가능한 단위로 테스트한다. 세 가지를 차례로 확인한다.</p>
-<p><strong>테스트 1. 슬래시 커맨드로 직접 호출.</strong></p>
-<div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
-<strong>지시문 예시</strong><br>
-"/csv-profile data/sigungu_2023.csv"
-</div>
-
-<p><strong>예상되는 결과.</strong> 에이전트가 SKILL.md의 절차를 따라 파일을 읽고, 코드를 실행하고, <code>reports/프로파일_sigungu_2023.md</code>를 저장했다고 보고한다. 도구 사용 로그에서 절차의 각 단계(파일 확인 → 계산 → 저장)가 순서대로 실행되는지 지켜보라.</p>
-<p><strong>검증.</strong> 보고서를 열어 세 가지를 대조한다. (1) 행 수가 229로 나오는가 (2주차에 확인한 값이다). (2) 산출물 형식의 다섯 개 절(기본 정보, 열 정보, 수치형 요약, 품질 경고, 확인 필요)이 모두 있는가. (3) 수치 하나를 골라 재검산한다. 예컨대 보고된 총인구 평균을, "code 폴더에 저장된 profile 코드를 열어 어느 열로 계산했는지 보여 줘"라고 시켜 확인하거나 파일을 직접 열어 몇 행을 눈으로 대조한다.</p>
-<p><strong>테스트 2. 자동 호출.</strong> 새 대화를 열고, 이번에는 스킬 이름을 말하지 않고 요청한다. "data/sigungu_2023.csv가 어떤 데이터인지 개요를 정리해 줘" 정도가 좋다. 에이전트가 csv-profile 스킬을 스스로 꺼내 쓰는지 관찰하라. 쓰면 <code>description</code>이 제 역할을 한 것이다. 쓰지 않고 즉흥적으로 요약했다면, 요청의 표현이 설명과 멀었기 때문일 수 있다. 이때가 개선 지점이다. <code>description</code>에 "개요", "어떤 데이터인지" 같은, 여러분이 실제로 쓰는 표현을 추가해 저장하고 다시 시험해 보라. 스킬 파일의 수정은 보통 대화 중에 바로 반영된다.</p>
-<p><strong>테스트 3. 일부러 어려운 입력 주기.</strong> 표준 절차는 표준적인 입력에서만 검증된다. 경계를 시험해 보자. 수업 자료실의 다른 파일(예: <code>data/income_dist.csv</code>)이나, 일부러 값 몇 개를 지워 결측을 만든 사본에 스킬을 실행해 보라. 품질 경고 절이 결측을 제대로 잡아내는가. 천 단위 쉼표가 있는 파일이라면 "문자로 저장된 숫자" 지적이 나오는가. 여기서 스킬이 놓치는 것을 발견하면, 그것이 SKILL.md 절차에 추가할 다음 줄이 된다.</p>
-<p><strong>개선의 기록.</strong> 테스트에서 발견한 문제와 SKILL.md 수정 내역을 파일 끝에 주석처럼 남기거나 별도 메모로 기록한다. 예를 들면 "v2: 자동 호출이 안 되어 description에 '개요' 추가", "v3: 중복 행 검사가 빠져 절차 6에 추가" 같은 식이다. 스킬은 한 번 만들고 끝나는 완성품이 아니라, 쓰면서 다듬는 살아 있는 매뉴얼이다.</p>
+<p>주목할 점이 하나 있다. 절차 3에서 스킬이 MCP 도구 사용을 지시하고 있다. 5주차의 csv-profile이 "파일을 읽고 계산하라"는 절차였다면, 이 스킬은 그라운딩(1-2단계)과 MCP(3단계)를 한 절차 안에 엮는다. 1회차에서 말한 근거의 삼각대가 스킬 본문에 그대로 구현된 것이고, 스킬 자체가 절차 근거(이 메모가 어떤 절차로 만들어지는지의 기록)가 된다.</p>
+<p><strong>테스트.</strong> 저장했으면 오늘의 두 질문으로 시험한다. 먼저 <code>/evidence-memo 주차장 데이터를 민간 업체에 영리 목적으로 제공해도 되는가</code>를 실행해 2.1의 답과 같은 취지의 메모가 여섯 절 형식으로 나오는지 보고, 이어서 <code>/evidence-memo 우리나라 인구는 감소 추세인가</code>로 2.3과 같은 수치와 출처가 담기는지 본다. 각 실행에서 도구 사용 로그(파일 읽기, kosis 도구 호출)를 확인하고, 인용 하나와 수치 하나를 원문·포털과 대조한다. 5주차에서 배운 대로, 자동 호출이 필요하면 description을 다듬고 개선 내역을 기록한다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
-<strong>유의 · 스킬이 있어도 검증은 사라지지 않는다</strong><br>
-테스트 1을 통과한 스킬이 다음 달 새 파일에서도 맞으리라는 보장은 없다. 1회차에서 배운 자동화 편향을 기억하라. 산출물이 표준 형식으로 말끔하게 나올수록 안을 들여다보는 습관이 무뎌진다. 스킬 산출물에 대한 최소 검증(행 수 대조, 수치 하나 재검산)을 여러분의 검증 체크리스트에 상시 항목으로 넣어 두라. 아예 SKILL.md 절차 마지막에 "보고서의 행 수·열 수를 원본과 대조한 결과를 함께 출력하라"를 추가하는 것도 좋은 개선이다.
+<strong>유의 · 표준화된 근거에도 검증은 사라지지 않는다</strong><br>
+근거 메모가 스킬로 표준화되면, 메모마다 인용과 출처가 말끔하게 붙어 나온다. 바로 그래서 5주차의 자동화 편향 경고가 여기서 가장 무겁다. 인용이 붙어 있다는 것과 인용이 맞다는 것은 다른 문제다. 형식이 완비된 문서일수록 사람은 대조를 건너뛰고 싶어진다. 스킬 산출물에서도 최소 검증(인용 1건 원문 대조, 수치 1건 포털 대조)을 상시 습관으로 유지하라. "확인 필요" 절이 비어 있지 않은지 보는 것도 좋은 신호다. 매번 비어 있다면 스킬이 판단을 사람에게 넘기지 않고 스스로 결정하고 있다는 뜻일 수 있다.
 </div>
 
-<p>한 가지 확장을 소개하고 마친다. 11주차에서 한 민원 분류 작업도 오늘과 똑같은 방법으로 스킬이 된다. <code>.claude/skills/minwon-classify/SKILL.md</code>를 만들고, 본문에 11주차에서 다듬은 분류 절차(전처리 → 분류 기준표 적용 → 집계 → 표본 교차 검증)를 적고, 분류 기준표를 같은 폴더에 별도 파일로 넣어 본문에서 참조하게 하면 된다. 이번 과제(11-B)에서 직접 해 보라.</p>
 <h2 id="검증-체크리스트">검증 체크리스트</h2>
 <ul>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>data/laws/공공데이터법.txt</code>에 출처와 법령 번호를 적어 두었다</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.1에서 에이전트가 인용한 조문 하나를 Ctrl+F로 원문과 대조했다</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 파일에 없는 조문을 물었을 때의 반응을 기록했다</li>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.2의 비교 기록표(표 12-3)를 실험 A, B 모두 채웠다</li>
-<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>.claude/skills/csv-profile/SKILL.md</code>가 스킬 목록과 <code>/</code> 자동완성에 나타난다</li>
-<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>/csv-profile</code>이 만든 보고서의 행 수(229)를 원본과 대조했다</li>
-<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 자동 호출 테스트를 했고, 결과에 따라 <code>description</code>을 한 번 이상 손보았다</li>
-<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 스킬 개선 내역을 기록으로 남겼다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 2.3에서 도구 사용 로그의 kosis 도구 호출을 확인했다 (기억으로 답하지 않았다)</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 근거메모의 수치 하나(예: 2023년 51,325,329명)를 KOSIS 화면과 대조했다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>.claude/skills/evidence-memo/SKILL.md</code>가 스킬 목록과 <code>/</code> 자동완성에 나타난다</li>
+<li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>/evidence-memo</code> 실행 결과가 여섯 절 형식을 갖추고, 인용·수치·출처가 검증을 통과했다</li>
 </ul>
 <h2 id="자주-겪는-문제">자주 겪는 문제</h2>
 <table>
@@ -309,28 +325,33 @@ argument-hint: [CSV 파일 경로]
 <td>"먼저 파일을 읽고 답하라"를 명시하고, 로그에 파일 읽기가 나타나는지 확인. 새 대화라면 파일 경로가 정확한지 확인</td>
 </tr>
 <tr>
-<td><code>/csv-profile</code>이 자동완성에 안 뜬다</td>
-<td>폴더·파일 이름 오타(<code>SKILL.md</code> 철자, 스킬 폴더 위치), 또는 <code>.claude/skills</code> 폴더를 대화 도중 처음 만든 경우</td>
-<td>경로가 정확히 <code>.claude/skills/csv-profile/SKILL.md</code>인지 확인. 폴더를 새로 만든 경우에는 Claude Code를 재시작하면 인식된다</td>
+<td>통계 근거를 요청했는데 kosis 도구 호출 없이 수치가 나온다</td>
+<td>에이전트가 기억 속 수치로 답했다</td>
+<td>"반드시 kosis MCP 도구로 조회해서 답해 줘"라고 재지시. 기억의 수치는 근거로 쓸 수 없다</td>
 </tr>
 <tr>
-<td>스킬은 실행되는데 절차 일부(코드 저장 등)를 건너뛴다</td>
-<td>본문 지시가 길거나 모호해 일부가 무시됨</td>
-<td>건너뛴 단계를 지적하고 다시 시키면 대개 수행한다. 재발하면 SKILL.md에서 해당 단계를 번호 목록으로 분리하고 "반드시"를 명시</td>
-</tr>
-<tr>
-<td>자동 호출 테스트에서 스킬 대신 즉흥 답변이 나온다</td>
-<td>요청 표현이 <code>description</code>과 동떨어짐</td>
-<td><code>description</code>에 실제로 쓰는 표현(개요, 진단, 프로파일링 등)을 추가. 급하면 <code>/csv-profile</code>로 직접 호출</td>
+<td>kosis 도구가 목록에 없거나 연결 실패다</td>
+<td>MCP 서버 미등록 또는 연결 문제</td>
+<td>6주차 2.2의 등록 절차와 <code>/mcp</code> 확인을 다시 수행</td>
 </tr>
 <tr>
 <td>기억 실험(실험 A)에서 에이전트가 자꾸 파일을 읽으려 한다</td>
 <td>"파일 확인 없이"라는 제약을 놓침</td>
 <td>지시문에 제약을 명시했는지 확인하고, 파일 읽기 승인 요청이 오면 거부 (2주차와 동일)</td>
 </tr>
+<tr>
+<td><code>/evidence-memo</code>가 자동완성에 안 뜬다</td>
+<td>폴더·파일 이름 오타 또는 폴더를 대화 도중 처음 만든 경우</td>
+<td>경로가 <code>.claude/skills/evidence-memo/SKILL.md</code>인지 확인. Claude Code를 재시작하면 인식된다 (5주차와 동일)</td>
+</tr>
+<tr>
+<td>스킬이 법령 인용 없이 해석만 쓴다</td>
+<td>절차의 인용 요구가 약하거나 관련 파일을 못 찾음</td>
+<td>data/laws에 관련 법령 파일이 있는지 확인하고, SKILL.md 절차 2에 "원문 그대로"를 명시</td>
+</tr>
 </tbody>
 </table>
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 12-A. 그라운딩 비교 보고.</strong> 2.1과 2.2의 결과를 한 쪽으로 정리해 제출한다. 포함할 것: (1) 채워진 표 12-3, (2) 실험 A와 B의 답변에서 서로 달랐던 지점 하나에 대한 원문 대조 결과, (3) "보고서에 법령 인용이 필요할 때 나는 앞으로 어떻게 묻겠는가"를 지시문 형태로 한 개. 평가 기준은 대조의 정확성이다.</p>
-<p><strong>과제 12-B. 나만의 Skill.</strong> 자신의 학기 프로젝트에서 반복되는 작업 하나를 골라 스킬로 만들어 제출한다. csv-profile을 자기 데이터에 맞게 고친 것도 좋고, 11주차 민원 분류의 스킬화, 혹은 9주차 그래프 표준화(제목·축·폰트 규칙을 적용해 그림을 만드는 절차) 같은 새 스킬도 좋다. 제출물: (1) SKILL.md 전문, (2) 슬래시 커맨드 실행 결과 산출물, (3) 테스트에서 발견한 문제와 수정 내역 한 단락, (4) 이 스킬에서 "사람의 확인 지점"이 어디인지 한 문장. 평가 기준은 절차의 구체성과 확인 지점 설계의 설득력이다.</p><div class="pager"><span><a href="w12-1.html">← 12주차 1회차. 문서 그라운딩과 작업 자동화 (Skill)</a></span><span><a href="w13-1.html">13주차 1회차. 다중 에이전트와 분석 파이프라인 →</a></span></div></main>
+<p><strong>과제 12-B. 내 프로젝트의 근거 메모.</strong> 자신의 학기 프로젝트(6주차 계획서)의 핵심 주장 하나를 골라 <code>/evidence-memo</code>로 근거 메모를 만들어 제출한다. 주장에 따라 문서 근거(관련 법령·조례를 data/laws에 추가)와 데이터 근거(kosis MCP 조회) 중 한쪽이 비어도 되지만, 왜 비었는지를 메모에 밝혀야 한다. 제출물: (1) 근거메모 전문, (2) 자신이 수행한 검증 기록(인용 대조, 수치 대조 각 1건 이상), (3) 스킬을 자기 프로젝트에 맞게 고친 부분이 있다면 그 내역. 평가 기준은 근거의 검증 가능성(인용·출처가 대조 가능한 형태인가)과 검증 기록의 구체성이다. 이 메모는 14주차 최종 보고서의 근거 절 초안이 된다.</p><div class="pager"><span><a href="w12-1.html">← 12주차 1회차. 문서 그라운딩과 RAG</a></span><span><a href="w13-1.html">13주차 1회차. 다중 에이전트와 분석 파이프라인 →</a></span></div></main>
 </body></html>

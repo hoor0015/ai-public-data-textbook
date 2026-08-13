@@ -1,7 +1,7 @@
 # 6주차 확인 그림: 시도별 주민등록 총인구 (2023)
-# 데이터 출처: KOSIS 오픈API, 행정안전부 주민등록인구현황
+# 데이터 출처: KOSIS, 행정안전부 주민등록인구현황
 #   통계표 DT_1B040A3 (행정구역(시군구)별 성별 인구수), 항목 T20(총인구수), 2023년
-#   2026-07-02에 API로 수집한 실제 값. 17개 시도 합계 = 51,325,329 (전국 값과 일치 확인)
+#   2026-08-12에 kosis MCP로 수집한 실제 값. 17개 시도 합계 = 51,325,329 (전국 값과 일치 확인)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -33,7 +33,7 @@ for b, v in zip(bars, vals):
             f"{v:,.0f}", va="center", fontsize=9, color="#333")
 ax.set_xlabel("주민등록 총인구 (만 명, 2023)")
 ax.set_xlim(0, 1550)
-ax.set_title("시도별 주민등록 총인구 (2023): API 수집 결과 확인용", fontsize=13)
+ax.set_title("시도별 주민등록 총인구 (2023): MCP 수집 결과 확인용", fontsize=13)
 sns.despine(left=True)
 fig.tight_layout()
 fig.savefig(FIG / "fig06_sido_pop.png", dpi=150, bbox_inches="tight")

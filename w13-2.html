@@ -62,11 +62,11 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 공공데이터 생태계</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 데이터 찾고 첫 개관하기</a></li>
-<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 오픈API와 자동 수집</a></li>
-<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 에이전트로 API 수집 파이프라인 만들기</a></li>
+<li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
+<li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
 <li class="chap"><a href="w07-1.html"><span class="tag t1">이론</span>7주차 데이터 정제: 지저분한 현실 다루기</a></li>
 <li class="chap"><a href="w07-2.html"><span class="tag t2">실습</span>7주차 에이전트로 데이터 정제하기</a></li>
 <li class="exam">8주차 · 중간고사</li>
@@ -77,8 +77,8 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
 <li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
 <li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 작업 자동화 (Skill)</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 그라운딩과 나만의 Skill 만들기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
 <li class="part">4부. 종합과 확장</li>
 <li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
 <li class="chap cur"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
@@ -97,7 +97,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </ul></nav>
 <main><h1>13주차 2회차. 전 과정 파이프라인 구축하기</h1>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
-<p>1회차에서 서브에이전트, 파이프라인, 검문소를 개념으로 배웠다. 오늘은 그것을 전부 실행한다. 6주차에 수집해 둔 시군구 데이터에서 출발해, 정제·병합(7주차) → 통계 분석(10주차) → 시각화(9주차) → 요약 보고까지를 <strong>하나의 지시</strong>로 묶어 에이전트 팀에게 맡기고, 단계마다 검문소에서 직접 확인한다. 마지막에는 빈 폴더에 데이터와 지시문만 복사해 처음부터 다시 돌리는 재현성 테스트로 마무리한다. 지난 몇 주 동안 따로따로 배운 기술이 한 줄로 꿰어지는 날이다.</p>
+<p>1회차에서 서브에이전트, 파이프라인, 검문소를 개념으로 배웠다. 오늘은 그것을 전부 실행한다. 학기 내내 써 온 시군구 데이터에서 출발해, 정제·병합(7주차) → 통계 분석(10주차) → 시각화(9주차) → 요약 보고까지를 <strong>하나의 지시</strong>로 묶어 에이전트 팀에게 맡기고, 단계마다 검문소에서 직접 확인한다. 마지막에는 빈 폴더에 데이터와 지시문만 복사해 처음부터 다시 돌리는 재현성 테스트로 마무리한다. 지난 몇 주 동안 따로따로 배운 기술이 한 줄로 꿰어지는 날이다.</p>
 <p>이 실습이 끝나면 다음 산출물이 폴더에 남는다.</p>
 <ul>
 <li><code>파이프라인.md</code>: 단계 정의서 (입력·처리·출력·검문 항목)</li>
@@ -133,7 +133,7 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </tr>
 </tbody>
 </table>
-<p>오늘의 공통 예제는 "지난 10년 사이 시군구 출산율은 어떻게 변했고, 고령화와 어떤 관계가 있는가"라는 질문이다. 두 데이터 파일은 이미 확보되어 있으므로 수집 단계는 확인만 하고 지나간다. 실습은 이 공통 예제로 진행하고, 제출 과제에서 같은 절차를 자기 프로젝트 데이터에 적용한다.</p>
+<p>오늘의 공통 예제는 "지난 10년 사이 시군구 출산율은 어떻게 변했고, 고령화와 어떤 관계가 있는가"라는 질문이다. 두 데이터 파일은 이미 확보되어 있으므로 수집 단계는 확인만 하고 지나간다. (1회차 1.3절에서 본 대로 kosis MCP를 쓰면 수집 자체를 파이프라인의 한 단계로 자동화할 수도 있지만, 오늘은 단계 사이의 연결과 검문에 집중한다.) 실습은 이 공통 예제로 진행하고, 제출 과제에서 같은 절차를 자기 프로젝트 데이터에 적용한다.</p>
 <h2 id="21-파이프라인-설계하기-단계-정의서-작성">2.1 파이프라인 설계하기: 단계 정의서 작성</h2>
 <p><strong>(a) 무엇을 왜 하는가.</strong> 팀을 부리려면 조직도가 먼저다. 에이전트에게 지시를 던지기 전에, 무엇을 몇 단계로 나누고 각 단계가 무엇을 받아 무엇을 내놓는지를 사람이 먼저 정한다. 이것이 1회차 표 13-1에서 본 단계 정의서다. 프로젝트 폴더에 <code>파이프라인.md</code> 파일을 만들고 아래 내용을 직접 작성하라. (타자가 힘들면 에이전트에게 틀을 만들게 해도 좋지만, 각 칸의 내용은 자기 판단으로 채운다.)</p>
 <p><strong>표 13-3. 오늘 실습의 단계 정의서 (<code>파이프라인.md</code>에 옮겨 적을 내용)</strong></p>
@@ -340,5 +340,5 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 </table>
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 13-A. 공통 예제 파이프라인 패키지.</strong> 오늘 실습의 산출물 일체를 제출한다. <code>파이프라인.md</code>(검문소 통과 기록 포함), <code>지시문_파이프라인.md</code>, <code>output/</code> 폴더, <code>재현성테스트.md</code>. 평가 기준은 세 가지다. (1) 검문소 2에서 미추홀구 문제를 발견하고 근거 있게 처리했는가, (2) 검문 기록이 구체적인가, (3) 재현성 테스트에서 숫자 일치를 확인했는가.</p>
-<p><strong>과제 13-B. 내 프로젝트 파이프라인 설계서.</strong> 5주차에 정한 자기 학기 프로젝트 데이터에 대해 표 13-3 형식의 단계 정의서와 완결된 파이프라인 지시문을 작성해 제출한다. 실행까지 하면 가산점이 있지만, 이번 주의 필수는 설계다. 평가 기준은 단계 사이의 입력·출력이 파일로 정확히 이어지는가와 검문 항목이 그 데이터의 실제 위험(병합 키, 결측, 단위)을 겨냥하고 있는가이다. 이 설계서는 14주차 최종 보고서 실습에서 그대로 사용한다.</p><div class="pager"><span><a href="w13-1.html">← 13주차 1회차. 다중 에이전트와 분석 파이프라인</a></span><span><a href="w14-1.html">14주차 1회차. 분석 보고서와 책임 있는 AI 활용 →</a></span></div></main>
+<p><strong>과제 13-B. 내 프로젝트 파이프라인 설계서.</strong> 6주차에 정한 자기 학기 프로젝트 데이터에 대해 표 13-3 형식의 단계 정의서와 완결된 파이프라인 지시문을 작성해 제출한다. 실행까지 하면 가산점이 있지만, 이번 주의 필수는 설계다. 평가 기준은 단계 사이의 입력·출력이 파일로 정확히 이어지는가와 검문 항목이 그 데이터의 실제 위험(병합 키, 결측, 단위)을 겨냥하고 있는가이다. 이 설계서는 14주차 최종 보고서 실습에서 그대로 사용한다.</p><div class="pager"><span><a href="w13-1.html">← 13주차 1회차. 다중 에이전트와 분석 파이프라인</a></span><span><a href="w14-1.html">14주차 1회차. 분석 보고서와 책임 있는 AI 활용 →</a></span></div></main>
 </body></html>

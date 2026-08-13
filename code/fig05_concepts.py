@@ -1,4 +1,4 @@
-# 5주차 1회차 개념도 생성
+# 5주차 1회차 개념도 생성 (Skill: 3층 구조, 작동 흐름)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -28,83 +28,65 @@ def arrow(ax, x1, y1, x2, y2, color="#555", style="-|>", lw=1.6, ls="-"):
 
 
 # ---------------------------------------------------------------- 그림 5-1
-# 한국 공공데이터 생태계 지도: 포털들을 성격별로 배치
-fig, ax = plt.subplots(figsize=(12, 6.4))
+# 일회성 지시, Skill, CLAUDE.md의 3층 구조
+fig, ax = plt.subplots(figsize=(11, 5.8))
 ax.set_xlim(0, 13)
 ax.set_ylim(0, 9)
 ax.axis("off")
 
-# 맨 위: 분석가의 질문
-box(ax, 4.4, 7.6, 4.2, 1.1, "분석가의 질문\n\"이 데이터는 어디에 있을까?\"",
-    fc="#fdf9f4", ec="#c77b2f", fontsize=11, weight="bold")
-
-# 가운데: 종합 창구
-box(ax, 4.4, 5.2, 4.2, 1.5,
-    "공공데이터포털  data.go.kr\n(행정안전부 · 범정부 종합 창구)\n파일데이터 + 오픈API",
-    fc="#f5f9fd", ec="#2f6fb0", fontsize=10.5, weight="bold")
-arrow(ax, 6.5, 7.5, 6.5, 6.9)
-
-# 아래: 성격별 전문 포털 4묶음
-groups = [
-    ("통계 전문", "#f4fbf6", "#2f8f4e",
-     "KOSIS 국가통계포털\nkosis.kr (국가데이터처)\n인구·고용·물가 등 승인통계",
-     "한국은행 ECOS\necos.bok.or.kr\n금리·환율·국민소득"),
-    ("재정·기관 정보", "#faf8fc", "#7a5fa8",
-     "지방재정365\nlofin365.go.kr\n지자체 예산·재정자립도",
-     "ALIO 경영정보 공개\nalio.go.kr\n공공기관 인력·부채"),
-    ("법령·행정문서", "#fdf9f4", "#c77b2f",
-     "국가법령정보센터\nlaw.go.kr (법제처)\n법령·판례·자치법규",
-     "정보공개포털\nopen.go.kr\n정보공개 청구·원문"),
+layers = [
+    (6.3, "일회성 지시 (대화창)", "이번 한 번만 필요한 요청",
+     "\"이 표를 오름차순으로 다시 정렬해 줘\"", "#fdf9f4", "#c77b2f"),
+    (3.5, "Skill (.claude/skills/이름/SKILL.md)", "부르면 실행되는 절차. 필요할 때만 본문이 로드된다",
+     "\"/csv-profile data/sigungu_2023.csv\" 또는 관련 요청 시 자동 사용", "#f4fbf6", "#2f8f4e"),
+    (0.7, "CLAUDE.md (프로젝트 규칙)", "항상 적용되는 규칙. 매 대화에 자동으로 로드된다",
+     "\"표의 숫자는 천 단위 쉼표\", \"그림은 figures 폴더에 저장\"", "#f5f9fd", "#2f6fb0"),
 ]
-x0 = 0.5
-for i, (title, fc, ec, top, bottom) in enumerate(groups):
-    x = x0 + i * 4.2
-    ax.text(x + 1.9, 4.35, title, ha="center", fontsize=11.5,
-            fontweight="bold", color=ec)
-    box(ax, x, 2.3, 3.8, 1.6, top, fc=fc, ec=ec, fontsize=9.5)
-    box(ax, x, 0.4, 3.8, 1.6, bottom, fc=fc, ec=ec, fontsize=9.5)
-    arrow(ax, 6.5, 5.1, x + 1.9, 4.7, color="#999", ls="--", lw=1.2)
+for y, t1, t2, ex, fc, ec in layers:
+    box(ax, 0.6, y, 7.6, 2.2, "", fc=fc, ec=ec)
+    ax.text(4.4, y + 1.72, t1, ha="center", fontsize=12, fontweight="bold")
+    ax.text(4.4, y + 1.12, t2, ha="center", fontsize=10, color="#333")
+    ax.text(4.4, y + 0.48, "예: " + ex, ha="center", fontsize=9.5, color="#555")
 
-ax.text(11.2, 6.0, "종합 창구에서 시작하되,\n주제가 분명하면\n전문 포털로 바로 간다",
-        ha="center", fontsize=10, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
-fig.savefig(FIG / "fig05_ecosystem.png", dpi=150, bbox_inches="tight")
+ax.annotate("", xy=(9.2, 8.4), xytext=(9.2, 0.8),
+            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
+ax.text(9.55, 4.6, "위로 갈수록\n일회적·즉흥적", fontsize=10.5, color="#555", va="center")
+ax.text(11.5, 4.6, "아래로 갈수록\n반복적·영구적", fontsize=10.5, color="#555", va="center")
+ax.annotate("", xy=(11.2, 0.8), xytext=(11.2, 8.4),
+            arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))
+ax.text(4.4, 8.75, "같은 지시를 세 번째 쓰고 있다면 아래층으로 내릴 때다",
+        ha="center", fontsize=11, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+fig.savefig(FIG / "fig05_three_layers.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 5-2
-# 파일 내려받기와 오픈API의 차이
-fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
-for ax in axes:
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
-    ax.axis("off")
+# Skill 작동 흐름
+fig, ax = plt.subplots(figsize=(12, 5.4))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis("off")
 
-ax = axes[0]
-ax.set_title("(가) 파일 내려받기: 사람이 옮긴다", fontsize=13, pad=12)
-box(ax, 0.6, 6.6, 3.6, 2.0, "포털 화면\n(검색·클릭)", fc="#f5f9fd", ec="#2f6fb0")
-box(ax, 5.8, 6.6, 3.6, 2.0, "내 컴퓨터\nCSV / XLSX 파일", fc="#fdf9f4", ec="#c77b2f")
-box(ax, 3.2, 2.6, 3.6, 2.0, "분석\n(pandas로 읽기)", fc="#f4fbf6", ec="#2f8f4e")
-arrow(ax, 4.4, 7.6, 5.6, 7.6)
-arrow(ax, 7.6, 6.5, 5.6, 4.7)
-ax.text(5.0, 9.3, "내려받기(수동)", ha="center", fontsize=10, color="#555")
-ax.text(5.0, 0.9, "받은 순간의 스냅사진: 데이터가 갱신되면 다시 내려받아야 한다",
-        ha="center", fontsize=10, color="#333")
+box(ax, 0.4, 5.6, 3.2, 2.4, "평소\n\nSkill의 이름과 설명만\n목록으로 알고 있다\n(본문은 안 읽은 상태)",
+    fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 5.2, 6.9, 3.6, 1.5, "호출 방법 1\n사용자가 /skill-name 입력", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 5.2, 4.9, 3.6, 1.5, "호출 방법 2\n요청이 설명과 맞으면\n에이전트가 스스로 사용", fc="#fdf9f4", ec="#c77b2f", fontsize=9.5)
+box(ax, 10.2, 5.6, 3.4, 2.4, "실행\n\nSKILL.md 본문이\n맥락창에 로드되고\n적힌 절차대로 작업",
+    fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 3.7, 7.2, 5.1, 7.55)
+arrow(ax, 3.7, 6.2, 5.1, 5.75)
+arrow(ax, 8.9, 7.55, 10.1, 7.2)
+arrow(ax, 8.9, 5.75, 10.1, 6.2)
 
-ax = axes[1]
-ax.set_title("(나) 오픈API: 코드가 가져온다", fontsize=13, pad=12)
-box(ax, 0.6, 6.6, 3.6, 2.0, "분석 코드\n(에이전트가 작성)", fc="#f4fbf6", ec="#2f8f4e")
-box(ax, 5.8, 6.6, 3.6, 2.0, "포털 서버\n(API 창구)", fc="#f5f9fd", ec="#2f6fb0")
-box(ax, 3.2, 2.6, 3.6, 2.0, "응답 데이터\n(JSON)", fc="#faf8fc", ec="#7a5fa8")
-arrow(ax, 4.4, 7.9, 5.6, 7.9)
-arrow(ax, 7.6, 6.5, 5.6, 4.7)
-arrow(ax, 3.4, 3.6, 1.6, 6.4, ls="--", color="#999", lw=1.2)
-ax.text(5.0, 9.3, "요청(인증키 포함)", ha="center", fontsize=10, color="#555")
-ax.text(7.4, 5.4, "응답", ha="center", fontsize=10, color="#555")
-ax.text(1.7, 4.9, "코드 재실행 =\n최신 데이터", ha="center", fontsize=9.5, color="#777")
-ax.text(5.0, 0.9, "실행할 때마다 자동으로 다시 가져온다: 6주차에서 직접 만든다",
-        ha="center", fontsize=10, color="#333")
-fig.tight_layout()
-fig.savefig(FIG / "fig05_file_vs_api.png", dpi=150, bbox_inches="tight")
+box(ax, 2.2, 1.0, 9.6, 2.6, "", fc="white", ec="#7a5fa8")
+ax.text(7.0, 3.1, "SKILL.md의 두 부분", ha="center", fontsize=11, fontweight="bold", color="#4a3a68")
+ax.text(4.6, 1.95, "머리말(frontmatter)\nname: 이름\ndescription: 언제 쓰는 스킬인지", ha="center",
+        fontsize=9.5, color="#333")
+ax.text(9.6, 1.95, "본문(markdown)\n에이전트가 따를 절차를\n단계별로 적은 지시문", ha="center",
+        fontsize=9.5, color="#333")
+ax.plot([7.0, 7.0], [1.2, 2.8], color="#d9d9e3", lw=1)
+arrow(ax, 11.9, 5.5, 8.4, 3.75, color="#7a5fa8", ls="--")
+fig.savefig(FIG / "fig05_skill_flow.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 print("saved:", [p.name for p in sorted(FIG.glob('fig05_*.png'))])
