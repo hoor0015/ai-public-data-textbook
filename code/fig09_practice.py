@@ -1,4 +1,4 @@
-# 9주차 2회차(실습) 그림 생성: 그림 9-6, 8-7
+# 9주차 2회차(실습) 그림 생성: 그림 9-10, 9-11
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -19,7 +19,7 @@ inc = pd.read_csv(BASE / "data" / "income_dist.csv", encoding="utf-8-sig")
 sub = df.dropna(subset=["합계출산율"])
 r = sub["고령인구비율"].corr(sub["합계출산율"])
 
-# ---------------------------------------------------------------- 그림 9-6
+# ---------------------------------------------------------------- 그림 9-10
 # 그래프 다듬기 전과 후
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
 
@@ -42,7 +42,7 @@ fig.tight_layout()
 fig.savefig(FIG / "fig09_polish.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 9-7
+# ---------------------------------------------------------------- 그림 9-11
 # 왜곡된 시계열 그래프와 고친 그래프
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
 
@@ -74,4 +74,4 @@ fig.tight_layout()
 fig.savefig(FIG / "fig09_distort_fix.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("그림 9-6, 8-7 저장 완료")
+print("그림 9-10, 9-11 저장 완료")

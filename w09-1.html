@@ -71,14 +71,14 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
-<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리</a></li>
-<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트가 일하는 모습 관찰하기</a></li>
-<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 에이전트에게 일 시키는 법: 지시 설계</a></li>
-<li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 지시문 개선 워크숍</a></li>
-<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 분석 환경 이해하기</a></li>
-<li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 에이전트로 분석 환경 구축하기</a></li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 반복 작업의 표준화: Skill</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 나만의 첫 Skill 만들기</a></li>
+<li class="chap"><a href="w02-1.html"><span class="tag t1">이론</span>2주차 AI 에이전트의 작동 원리와 지시 설계</a></li>
+<li class="chap"><a href="w02-2.html"><span class="tag t2">실습</span>2주차 에이전트 관찰과 지시문 워크숍</a></li>
+<li class="chap"><a href="w03-1.html"><span class="tag t1">이론</span>3주차 분석 환경 이해하기</a></li>
+<li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 에이전트로 분석 환경 구축하기</a></li>
+<li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 반복 작업의 표준화: Skill</a></li>
+<li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 나만의 첫 Skill 만들기</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 Skill 심화: 절차에 인자와 도구를 달다</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 스크립트가 딸린 Skill과 나만의 스킬 라이브러리</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
 <li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
@@ -111,7 +111,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>9주차 1회차. 탐색적 데이터 분석과 시각화</h1>
-<p class="moddate">최종 수정: 2026-08-13 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-09-03 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>그림의 가장 큰 가치는, 우리가 전혀 예상하지 못했던 것을 알아차리도록 강제할 때 드러난다.
 (존 튜키, 『탐색적 데이터 분석』)</p>
@@ -200,6 +200,8 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 </div>
 
 <p>그림 9-3의 상관계수는 r = 0.39다. 방향은 양(+)이고, 세기는 어중간하다. 점들이 추세선 주위에 넓게 흩어져 있는 데서 보이듯, 고령인구비율만으로 출산율이 결정되는 것은 결코 아니다. 참고로 같은 데이터에서 인구밀도(로그 변환)와 고령인구비율의 상관계수를 계산하면 r = -0.74로, 사람이 빽빽이 모여 사는 곳일수록 젊다는 훨씬 강한 관계가 나온다.</p>
+<p>여기서 로그 변환이라는 낯선 말이 나왔으니 짚고 간다. 로그 눈금은 축의 눈금을 같은 크기씩이 아니라 같은 배수씩 매기는 방식이다. 보통의 축이 0, 100, 200, 300처럼 100씩 더해 가며 눈금을 매긴다면, 로그 눈금은 100, 1,000, 10,000을 같은 간격으로 놓는다. 눈금 하나를 지날 때마다 값이 열 배가 되는 것이다. 이렇게 하는 이유는 인구밀도 같은 변수의 생김새에 있다. 우리 데이터에서 인구밀도가 가장 낮은 곳은 경북 영양군으로 1제곱킬로미터에 19.2명이고, 가장 높은 곳은 서울 양천구로 25,050.4명이다. 두 곳의 차이가 1,300배가 넘는다. 보통의 축에 그리면 양천구 하나를 담기 위해 축을 25,000까지 늘려야 하고, 그러면 1,000명 아래에 있는 136곳(100명 미만 63곳, 100-1,000명 73곳)이 축 왼쪽 끝에 겹쳐 붙어 한 덩어리로 보인다. 중앙값이 491.5명인데 평균은 3,711.3명으로 일곱 배가 넘는 것도 소수의 큰 값이 평균을 끌어올린 치우친 분포의 신호다. 로그 눈금으로 바꾸면 19.2명과 192명의 차이도, 2,500명과 25,000명의 차이도 같은 간격으로 벌어져 점들이 축 전체에 고르게 퍼진다. 값을 더하기가 아니라 배수로 생각하는 편이 자연스러운 변수, 곧 인구밀도, 인구 수, 소득, 면적 같은 것들에 이 방법을 쓴다.</p>
+<p>방금의 r = -0.74도 인구밀도를 이렇게 배수의 눈금으로 바꾼 뒤 계산한 값이다. 원래 값을 그대로 쓰면 r = -0.41이 나온다. 같은 두 변수인데 값이 이렇게 다른 이유는 상관계수가 직선 관계의 세기를 재는 자이기 때문이다. 원래 값으로는 왼쪽에 뭉친 채 굽어 있던 관계가 눈금을 바꾸자 곧게 펴진 것이다. 어느 쪽이 참이냐를 가리기보다, 축을 어떻게 잡았는지 밝히고 그림과 숫자를 함께 내놓는 것이 정직한 보고다. 로그 눈금으로 그린 그림을 읽을 때는 축의 숫자를 반드시 확인해야 한다. 눈금 사이의 거리가 같아 보여도 실제 값의 차이는 한 칸마다 열 배씩 커지기 때문이다.</p>
 <p>숫자 하나로 요약되니 편리하지만, 두 가지 함정을 지금 새겨 두어야 한다. 첫째, 상관계수는 직선 관계만 잡아낸다. 두 변수가 U자형처럼 굽은 관계를 가지면 r이 0에 가깝게 나올 수 있으므로, 상관계수만 보고 "관계가 없다"고 단정하면 안 된다. 산점도를 먼저 보고 상관계수를 보는 순서가 안전하다. 둘째, 상관은 인과가 아니다. 여름철 아이스크림 판매량과 물놀이 사고 건수는 강한 양의 상관을 보이지만, 아이스크림이 사고를 일으키는 것이 아니라 더위라는 제3의 요인이 둘 다를 끌어올린다. r이 아무리 크더라도 "A가 B를 일으킨다"는 문장은 상관계수에서 나오지 않는다. 이 함정은 정책 해석에서 특히 치명적이므로 10주차에서 본격적으로 다룬다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 지역 데이터의 함정: 집단의 관계는 개인의 관계가 아니다</strong><br>

@@ -1,4 +1,4 @@
-# 5주차 2회차: sigungu_2023.csv 열별 결측 현황 막대그래프
+# 4주차 2회차: sigungu_2023.csv 열별 결측 현황 막대그래프
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -33,6 +33,6 @@ ax.set_title("sigungu_2023.csv 열별 결측 현황: 합계출산율과 출생�
 plt.setp(ax.get_xticklabels(), rotation=30, ha="right", fontsize=10)
 sns.despine(left=True)
 fig.tight_layout()
-fig.savefig(FIG / "fig05_missing.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig04_missing.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("saved: fig05_missing.png / missing =", dict(missing[missing > 0]))
+print("saved: fig04_missing.png / missing =", dict(missing[missing > 0]))
