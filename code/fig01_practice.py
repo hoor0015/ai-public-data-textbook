@@ -54,7 +54,7 @@ tree = ("공공데이터분석\n"
         "  data\n"
         "  산출물\n"
         "  메모\n"
-        "    관찰일지_1주차.md\n"
+        "    내가아는사실.md\n"
         "    우리동네.md\n"
         "  README.md")
 ax.text(1.3, 6.15, tree, ha="left", va="top", fontsize=9.5, color="#333")
@@ -69,7 +69,7 @@ ax.text(3.75, 5.75,
         "  ## 메모\n"
         "- 수업 중 관찰과 기록을 남긴다.\n"
         "+ 수업 중 관찰과 기록을 남긴다.\n"
-        "+ 관찰일지는 주차별로 저장한다.",
+        "+ 계획서는 주차별로 저장한다.",
         ha="left", va="top", fontsize=9, color="#333")
 ax.text(6.2, 3.75, "파일을 클릭하면 내용이 열린다.\n에이전트가 파일을 고치면\n이전과 이후가 나란히 비교된다(diff).",
         ha="center", va="bottom", fontsize=9, color="#333")
