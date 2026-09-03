@@ -183,3 +183,23 @@ print("사본에서 '-'의 개수:", int((dd["합계출산율"] == "-").sum()))
 print("사본 합계출산율을 숫자로 되돌린 뒤 평균:",
       round(pd.to_numeric(dd["합계출산율"], errors="coerce").mean(), 4),
       " 값 개수:", int(pd.to_numeric(dd["합계출산율"], errors="coerce").count()))
+
+
+# =====================================================================
+# 2.11 두 번째 스킬 top-bottom: 한 열의 상위 5개·하위 5개와 파일 줄 번호
+#     (결측이 있는 행은 제외하고, 제외한 건수를 함께 보고한다)
+# =====================================================================
+
+print("\n\n########## 2.11 top-bottom 스킬의 실행 예 ##########")
+tb_path = os.path.join(root, "data", "sigungu_2023.csv")
+tb = pd.read_csv(tb_path)
+col = "합계출산율"
+tb["줄번호"] = tb.index + 2  # 열 이름 줄이 1번째 줄이므로 첫 데이터가 2번째 줄
+valid = tb.dropna(subset=[col])
+print("전체 행:", len(tb), " 결측 제외 후:", len(valid), " 제외한 행:", len(tb) - len(valid))
+missing_rows = tb[tb[col].isna()][["시도", "시군구", "줄번호"]]
+print("제외한 행:", missing_rows.to_dict("records"))
+print("\n--- 상위 5개 ---")
+print(valid.nlargest(5, col)[["시도", "시군구", col, "줄번호"]].to_string(index=False))
+print("\n--- 하위 5개 ---")
+print(valid.nsmallest(5, col)[["시도", "시군구", col, "줄번호"]].to_string(index=False))

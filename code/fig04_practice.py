@@ -1,5 +1,4 @@
-# 4주차 2회차 개념도: 스킬의 테스트와 개선 순환 (그림 4-5),
-#                      하나의 스킬과 세 데이터의 보고서 (그림 4-4)
+# 4주차 2회차 개념도: 스킬의 테스트와 개선 순환 (그림 4-4)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -81,53 +80,3 @@ plt.close(fig)
 print("saved: fig04_skill_test_loop.png")
 
 
-# ----------------------------------------------------------------------
-# 그림 4-4. 하나의 스킬과 세 데이터: 무엇이 같고 무엇이 다른가
-# 세 파일의 행·열 수는 code/ch04_practice.py로 계산한 실제 값이다.
-# ----------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(12.6, 6.4))
-ax.set_xlim(0, 14.2)
-ax.set_ylim(0, 8.2)
-ax.axis("off")
-
-DW, DH = 3.3, 1.25
-data_boxes = [
-    (6.15, "sigungu_2023.csv\n229행 12열, 결측 2열"),
-    (4.15, "income_dist.csv\n13행 3열, 식별자 열 있음"),
-    (2.15, "sigungu_tfr_2013.csv\n264행 3열, 결측 없음"),
-]
-for y, t in data_boxes:
-    box(ax, 0.3, y, DW, DH, t, fc="#f5f9fd", ec="#2f6fb0")
-
-SX, SY, SW, SH = 4.9, 3.15, 3.6, 3.3
-box(ax, SX, SY, SW, SH,
-    "csv-profile\nSKILL.md 한 장\n절차 8단계\n산출물 형식 6절",
-    fc="#f4fbf6", ec="#2f8f4e", weight="bold")
-
-RW, RH = 4.5, 1.25
-rep_boxes = [
-    (6.15, "프로파일_sigungu_2023.md\n열 정보 12행, 확인 필요 1건"),
-    (4.15, "프로파일_income_dist.md\n열 정보 3행, 수치형 요약 2열"),
-    (2.15, "프로파일_sigungu_tfr_2013.md\n열 정보 3행, 확인 필요 1건"),
-]
-for y, t in rep_boxes:
-    box(ax, 9.4, y, RW, RH, t, fc="#fdf9f4", ec="#c77b2f")
-
-for y, _ in data_boxes:
-    arrow(ax, 0.3 + DW + 0.05, y + DH / 2, SX - 0.05, SY + SH / 2, color="#777")
-for y, _ in rep_boxes:
-    arrow(ax, SX + SW + 0.05, SY + SH / 2, 9.4 - 0.05, y + RH / 2, color="#777")
-
-ax.text(1.95, 7.75, "입력: 세 데이터", ha="center", fontsize=11, color="#2f6fb0")
-ax.text(6.7, 7.75, "절차: 하나의 스킬", ha="center", fontsize=11, color="#2f8f4e")
-ax.text(11.65, 7.75, "산출: 세 보고서", ha="center", fontsize=11, color="#a0561a")
-
-ax.text(7.1, 0.95,
-        "같은 것은 절 제목 여섯 개와 표의 열 구성이고, 다른 것은 표의 행 수와 값이다.\n"
-        "형식이 같아야 세 보고서를 나란히 놓고 비교할 수 있다.",
-        ha="center", va="center", fontsize=10.5, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.45"))
-
-fig.savefig(FIG / "fig04_three_reports.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-print("saved: fig04_three_reports.png")
