@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -302,4 +313,10 @@ Please provide a package name with `--name`.
 <p><strong>과제 4-A. 환경보고서.</strong> '환경보고서_4주차.md'를 제출한다. 평가 기준은 다섯 항목이 모두 실측값(확인 명령 포함)으로 채워졌는가, 그리고 그중 한 값에 대해 "직접 재확인한 방법"을 보고서 끝에 한 문단 덧붙였는가다.</p>
 <p><strong>과제 4-B. 디버깅 일지.</strong> 오늘 만난 오류(일부러 낸 것 포함) 중 하나를 골라 메모 폴더에 '디버깅일지_4주차.md'로 정리한다. (1) 오류문의 마지막 줄(복사), (2) 원인을 내 말로 한 문장, (3) 해결 과정에서 에이전트에게 준 지시문, (4) 해결을 어떻게 확인했는지를 적는다. 평가 기준은 오류문 해석의 정확성과 확인 절차의 구체성이다.</p>
 <p><strong>과제 4-C. 예습 질문.</strong> 군위군의 합계출산율은 왜 비어 있을까. 힌트: 2023년 7월에 군위군의 소속 행정구역이 바뀌었다. 어떤 변화였는지 찾아보고 두 문장으로 정리하라(출처 포함). 행정구역 개편이 데이터에 남기는 흔적은 7주차에서 본격적으로 다룬다.</p><div class="pager"><span><a href="w04-1.html">← 4주차 1회차. 분석 환경 이해하기</a></span><span><a href="w05-1.html">5주차 1회차. 반복 작업의 표준화: Skill →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

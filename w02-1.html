@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -275,4 +286,10 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <p><strong>2-2. 맥락창 추론.</strong> 어제 에이전트와 두 시간 동안 인구 데이터를 분석하고 대화창을 닫았다. 오늘 새 대화를 열고 "어제 만든 그래프를 조금 수정해 줘"라고 지시하면 어떤 일이 벌어질지 예측하고, 오늘 작업을 순조롭게 시작하기 위한 더 나은 첫 지시문을 써 보라. (힌트: 어제의 산출물은 파일로 폴더에 남아 있다.)</p>
 <p><strong>2-3. 루프 재구성.</strong> "data 폴더의 CSV에서 인구가 가장 많은 시군구 5곳을 찾아 표로 만들어 줘"라는 지시를 받은 에이전트가 밟을 걸음을, 2.4절의 예시처럼 (계획)-(행동)-(관찰) 형식으로 5걸음 이상 써 보라. 중간에 오류가 한 번 일어나 스스로 고치는 걸음을 반드시 포함하라.</p>
 <p><strong>2-4. 지시문 고치기.</strong> 원리를 적용해 다음 지시문의 문제를 지적하고 고쳐 써 보라. "우리 시 인구가 요즘 어떤지 분석해서 보고서 완성해 줘."</p><div class="pager"><span><a href="w01-2.html">← 1주차 2회차. 첫 만남: VSCode와 Claude Code</a></span><span><a href="w02-2.html">2주차 2회차. 에이전트가 일하는 모습 관찰하기 →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

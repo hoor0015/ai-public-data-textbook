@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -359,4 +370,10 @@ argument-hint: [질문]
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 12-A. 그라운딩 비교 보고.</strong> 2.1과 2.2의 결과를 한 쪽으로 정리해 제출한다. 포함할 것: (1) 채워진 표 12-3, (2) 실험 A와 B의 답변에서 서로 달랐던 지점 하나에 대한 원문 대조 결과, (3) "보고서에 법령 인용이 필요할 때 나는 앞으로 어떻게 묻겠는가"를 지시문 형태로 한 개. 평가 기준은 대조의 정확성이다.</p>
 <p><strong>과제 12-B. 내 프로젝트의 근거 메모.</strong> 자신의 학기 프로젝트(6주차 계획서)의 핵심 주장 하나를 골라 <code>/evidence-memo</code>로 근거 메모를 만들어 제출한다. 주장에 따라 문서 근거(관련 법령·조례를 data/laws에 추가)와 데이터 근거(kosis MCP 조회) 중 한쪽이 비어도 되지만, 왜 비었는지를 메모에 밝혀야 한다. 제출물: (1) 근거메모 전문, (2) 자신이 수행한 검증 기록(인용 대조, 수치 대조 각 1건 이상), (3) 스킬을 자기 프로젝트에 맞게 고친 부분이 있다면 그 내역. 평가 기준은 근거의 검증 가능성(인용·출처가 대조 가능한 형태인가)과 검증 기록의 구체성이다. 이 메모는 14주차 최종 보고서의 근거 절 초안이 된다.</p><div class="pager"><span><a href="w12-1.html">← 12주차 1회차. 문서 그라운딩과 RAG</a></span><span><a href="w13-1.html">13주차 1회차. 다중 에이전트와 분석 파이프라인 →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

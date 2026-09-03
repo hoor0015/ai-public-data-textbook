@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -303,4 +314,10 @@ argument-hint: [CSV 파일 경로]
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 5-A. 수동 vs 스킬 비교 보고.</strong> 2.1의 수동 보고서와 2.3의 스킬 보고서를 나란히 놓고 한 쪽으로 정리해 제출한다. 포함할 것: (1) 두 보고서가 같은 사실(행 수, 결측 위치, 주요 수치)을 보고하는지 대조한 결과, (2) 형식 면에서 무엇이 달라졌는지, (3) 자신이 수행한 검증 기록 (최소 3항목. "확인했음"이 아니라 "파일 몇 번째 줄에서 어떤 값을 보았음" 수준으로). 평가 기준은 검증의 구체성이다.</p>
 <p><strong>과제 5-B. 나만의 두 번째 스킬.</strong> 자신이 반복하는 작업 하나를 골라 스킬로 만들어 제출한다. 이번에는 1회차에서 권한 분업을 써 보라. 초안 작성은 에이전트에게 맡기고("이런 작업을 하는 SKILL.md 초안을 만들어 줘"), 여러분은 절차와 기준을 다듬는다. 제출물: (1) SKILL.md 전문, (2) 슬래시 커맨드 실행 결과 산출물, (3) 테스트에서 발견한 문제와 수정 내역 한 단락, (4) 이 스킬에서 "사람의 확인 지점"이 어디인지 한 문장. 평가 기준은 절차의 구체성과 확인 지점 설계의 설득력이다.</p><div class="pager"><span><a href="w05-1.html">← 5주차 1회차. 반복 작업의 표준화: Skill</a></span><span><a href="w06-1.html">6주차 1회차. 공공데이터 생태계와 MCP →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

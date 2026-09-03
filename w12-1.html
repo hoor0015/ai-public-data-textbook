@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -269,4 +280,10 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <p><strong>12-1. 그라운딩 설계.</strong> 후배가 에이전트에게 "개인정보 보호법상 가명정보가 뭐야?"라고 물어 받은 답을 그대로 과제에 옮겨 적으려 한다. 이 질문을 그라운딩된 질문으로 바꾸려면 (1) 무엇을 준비해서 (2) 지시문을 어떻게 고쳐야 하는지 쓰고, (3) 받은 답을 어떻게 검증할지 한 문장으로 써 보라.</p>
 <p><strong>12-2. RAG 고장 진단.</strong> 어느 시청의 민원 안내 챗봇은 시 자치법규 전체를 저장소로 삼는 RAG 시스템이다. 민원인이 "반려동물 놀이터 이용 시간"을 물었는데 챗봇이 틀린 답을 했다. (a) 이 시스템 내부에서 일어나는 세 단계를 순서대로 설명하라. (b) 틀린 답의 원인이 될 수 있는 지점을 검색 단계와 생성 단계에서 하나씩 들고, 각각을 어떻게 확인할 수 있을지 써 보라.</p>
 <p><strong>12-3. 근거의 삼각대.</strong> "우리 시는 고령화가 빠르게 진행되고 있으므로 노인 교통복지 예산을 확대할 필요가 있다"라는 보고서 문장이 있다. 표 12-2의 세 근거를 이 문장에 적용해, 각각 (1) 무엇을 근거로 삼을지, (2) 이 과목의 어느 도구로 확보할지, (3) 어떻게 검증할지를 표로 정리해 보라.</p><div class="pager"><span><a href="w11-2.html">← 11주차 2회차. 에이전트로 민원 텍스트 분석하기</a></span><span><a href="w12-2.html">12주차 2회차. Skill과 MCP로 근거 있는 답 만들기 →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

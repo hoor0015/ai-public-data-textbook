@@ -95,6 +95,15 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
@@ -203,10 +212,18 @@ def page(title, body_html, nav_html, prev_l, next_l):
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} - {BOOK_TITLE}</title>
-<style>{CSS}</style></head>
+<style>{CSS}</style>
+<script>try{{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}}catch(e){{}}</script></head>
 <body>
-<nav class="sidebar">{nav_html}</nav>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button>{nav_html}</nav>
 <main>{body_html}{pager}</main>
+<script>
+(function(){{var h=document.documentElement;
+function set(c){{h.classList.toggle('nav-collapsed',c);try{{localStorage.setItem('textbook-nav',c?'closed':'open')}}catch(e){{}}}}
+document.querySelector('.nav-hide').onclick=function(){{set(true)}};
+document.querySelector('.nav-show').onclick=function(){{set(false)}};}})();
+</script>
 </body></html>"""
 
 

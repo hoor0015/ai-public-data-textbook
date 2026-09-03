@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -312,4 +323,10 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
 <p><strong>과제 11-A. 민원 텍스트 분석 미니 보고서.</strong> 오늘의 산출물을 2쪽 이내로 정리한다. (1) 데이터 출처와 전처리 규칙(불용어 목록 포함), (2) 핵심어 빈도 그래프와 세 문장 해석, (3) 규칙 분류와 에이전트 분류의 비교표, (4) 불일치 사례에 대한 나의 판정과 근거. 평가 기준은 그래프의 완성도가 아니라 검증 절차의 충실함, 특히 (4)에서 판정의 근거를 원문에서 끌어왔는지다.</p>
 <p><strong>과제 11-B. 규칙 개선 실험.</strong> 2.5절의 발견을 반영해 키워드 규칙을 한 군데 이상 수정하고(예: "인터넷" 키워드 제거), 표본 30건에 대한 일치율이 어떻게 달라지는지 실행해 보라. 일치율이 오르든 내리든, 왜 그렇게 되었는지 불일치 목록의 변화로 설명하라.</p>
 <p><strong>과제 11-C (선택). 내 프로젝트에 적용.</strong> 학기 프로젝트 데이터에 텍스트 열(기관명, 사업명, 비고 등)이 있다면, 오늘 배운 빈도 분석을 적용해 보고 흥미로운 단어 3개를 골라 그 단어가 든 행을 직접 확인해 보라.</p><div class="pager"><span><a href="w11-1.html">← 11주차 1회차. 텍스트 데이터 분석 (Text-as-Data)</a></span><span><a href="w12-1.html">12주차 1회차. 문서 그라운딩과 RAG →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

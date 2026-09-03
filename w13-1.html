@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -304,4 +315,10 @@ description: 분석 산출물을 원자료와 대조해 검산하는 검증 전�
 <p><strong>13-1. 단계 정의서 만들기.</strong> "우리 시 5년치 민원 데이터로 부서별 민원 추이 보고서를 만든다"는 과제를 표 13-1의 형식(단계, 입력, 처리, 출력)에 맞추어 4단계 이상의 단계 정의서로 작성해 보라. 각 단계의 출력은 반드시 파일명으로 적을 것.</p>
 <p><strong>13-2. 검문소 배치.</strong> 13-1에서 만든 파이프라인에 검문소를 두 곳만 세울 수 있다고 하자. 어느 두 곳에 세울 것인가. 각 검문소에서 확인할 결정적 항목을 한 가지씩 정하고, 그 위치를 고른 이유를 "오류의 전파" 관점에서 설명하라.</p>
 <p><strong>13-3. 분업의 득실.</strong> 서브에이전트에게 일을 나누면 본 에이전트의 맥락창이 깨끗해지는 대신, 서브에이전트는 지금까지의 대화 내용을 알지 못한다. 이 교환이 손해가 되는 상황의 예를 하나 들고, 그 손해를 줄이기 위해 지시문 또는 CLAUDE.md에 무엇을 담아야 할지 제안해 보라.</p><div class="pager"><span><a href="w12-2.html">← 12주차 2회차. Skill과 MCP로 근거 있는 답 만들기</a></span><span><a href="w13-2.html">13주차 2회차. 전 과정 파이프라인 구축하기 →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>

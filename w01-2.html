@@ -50,13 +50,24 @@ nav.sidebar li.exam { margin-top:12px; margin-left:6px; font-size:.88rem;
   padding-top:18px; border-top:1px solid #e3e6ea; font-size:.95rem; }
 .pager a { max-width:46%; }
 .toc-part { margin-top:26px; font-size:1.1rem; }
+button.nav-hide, button.nav-show { cursor:pointer; font:inherit; font-size:.8rem; line-height:1;
+  border:1px solid #d5d9de; border-radius:4px; background:#fff; color:#57606a; padding:5px 9px; }
+button.nav-hide:hover, button.nav-show:hover { border-color:var(--accent); color:var(--accent); }
+button.nav-hide { position:absolute; top:10px; right:10px; }
+button.nav-show { display:none; position:fixed; top:10px; left:10px; z-index:20; }
+nav.sidebar h1 { padding-right:66px; }
+html.nav-collapsed nav.sidebar { display:none; }
+html.nav-collapsed button.nav-show { display:inline-block; }
+html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 @media (max-width: 900px) {
   nav.sidebar { position:static; width:auto; border-right:none; border-bottom:1px solid #e3e6ea; }
   main { margin-left:0; padding:24px 20px 60px; }
 }
-</style></head>
+</style>
+<script>try{if(localStorage.getItem('textbook-nav')==='closed')document.documentElement.classList.add('nav-collapsed')}catch(e){}</script></head>
 <body>
-<nav class="sidebar"><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
+<button class="nav-show" type="button" title="목차 펼치기">☰ 목차</button>
+<nav class="sidebar"><button class="nav-hide" type="button" title="목차 접기">◀ 접기</button><h1><a href="index.html">AI 기반 공공데이터 분석</a></h1><ul>
 <li class="part">1부. 에이전트와 도구</li>
 <li class="chap"><a href="w01-1.html"><span class="tag t1">이론</span>1주차 AI 에이전트 시대의 공공데이터 분석</a></li>
 <li class="chap cur"><a href="w01-2.html"><span class="tag t2">실습</span>1주차 첫 만남: VSCode와 Claude Code</a></li>
@@ -245,4 +256,10 @@ Claude Code는 터미널 단독으로도, 다른 편집기에서도 쓸 수 있�
 <h2 id="제출-과제">제출 과제</h2>
 <p><strong>과제 1-A. 우리 동네 소개 문서 완성.</strong> 2.4절의 우리동네.md를 완성해 제출한다. 평가 기준은 문서의 화려함이 아니라 (1) 모든 항목에 출처가 있는가, (2) 출처와 본문 수치가 일치하는가이다.</p>
 <p><strong>과제 1-B. 첫 관찰 기록.</strong> 메모 폴더에 '관찰일지_1주차.md'를 만들고(직접 타이핑해도, 에이전트에게 받아 적게 해도 좋다) 다음 세 가지를 적는다. (1) 에이전트가 기대보다 잘한 것 한 가지, (2) 기대보다 못한 것 한 가지, (3) 다음에 시켜 보고 싶은 것 한 가지.</p><div class="pager"><span><a href="w01-1.html">← 1주차 1회차. AI 에이전트 시대의 공공데이터 분석</a></span><span><a href="w02-1.html">2주차 1회차. AI 에이전트의 작동 원리 →</a></span></div></main>
+<script>
+(function(){var h=document.documentElement;
+function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}
+document.querySelector('.nav-hide').onclick=function(){set(true)};
+document.querySelector('.nav-show').onclick=function(){set(false)};})();
+</script>
 </body></html>
