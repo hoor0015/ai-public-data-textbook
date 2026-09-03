@@ -111,4 +111,33 @@ ax.text(6.0, 0.7, "도구 하나하나는 단순하다. 힘은 \"어떤 도구�
 fig.savefig(FIG / "fig02_tools.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
+# ---------------------------------------------------------------- 그림 2-3
+# 검증의 세 겹: 지시문의 손잡이, 별도 검증, 사람의 눈
+fig, ax = plt.subplots(figsize=(12.5, 5.8))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis("off")
+ax.text(7.0, 8.5, "답은 확인 절차 없이 생성된다  →  그래서 맞는지 확인할 수 있게 묻고, 검증을 겹으로 쌓는다",
+        ha="center", fontsize=11, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+layers = [
+    (0.5, "첫째 겹\n지시문의 검증 손잡이", "#f4fbf6", "#2f8f4e",
+     "① 근거의 위치를 보고하게 한다\n② 자료에서 직접 계산·조회하게 한다\n③ 없다고 답할 자리를 만든다"),
+    (5.0, "둘째 겹\n별도 검증", "#f5f9fd", "#2f6fb0",
+     "같은 대화에서 재검산 지시\n새 대화에서 독립 검산\n검증 전담 에이전트 (13주차)"),
+    (9.5, "셋째 겹\n사람의 눈", "#fdf9f4", "#c77b2f",
+     "결정적 항목 하나(행 수)를 직접 확인\n'일치' 칸 두어 개를 표본 대조"),
+]
+for x, title, fc, ec, body in layers:
+    box(ax, x, 5.3, 4.0, 1.9, title, fc=fc, ec=ec, weight="bold")
+    box(ax, x, 1.6, 4.0, 2.5, body, fc="white", ec=ec, fontsize=9.5)
+    arrow(ax, x + 2.0, 5.2, x + 2.0, 4.2, color=ec)
+arrow(ax, 4.6, 6.25, 4.9, 6.25)
+arrow(ax, 9.1, 6.25, 9.4, 6.25)
+ax.text(7.0, 0.7, "겹이 늘수록 사람이 봐야 할 양은 줄어들지만, 마지막 눈은 끝까지 남는다",
+        ha="center", fontsize=10.5, color="#555")
+fig.savefig(FIG / "fig02_verification_layers.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+
 print("saved:", [p.name for p in sorted(FIG.glob('fig02_*.png'))])

@@ -115,4 +115,61 @@ ax.text(6.5, 0.4, "실행 전에 사람이 계획을 검토하는 관문이 생�
 fig.savefig(FIG / "fig03_plan_mode.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
+# ---------------------------------------------------------------- 그림 3-4
+# 같은 대화의 재검산 vs 새 대화의 독립 검산
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.4))
+for ax in axes:
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+
+ax = axes[0]
+ax.set_title("(가) 같은 대화에서 재검산", fontsize=13, pad=12)
+box(ax, 0.6, 2.9, 8.8, 5.9, "", fc="#fdf9f4", ec="#c77b2f")
+ax.text(5.0, 8.25, "맥락창 (결과를 만든 대화)", ha="center", fontsize=11, fontweight="bold", color="#8a5a1f")
+for i, t in enumerate(["내가 세운 계획", "내가 쓴 코드", "내 결론: 표 완성"]):
+    box(ax, 1.2, 6.3 - i * 1.35, 3.6, 1.1, t, fc="white", ec="#c77b2f", fontsize=9.5)
+box(ax, 5.6, 4.1, 3.2, 2.4, "검증 지시\n→ 재검산", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 4.9, 5.3, 5.5, 5.3, color="#c77b2f", ls="--")
+ax.text(5.0, 1.6, "자기 기억을 참조하며 검산한다.\n처음의 착각이 이어질 수 있다.", ha="center", fontsize=10, color="#8a5a1f")
+
+ax = axes[1]
+ax.set_title("(나) 새 대화에서 독립 검산", fontsize=13, pad=12)
+box(ax, 0.6, 2.9, 8.8, 5.9, "", fc="#f5f9fd", ec="#2f6fb0")
+ax.text(5.0, 8.25, "맥락창 (새 대화: 빈 책상)", ha="center", fontsize=11, fontweight="bold", color="#2f6fb0")
+for i, t in enumerate(["원본 파일", "결과 표"]):
+    box(ax, 1.2, 6.0 - i * 1.5, 3.6, 1.2, t, fc="white", ec="#2f6fb0", fontsize=9.5)
+box(ax, 5.6, 4.1, 3.2, 2.4, "검산 지시\n→ 처음부터\n다시 계산", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+arrow(ax, 4.9, 5.3, 5.5, 5.3, color="#2f6fb0")
+ax.text(5.0, 1.6, "만든 사람의 믿음을 물려받지 않은\n감사관이 된다.", ha="center", fontsize=10, color="#1f4e7a")
+fig.tight_layout()
+fig.savefig(FIG / "fig03_independent_check.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+# ---------------------------------------------------------------- 그림 3-5
+# 3주차 실습 2.5절의 흐름
+fig, ax = plt.subplots(figsize=(12.5, 5.4))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis("off")
+box(ax, 0.4, 3.6, 2.8, 2.2, "실험 B의 표\n상위·하위 5개\n시군구", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
+box(ax, 4.2, 6.0, 3.4, 2.0, "1단계 검증 지시\n(같은 대화에서 이어서)", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+box(ax, 4.2, 1.4, 3.4, 2.0, "2단계 독립 검산\n(새 대화: 원본 + 표만)", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 8.4, 6.0, 2.6, 2.0, "검증 보고 1\n값·재계산값\n행 번호·일치", fc="white", ec="#2f8f4e", fontsize=9.5)
+box(ax, 8.4, 1.4, 2.6, 2.0, "검증 보고 2\n값·재계산값\n행 번호·일치", fc="white", ec="#2f6fb0", fontsize=9.5)
+box(ax, 11.4, 3.4, 2.5, 2.6, "사람의 확인\n참값 대조\n'일치' 칸 2개\n직접 확인", fc="#fdf9f4", ec="#c77b2f", fontsize=9.5)
+arrow(ax, 3.3, 5.3, 4.1, 6.8)
+arrow(ax, 3.3, 4.1, 4.1, 2.6)
+arrow(ax, 7.7, 7.0, 8.3, 7.0)
+arrow(ax, 7.7, 2.4, 8.3, 2.4)
+arrow(ax, 11.1, 6.6, 11.5, 5.4)
+arrow(ax, 11.1, 2.8, 11.5, 4.0)
+ax.text(5.9, 4.6, "오류 심기 실험: 0.320 → 0.302로 고쳐 다시 검산", ha="center", fontsize=9.5, color="#555",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.3"))
+ax.text(7.0, 0.5, "사람이 볼 양은 열 칸에서 두 칸으로 줄지만, 마지막 확인은 남는다",
+        ha="center", fontsize=10.5, color="#555")
+fig.savefig(FIG / "fig03_verify_flow.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+
 print("saved:", [p.name for p in sorted(FIG.glob('fig03_*.png'))])

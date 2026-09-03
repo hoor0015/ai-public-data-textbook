@@ -96,4 +96,34 @@ ax.text(7.0, 0.5, "화살표 위의 붉은 표시가 사람이 멈춰서 확인�
 fig.savefig(FIG / "fig13_pipeline_checkpoints.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
+# ---------------------------------------------------------------- 그림 13-3
+# 검문소의 두 눈: 검증 에이전트의 1차 대조와 사람의 2차 확인
+fig, ax = plt.subplots(figsize=(12.5, 5.8))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis("off")
+box(ax, 0.3, 3.6, 2.6, 2.2, "② 단계 산출물\noutput/merged.csv", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 3.6, 1.7, 7.2, 6.8, "", fc="white", ec="#c0392b")
+ax.text(7.2, 8.05, "검문소", ha="center", fontsize=12, fontweight="bold", color="#c0392b")
+box(ax, 3.85, 4.0, 3.3, 3.7,
+    "1차: verifier\n(검증 전담 서브에이전트)\n독립 맥락창\n원자료 + 산출물만 받음\n행 수·대표 수치·표본 5행\n전수 대조 → 대조표",
+    fc="#f4fbf6", ec="#2f8f4e", fontsize=9)
+box(ax, 7.45, 4.0, 3.2, 3.7,
+    "2차: 사람\n결정적 항목(행 수)\n파일 열어 직접 확인\n'일치' 칸 표본 대조\n통과 / 반려 결정",
+    fc="#fdf9f4", ec="#c77b2f", fontsize=9)
+arrow(ax, 3.0, 4.7, 3.75, 5.9)
+arrow(ax, 7.2, 5.9, 7.35, 5.9)
+box(ax, 11.4, 5.8, 2.2, 1.3, "통과\n→ ③ 분석", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
+box(ax, 11.4, 2.8, 2.2, 1.3, "반려\n→ ② 재실행", fc="#fdf9f4", ec="#c0392b", fontsize=10)
+arrow(ax, 10.7, 6.3, 11.3, 6.4, color="#2f8f4e")
+arrow(ax, 10.7, 4.8, 11.3, 3.6, color="#c0392b")
+ax.text(7.2, 3.3, "만든 팀원과 검증 팀원은 다르다. 검증 보고에도 행 번호·계산 방법이라는 손잡이가 달린다.",
+        ha="center", fontsize=9.5, color="#555")
+ax.text(7.2, 2.35, "전수 대조라는 노동은 에이전트가, 결정적 판단과 표본 확인은 사람이 맡는다",
+        ha="center", fontsize=10, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.3"))
+fig.savefig(FIG / "fig13_verifier_gate.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+
 print("saved:", [p.name for p in sorted(FIG.glob("fig13_*.png"))])
