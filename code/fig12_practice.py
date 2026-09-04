@@ -94,10 +94,9 @@ ax.axis("off")
 
 # 호출과 SKILL.md
 box(ax, 0.3, 6.3, 3.0, 1.9,
-    "호출 (인자 세 개. 질문은 따옴표로)\n/evidence-memo data/laws 인구감소\n"
-    '"우리나라 인구는 감소 추세인가"',
+    "부탁 (조건을 문장으로)\n/evidence-memo 를 부르고\ndata/laws 의 문서로 인구 감소 추세를\n묻는 근거 메모를 만들어 달라고 적는다",
     fc="#fdf9f4", ec="#c77b2f")
-box(ax, 4.0, 6.4, 3.0, 1.7, "SKILL.md\n절차 10단계\n(\\$docs, \\$topic, \\$question)",
+box(ax, 4.0, 6.4, 3.0, 1.7, "SKILL.md\n절차 10단계\n(폴더와 질문은 대화에서 받는다)",
     fc="#f5f9fd", ec="#2f6fb0", weight="bold")
 arrow(ax, 3.3, 7.25, 4.0, 7.25)
 

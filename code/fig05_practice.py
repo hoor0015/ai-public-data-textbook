@@ -1,4 +1,4 @@
-# 5주차 2회차 개념도 생성 (그림 5-4: csv-profile 스킬 폴더의 v1 → v2 변화와 로드 시점)
+# 5주차 2회차 개념도 생성 (그림 5-4: 공문서 -> kordoc 스킬 -> Markdown -> 데이터)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -9,66 +9,60 @@ sns.set_style("white")
 import koreanize_matplotlib  # noqa: E402,F401
 import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
-figfit.MAX_PT = 13.0  # 짧은 문구 상자의 글씨 과대 방지
-
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
 
 FIG = Path(__file__).resolve().parent.parent / "figures"
 FIG.mkdir(exist_ok=True)
 
 
-def box(ax, x, y, w, h, text, fc="#f5f9fd", ec="#2f6fb0", fontsize=10, weight="normal", lw=1.4):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06",
-                                fc=fc, ec=ec, lw=lw))
-    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
-            fontsize=fontsize, fontweight=weight)
+def box(ax, x, y, w, h, text, fc="#f5f9fd", ec="#2f6fb0", lw=1.5):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06", fc=fc, ec=ec, lw=lw))
+    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=11)
 
 
-def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.6, ls="-"):
+def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.8, ls="-"):
     ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>",
-                                 mutation_scale=16, color=color, lw=lw, linestyle=ls))
+                                 mutation_scale=17, color=color, lw=lw, linestyle=ls))
 
 
-fig, ax = plt.subplots(figsize=(12, 6.6))
+fig, ax = plt.subplots(figsize=(12.4, 5.6))
 ax.set_xlim(0, 14)
-ax.set_ylim(0, 10)
+ax.set_ylim(0.95, 7)
 ax.axis("off")
 
-# ---- 왼쪽: v1 (4주차)
-ax.text(2.6, 9.45, "v1 (4주차)", ha="center", fontsize=12, fontweight="bold", color="#333")
-ax.text(2.6, 8.95, ".claude/skills/csv-profile/", ha="center", fontsize=10, color="#555", family="monospace")
-ax.add_patch(FancyBboxPatch((0.5, 3.2), 4.2, 5.4, boxstyle="round,pad=0.06",
-                            fc="#fafafa", ec="#bbbbbb", lw=1.2, ls="--"))
-box(ax, 0.9, 4.0, 3.4, 4.1,
-    "SKILL.md\n\n설명\n인자 자리($ARGUMENTS)\n절차 7단계\n품질 경고 기준\n산출물 양식\n규칙",
-    fc="#f4fbf6", ec="#2f8f4e")
-ax.text(2.6, 3.55, "파일 하나에 전부. 계산은 매번 즉흥 코드", ha="center", fontsize=9, color="#555")
+BW, BH, BY = 2.4, 1.7, 4.1
+xs = [0.25, 3.95, 7.65, 11.35]
+MID = BY + BH / 2
 
-# ---- 가운데 화살표
-arrow(ax, 4.9, 6.0, 5.9, 6.0, lw=2.0)
-ax.text(5.4, 6.45, "인자 설계\n참조 분리\n스크립트", ha="center", va="bottom", fontsize=9.5, color="#333")
+box(ax, xs[0], BY, BW, BH, "공문서 파일\nhwpx / hwp / pdf", fc="#f4f4f7", ec="#777")
+box(ax, xs[1], BY, BW, BH, "kordoc 스킬\nSKILL.md의 절차", fc="#f4fbf6", ec="#2f8f4e")
+box(ax, xs[2], BY, BW, BH, "Markdown 문서\n제목 + 문단 + 표", fc="#f5f9fd", ec="#2f6fb0")
+box(ax, xs[3], BY, BW, BH, "CSV + pandas\n계산과 그림", fc="#f5f9fd", ec="#2f6fb0")
 
-# ---- 오른쪽: v2 (5주차)
-ax.text(9.9, 9.45, "v2 (5주차)", ha="center", fontsize=12, fontweight="bold", color="#333")
-ax.text(9.9, 8.95, ".claude/skills/csv-profile/", ha="center", fontsize=10, color="#555", family="monospace")
-ax.add_patch(FancyBboxPatch((6.1, 3.2), 7.6, 5.4, boxstyle="round,pad=0.06",
-                            fc="#fafafa", ec="#bbbbbb", lw=1.2, ls="--"))
-box(ax, 6.4, 4.9, 2.2, 3.2, "SKILL.md\n\n설명·인자\n절차·규칙\n(짧게)", fc="#f4fbf6", ec="#2f8f4e")
-box(ax, 8.9, 4.9, 2.2, 3.2, "reference.md\n\n품질 경고 기준표\n산출물 양식\n확인 필요 지침", fc="#f5f9fd", ec="#2f6fb0")
-box(ax, 11.4, 4.9, 2.0, 3.2, "scripts/\nprofile.py\n\n계산 코드\n(고정)", fc="#fdf9f4", ec="#c77b2f")
-ax.text(7.5, 4.45, "설명: 항상 목록에\n본문: 호출할 때 로드", ha="center", va="top", fontsize=8.8, color="#555")
-ax.text(10.0, 4.45, "절차가 그 단계에\n이르렀을 때만 읽힘", ha="center", va="top", fontsize=8.8, color="#555")
-ax.text(12.4, 4.45, "실행만 되고 코드는\n맥락창에 안 실림", ha="center", va="top", fontsize=8.8, color="#555")
+gaps = ["설치한 스킬이\n나선다 (2.4)", "npx로 변환\n도구 실행", "표를 CSV로\n옮긴다 (2.5)"]
+for i, lab in enumerate(gaps):
+    arrow(ax, xs[i] + BW + 0.05, MID, xs[i + 1] - 0.05, MID)
+    ax.text((xs[i] + BW + xs[i + 1]) / 2, MID + 0.22, lab,
+            ha="center", va="bottom", fontsize=9, color="#444")
 
-# ---- 아래: 스킬 라이브러리
-ax.add_patch(FancyBboxPatch((0.5, 0.35), 13.2, 2.3, boxstyle="round,pad=0.06",
-                            fc="white", ec="#7a5fa8", lw=1.3))
-ax.text(7.1, 2.12, "스킬 라이브러리 (2.5절-2.8절)", ha="center", va="bottom", fontsize=11,
-        fontweight="bold", color="#4a3a68")
-box(ax, 0.9, 0.6, 3.9, 1.35, "csv-profile\n범용. 개인 폴더로 승격\n(자동 호출 허용)", fc="#f4fbf6", ec="#2f8f4e")
-box(ax, 5.15, 0.6, 3.9, 1.35, "submit-pack\n프로젝트 전용. 사람만 호출\n(disable-model-invocation)", fc="#fdf9f4", ec="#c77b2f")
-box(ax, 9.4, 0.6, 3.9, 1.35, "check-report\n격리 실행(context: fork)\n독립 검산", fc="#faf8fc", ec="#7a5fa8")
+notes = [
+    "사람이 읽으려고 만든 문서.\n서식 안에 글자가 갇혀 있다",
+    "GitHub에서 설치한 스킬.\n4주차 SKILL.md와 같은 구조",
+    "글자만 남은 문서.\n표는 파이프 표로 나온다",
+    "행과 열이 된 표.\n3주차 uv 환경에서 읽는다",
+]
+for x, note in zip(xs, notes):
+    ax.text(x + BW / 2, BY - 0.22, note, ha="center", va="top", fontsize=9.5, color="#555")
 
-fig.savefig(FIG / "fig05_skill_v2.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-print("saved:", FIG / "fig05_skill_v2.png")
+box(ax, 0.25, 1.2, 13.5, 1.0, "사람의 검증: 변환된 Markdown과 CSV를 원문 공문서와 대조한다 (2.7)",
+    fc="#fdf9f4", ec="#c77b2f")
+for x in (xs[0], xs[2], xs[3]):
+    arrow(ax, x + BW / 2, 2.25, x + BW / 2, BY - 1.15, color="#c77b2f", lw=1.5, ls=(0, (5, 3)))
+
+ax.text(0.25, 6.65, "그림 5-4. 공문서가 데이터가 되기까지", fontsize=13, fontweight="bold", color="#222")
+ax.text(0.25, 6.25, "오른쪽으로 한 칸씩 갈수록 다루기 쉬운 형태가 되고, 그만큼 원문에서 멀어진다.",
+        fontsize=10, color="#555")
+
+fig.tight_layout()
+fig.savefig(FIG / "fig05_kordoc_flow.png", dpi=150, bbox_inches="tight")
+print("saved:", FIG / "fig05_kordoc_flow.png")

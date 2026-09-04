@@ -85,8 +85,8 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 에이전트로 분석 환경 구축하기</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 반복 작업의 표준화: Skill</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 나만의 첫 Skill 만들기</a></li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 Skill 심화: 절차에 인자와 도구를 달다</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 스크립트가 딸린 Skill과 나만의 스킬 라이브러리</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 남이 만든 스킬 가져다 쓰기</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 GitHub의 스킬 설치해 공문서 다루기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
 <li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
@@ -110,7 +110,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>3주차 1회차. 분석 환경 이해하기</h1>
-<p class="moddate">최종 수정: 2026-09-03 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-09-05 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>우리는 도구를 만들고, 그다음에는 도구가 우리를 만든다.
 (존 컬킨, 「마셜 매클루언에 대한 스쿨맨의 안내」)</p>
@@ -260,7 +260,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 df = pd.read_csv(&quot;data/sigungu_2023.csv&quot;)  # CSV 파일을 읽어 df라는 표로 만든다
 print(df.describe())                       # 열별 요약통계(평균, 최소, 최대 등)를 출력한다
 </code></pre>
-<p>첫 줄의 <code>import</code>가 바로 "패키지를 꺼내 드는" 동작이다. 설치되지 않은 패키지를 <code>import</code>하면 "그런 모듈이 없다"는 오류(ModuleNotFoundError)가 난다. 다음 실습에서 이 오류를 실제로 만나 볼 것이다.</p>
+<p>첫 줄의 <code>import</code>가 바로 "패키지를 꺼내 드는" 동작이다. 설치되지 않은 패키지를 <code>import</code>하면 "그런 모듈이 없다"는 오류(ModuleNotFoundError)가 난다. 이 오류를 비롯해 자주 만나는 오류 메시지를 읽는 법은 다음 실습의 표 3-4에 정리되어 있다.</p>
 <div style="border:1px solid #cdd9e5;border-left:5px solid #2f6fb0;background:#f5f9fd;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>정의 · 패키지</strong><br>
 <strong>패키지</strong>(package)는 특정 기능(표 계산, 그래프 등)을 위해 다른 사람들이 만들어 공개한 파이썬 코드 묶음이다. 스마트폰의 앱처럼 필요한 것을 내려받아 설치하며, 설치된 패키지는 코드에서 <code>import</code>로 불러 쓴다.
@@ -320,11 +320,11 @@ print(df.describe())                       # 열별 요약통계(평균, 최소,
 <p>컴퓨터를 좀 써 본 사람이라면 이런 폴더를 하나쯤 갖고 있다. 바탕화면에 파일이 수십 개 흩어져 있고, "보고서_최종.hwp" 옆에 "보고서_최종_진짜최종.hwp"와 "보고서_최종_진짜최종_수정2.hwp"가 나란히 있는 폴더다. 어느 것이 진짜 최종인지는 본인도 모른다. 혼자 쓰는 문서 폴더라면 웃고 넘길 일이지만, 데이터 분석 프로젝트에서 이런 상태는 사고로 직결된다. 원본 데이터가 어느 파일인지, 보고서의 그래프가 어떤 코드에서 나왔는지 아무도 답할 수 없게 되기 때문이다.</p>
 <p>그래서 분석 프로젝트는 시작할 때 방 배치를 정한다. 원칙은 세 가지다.</p>
 <p><strong>첫째, 원본 데이터는 data 폴더에 두고 절대 수정하지 않는다.</strong> 원본은 분석의 최종 근거다. 정제나 가공이 필요하면 사본을 만들어 작업하고, 원본은 처음 받은 그대로 보존한다. 에이전트가 실수로(또는 지시를 오해해서) 원본을 덮어쓰면 되돌릴 길이 없다.</p>
-<p><strong>둘째, 코드와 산출물을 분리한다.</strong> 코드(main.py 등)는 산출물을 만들어 내는 기계이고, 산출물(표, 그림, 보고서)은 그 기계가 찍어 낸 제품이다. 제품은 산출물 폴더에 모은다. 이렇게 나누면 "이 그래프 어떻게 만들었죠?"라는 질문에 "이 코드가 만들었습니다"라고 파일로 답할 수 있다.</p>
+<p><strong>둘째, 코드와 산출물을 분리한다.</strong> 코드(main.py 등)는 산출물을 만들어 내는 기계이고, 산출물(표와 그림)은 그 기계가 찍어 낸 제품이다. 코드는 code 폴더에, 제품은 산출물 폴더에 모은다. 이렇게 나누면 "이 그래프 어떻게 만들었죠?"라는 질문에 "이 코드가 만들었습니다"라고 파일로 답할 수 있다.</p>
 <p><strong>셋째, 산출물은 언제든 버리고 다시 만들 수 있게 유지한다.</strong> 데이터(원본)와 코드만 있으면 산출물은 전부 재생산 가능해야 한다. 거꾸로 말해, 코드 없이 손으로만 만든 산출물은 재현이 불가능하므로 이 구조에서는 이물질이다.</p>
 <h3>우리 폴더의 완성된 모습</h3>
 <p><img alt="그림 3-3. 분석 프로젝트의 폴더 구조: 공공데이터분석 폴더의 완성된 모습" src="figures/fig03_folder.png" /></p>
-<p>그림 3-3은 다음 실습을 마쳤을 때 여러분의 공공데이터분석 폴더가 갖게 될 모습이다. 위에서부터 읽어 보자. data, 산출물, 메모 세 폴더는 1주차 실습에서 에이전트에게 시켜 만든 것이고, CLAUDE.md는 2주차에서 만든 이 폴더의 규칙 파일이다. 그 아래 초록색 항목들(pyproject.toml, uv.lock, .venv, main.py)이 다음 실습에서 uv와 에이전트가 만들어 낼 새 식구다. 오른쪽 범례가 보여 주듯 초록색 항목은 uv와 에이전트가 관리하며, 여러분이 내용을 직접 고칠 일은 없다. 특히 <code>.venv</code> 폴더는 안에 수천 개의 파일이 들어 있는 도구상자 내부이므로 열어서 만질 필요도, 이유도 없다.</p>
+<p>그림 3-3은 다음 실습을 마쳤을 때 여러분의 공공데이터분석 폴더가 갖게 될 모습이다. 위에서부터 읽어 보자. data, 산출물, 메모 세 폴더는 1주차 실습에서 에이전트에게 시켜 만든 것이고, CLAUDE.md는 2주차에서 만든 이 폴더의 규칙 파일이다. 그 아래 초록색 항목들(pyproject.toml, uv.lock, .venv, main.py, code 폴더)이 다음 실습에서 uv와 에이전트가 만들어 낼 새 식구다. 오른쪽 범례가 보여 주듯 초록색 항목은 uv와 에이전트가 관리하며, 여러분이 내용을 직접 고칠 일은 없다. 특히 <code>.venv</code> 폴더는 안에 수천 개의 파일이 들어 있는 도구상자 내부이므로 열어서 만질 필요도, 이유도 없다.</p>
 <p>이 방 배치를 에이전트에게도 알려 주어야 한다. 2주차에서 배운 CLAUDE.md가 바로 그 자리다. "원본 데이터는 data 폴더에 있으며 수정하지 말 것, 그림과 표는 산출물 폴더에 저장할 것" 같은 규칙을 CLAUDE.md에 적어 두면, 에이전트는 새 대화를 열 때마다 이 규칙을 읽고 지킨다. 매번 말로 반복할 필요가 없어진다. 폴더 구조는 사람의 정리 습관인 동시에, 에이전트에게 주는 상시 지시이기도 한 것이다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 폴더 구조도 검증 대상이다</strong><br>

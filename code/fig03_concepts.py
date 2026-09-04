@@ -97,9 +97,9 @@ plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 3-3
 # 분석 프로젝트 폴더 구조 (트리형)
-fig, ax = plt.subplots(figsize=(11, 7.2))
+fig, ax = plt.subplots(figsize=(11, 8.0))
 ax.set_xlim(0, 13)
-ax.set_ylim(0, 12.4)
+ax.set_ylim(-0.7, 12.4)
 ax.axis("off")
 
 box(ax, 0.5, 10.9, 5.0, 1.2, "공공데이터분석/  (작업 폴더)", fc="#f7f7fc", ec="#5b6ee1",
@@ -107,13 +107,14 @@ box(ax, 0.5, 10.9, 5.0, 1.2, "공공데이터분석/  (작업 폴더)", fc="#f7f
 
 items = [
     ("data/", "원본 데이터 보관 (sigungu_2023.csv)", "#f5f9fd", "#2f6fb0", "1주차에 만듦"),
-    ("산출물/", "표·그림·보고서 (에이전트가 저장)", "#f5f9fd", "#2f6fb0", "1주차에 만듦"),
-    ("메모/", "계획서·실습 기록", "#f5f9fd", "#2f6fb0", "1주차에 만듦"),
+    ("산출물/", "표·그림 (에이전트가 저장)", "#f5f9fd", "#2f6fb0", "1주차에 만듦"),
+    ("메모/", "보고서·계획서 (사람이 읽는 문서)", "#f5f9fd", "#2f6fb0", "1주차에 만듦"),
     ("CLAUDE.md", "에이전트 규칙 (폴더의 사용설명서)", "#faf8fc", "#7a5fa8", "2주차에 만듦"),
     ("pyproject.toml", "프로젝트 정보와 패키지 목록", "#f4fbf6", "#2f8f4e", "3주차: uv가 만듦"),
     ("uv.lock", "패키지의 정확한 버전 기록 (재현의 열쇠)", "#f4fbf6", "#2f8f4e", "3주차: uv가 만듦"),
     (".venv/", "가상환경 도구상자 (직접 안 건드림)", "#f4fbf6", "#2f8f4e", "3주차: uv가 만듦"),
     ("main.py", "분석 코드 (에이전트가 작성)", "#f4fbf6", "#2f8f4e", "3주차부터"),
+    ("code/", "다음 주부터 늘어날 분석 코드 파일", "#f4fbf6", "#2f8f4e", "3주차에 만듦"),
 ]
 spine_x = 1.1
 for i, (name, desc, fc, ec, when) in enumerate(items):
@@ -122,7 +123,7 @@ for i, (name, desc, fc, ec, when) in enumerate(items):
     box(ax, spine_x + 0.5, y, 3.0, 0.9, name, fc=fc, ec=ec, fontsize=10.5, weight="bold")
     ax.text(spine_x + 3.75, y + 0.45, desc, fontsize=10, va="center", ha="left", color="#333")
     ax.text(10.4, y + 0.45, when, fontsize=9.5, va="center", ha="left", color="#777")
-ax.plot([spine_x, spine_x], [10.9, 9.6 - 7 * 1.25 + 0.45], color="#999", lw=1.2)
+ax.plot([spine_x, spine_x], [10.9, 9.6 - (len(items) - 1) * 1.25 + 0.45], color="#999", lw=1.2)
 
 ax.text(10.4, 11.5, "파랑 = 내가 관리\n초록 = uv·에이전트가 관리\n보라 = 에이전트 규칙",
         fontsize=10, color="#333", ha="left", va="center",

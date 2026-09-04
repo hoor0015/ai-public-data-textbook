@@ -164,7 +164,7 @@ arrow(ax, 7.7, 7.0, 8.3, 7.0)
 arrow(ax, 7.7, 2.4, 8.3, 2.4)
 arrow(ax, 11.1, 6.6, 11.5, 5.4)
 arrow(ax, 11.1, 2.8, 11.5, 4.0)
-ax.text(5.9, 4.6, "오류 심기 실험: 0.320 → 0.302로 고쳐 다시 검산", ha="center", fontsize=9.5, color="#555",
+ax.text(5.9, 4.6, "같은 표를 두 갈래로 검산한다", ha="center", fontsize=9.5, color="#555",
         bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.3"))
 ax.text(7.0, 0.5, "사람이 볼 양은 열 칸에서 두 칸으로 줄지만, 마지막 확인은 남는다",
         ha="center", fontsize=10.5, color="#555")

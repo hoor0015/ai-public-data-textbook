@@ -1,4 +1,4 @@
-# 9주차 2회차(실습) 그림 생성: 그림 9-10, 9-11
+# 9주차 2회차(실습) 그림 생성: 그래프 다듬기 전과 후
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -42,36 +42,4 @@ fig.tight_layout()
 fig.savefig(FIG / "fig09_polish.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 9-11
-# 왜곡된 시계열 그래프와 고친 그래프
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
-
-ax = axes[0]
-ax.plot(inc["연도"], inc["지니계수"], marker="o", color="#c0392b", lw=2.6)
-ax.set_ylim(0.320, 0.390)
-ax.set_xticks([2011, 2015, 2019, 2023])
-ax.set_title("(가) 왜곡: 축을 좁게 잘라 급락처럼 보이게", fontsize=12)
-ax.set_xlabel("연도")
-ax.set_ylabel("지니계수")
-
-ax = axes[1]
-ax.plot(inc["연도"], inc["지니계수"], marker="o", color="#2f6fb0", lw=2)
-ax.set_ylim(0, 0.45)
-ax.set_xticks([2011, 2015, 2019, 2023])
-ax.set_title("(나) 고침: 축 범위를 넓혀 변화의 크기를 맥락에", fontsize=12)
-ax.set_xlabel("연도")
-ax.set_ylabel("지니계수")
-ax.annotate("0.387", xy=(2011, 0.387), xytext=(2011.2, 0.30),
-            fontsize=9.5, ha="left", color="#2f6fb0",
-            arrowprops=dict(arrowstyle="->", color="#888", lw=0.8))
-ax.annotate("0.323", xy=(2023, 0.323), xytext=(2021.0, 0.22),
-            fontsize=9.5, ha="left", color="#2f6fb0",
-            arrowprops=dict(arrowstyle="->", color="#888", lw=0.8))
-
-fig.suptitle("같은 지니계수 시계열, 두 가지 인상 (2011-2023년)",
-             fontsize=13, y=1.02)
-fig.tight_layout()
-fig.savefig(FIG / "fig09_distort_fix.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-
-print("그림 9-10, 9-11 저장 완료")
+print("saved: fig09_polish.png")

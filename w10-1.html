@@ -77,8 +77,8 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="chap"><a href="w03-2.html"><span class="tag t2">실습</span>3주차 에이전트로 분석 환경 구축하기</a></li>
 <li class="chap"><a href="w04-1.html"><span class="tag t1">이론</span>4주차 반복 작업의 표준화: Skill</a></li>
 <li class="chap"><a href="w04-2.html"><span class="tag t2">실습</span>4주차 나만의 첫 Skill 만들기</a></li>
-<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 Skill 심화: 절차에 인자와 도구를 달다</a></li>
-<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 스크립트가 딸린 Skill과 나만의 스킬 라이브러리</a></li>
+<li class="chap"><a href="w05-1.html"><span class="tag t1">이론</span>5주차 남이 만든 스킬 가져다 쓰기</a></li>
+<li class="chap"><a href="w05-2.html"><span class="tag t2">실습</span>5주차 GitHub의 스킬 설치해 공문서 다루기</a></li>
 <li class="part">2부. 공공데이터의 수집과 정리</li>
 <li class="chap"><a href="w06-1.html"><span class="tag t1">이론</span>6주차 공공데이터 생태계와 MCP</a></li>
 <li class="chap"><a href="w06-2.html"><span class="tag t2">실습</span>6주차 kosis MCP로 데이터 찾고 수집하기</a></li>
@@ -111,7 +111,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>10주차 1회차. 통계로 정책 진단하기</h1>
-<p class="moddate">최종 수정: 2026-07-10 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-09-05 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>세상에는 세 가지 거짓말이 있다. 거짓말, 새빨간 거짓말, 그리고 통계다.
 (마크 트웨인이 『자서전』에서 벤저민 디즈레일리의 말로 소개한 문구)</p>
@@ -214,7 +214,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <h2 id="14-관계의-강도-상관계수와-단순회귀">1.4 관계의 강도: 상관계수와 단순회귀</h2>
 <h3>상관계수 복습: 함께 움직이는 정도</h3>
 <p>집단 비교가 "두 무리가 다른가"를 묻는다면, 이제 물을 것은 "두 변수가 함께 움직이는가"다. 9주차에서 산점도와 상관을 눈으로 익혔으니 핵심만 다시 정리한다. 상관계수(correlation coefficient)는 두 변수가 같은 방향으로 움직이는 정도를 -1과 1 사이의 수 하나로 요약한다. 한쪽이 클 때 다른 쪽도 큰 경향이면 양수, 한쪽이 클 때 다른 쪽이 작은 경향이면 음수, 아무 직선 경향이 없으면 0 근처다. 절댓값이 1에 가까울수록 점들이 직선에 바짝 붙는다.</p>
-<p>실제로 계산해 보면, 228개 시군구(합계출산율이 결측인 대구 군위군은 제외된다. 7주차에서 본 그 결측이다)에서 고령인구비율과 합계출산율의 상관계수는 0.393이다. 고령화가 심한 시군구일수록 출산율이 오히려 높은 경향이 있다는 뜻이다. 많은 사람의 직관("늙은 지역은 아이도 안 낳을 것")과 반대 방향이라 당황스러울 수 있다. 이 수수께끼는 1.6절에서 풀기로 하고, 지금은 이 관계를 더 쓸모 있는 형태로 요약하는 도구를 먼저 배운다.</p>
+<p>실제로 계산해 보면, 228개 시군구(합계출산율이 결측인 경북 군위군은 제외된다. 7주차에서 본 그 결측이다)에서 고령인구비율과 합계출산율의 상관계수는 0.393이다. 고령화가 심한 시군구일수록 출산율이 오히려 높은 경향이 있다는 뜻이다. 많은 사람의 직관("늙은 지역은 아이도 안 낳을 것")과 반대 방향이라 당황스러울 수 있다. 이 수수께끼는 1.6절에서 풀기로 하고, 지금은 이 관계를 더 쓸모 있는 형태로 요약하는 도구를 먼저 배운다.</p>
 <h3>단순회귀: 관계를 직선 하나로 요약하기</h3>
 <p>상관계수는 관계의 방향과 강도만 알려 준다. 정책 분석에서는 한 걸음 더 나아간 질문이 필요할 때가 많다. "고령인구비율이 10%포인트 높은 지역은 출산율이 얼마나 다른가"처럼, 관계를 구체적인 수량으로 말하는 것이다. 이때 쓰는 도구가 단순회귀(simple regression)다. 회귀는 산점도의 점 구름을 가장 잘 관통하는 직선 하나를 찾아 준다. "가장 잘"의 기준은 각 점에서 직선까지의 세로 거리(예측이 빗나간 정도)를 전체적으로 가장 작게 만드는 것이다.</p>
 <p><img alt="그림 10-3. 시군구의 고령인구비율과 합계출산율, 그리고 회귀선" src="figures/fig10_scatter_reg.png" /></p>

@@ -38,11 +38,11 @@ ax.axis("off")
 BX, BW, BH = 1.0, 5.2, 0.92
 PITCH = 1.32
 
-# 스킬을 부르는 한 줄 (인자 세 개)
+# 스킬을 부르며 조건을 문장으로 일러 주는 한 줄
 box(ax, BX, 9.72, BW, 1.02,
-    "/kosis-collect  DT_1B040A3  2019-2023  전국",
+    "/kosis-collect + 통계표 DT_1B040A3, 2019-2023년, 전국",
     fc="#f4fbf6", ec="#2f8f4e", weight="bold")
-ax.text(BX + BW + 0.35, 10.23, "바뀌는 것은 인자로",
+ax.text(BX + BW + 0.35, 10.23, "바뀌는 조건은 말로 일러 준다",
         ha="left", va="center", fontsize=10.5, color="#2f8f4e")
 
 steps = [
@@ -77,7 +77,7 @@ for idx, note in notes:
     arrow(ax, BX + BW + 0.05, y, 7.25, y, color="#c77b2f", ls="--", lw=1.2)
 
 ax.text(7.0, 0.55,
-        "바뀌는 것(통계표 ID, 기간, 지역 수준)은 인자로 빼고,\n"
+        "바뀌는 것(통계표 ID, 기간, 지역 수준)은 부를 때 말로 일러 주고,\n"
         "바뀌지 않는 것(건수 기준, 건수 확인, 기록)은 절차에 고정한다.",
         ha="center", va="center", fontsize=10.5, color="#333",
         bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
