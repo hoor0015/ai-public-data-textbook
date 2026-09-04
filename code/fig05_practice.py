@@ -25,12 +25,13 @@ def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.8, ls="-"):
                                  mutation_scale=17, color=color, lw=lw, linestyle=ls))
 
 
-fig, ax = plt.subplots(figsize=(12.4, 5.6))
+fig, ax = plt.subplots(figsize=(12.4, 4.1))
 ax.set_xlim(0, 14)
-ax.set_ylim(0.95, 7)
+ax.set_ylim(1.85, 6.6)
 ax.axis("off")
 
-BW, BH, BY = 2.4, 1.7, 4.1
+# 상자 높이는 두 줄 글씨가 상자를 채우도록 잡는다 (figfit이 크기를 맞춰 준다).
+BW, BH, BY = 2.4, 1.06, 4.30
 xs = [0.25, 3.95, 7.65, 11.35]
 MID = BY + BH / 2
 
@@ -42,8 +43,8 @@ box(ax, xs[3], BY, BW, BH, "CSV + pandas\n계산과 그림", fc="#f5f9fd", ec="#
 gaps = ["설치한 스킬이\n나선다 (2.4)", "npx로 변환\n도구 실행", "표를 CSV로\n옮긴다 (2.5)"]
 for i, lab in enumerate(gaps):
     arrow(ax, xs[i] + BW + 0.05, MID, xs[i + 1] - 0.05, MID)
-    ax.text((xs[i] + BW + xs[i + 1]) / 2, MID + 0.22, lab,
-            ha="center", va="bottom", fontsize=9, color="#444")
+    ax.text((xs[i] + BW + xs[i + 1]) / 2, MID + 0.16, lab,
+            ha="center", va="bottom", fontsize=9.5, color="#444")
 
 notes = [
     "사람이 읽으려고 만든 문서.\n서식 안에 글자가 갇혀 있다",
@@ -52,15 +53,18 @@ notes = [
     "행과 열이 된 표.\n3주차 uv 환경에서 읽는다",
 ]
 for x, note in zip(xs, notes):
-    ax.text(x + BW / 2, BY - 0.22, note, ha="center", va="top", fontsize=9.5, color="#555")
+    ax.text(x + BW / 2, BY - 0.16, note, ha="center", va="top", fontsize=9.5, color="#555")
 
-box(ax, 0.25, 1.2, 13.5, 1.0, "사람의 검증: 변환된 Markdown과 CSV를 원문 공문서와 대조한다 (2.7)",
+BAR_Y, BAR_H = 2.20, 0.62
+box(ax, 0.25, BAR_Y, 13.5, BAR_H,
+    "사람의 검증: 변환된 Markdown과 CSV를 원문 공문서와 대조한다 (2.7)",
     fc="#fdf9f4", ec="#c77b2f")
 for x in (xs[0], xs[2], xs[3]):
-    arrow(ax, x + BW / 2, 2.25, x + BW / 2, BY - 1.15, color="#c77b2f", lw=1.5, ls=(0, (5, 3)))
+    arrow(ax, x + BW / 2, BAR_Y + BAR_H + 0.05, x + BW / 2, BY - 0.92,
+          color="#c77b2f", lw=1.5, ls=(0, (5, 3)))
 
-ax.text(0.25, 6.65, "그림 5-4. 공문서가 데이터가 되기까지", fontsize=13, fontweight="bold", color="#222")
-ax.text(0.25, 6.25, "오른쪽으로 한 칸씩 갈수록 다루기 쉬운 형태가 되고, 그만큼 원문에서 멀어진다.",
+ax.text(0.25, 6.30, "그림 5-4. 공문서가 데이터가 되기까지", fontsize=13, fontweight="bold", color="#222")
+ax.text(0.25, 5.95, "오른쪽으로 한 칸씩 갈수록 다루기 쉬운 형태가 되고, 그만큼 원문에서 멀어진다.",
         fontsize=10, color="#555")
 
 fig.tight_layout()
