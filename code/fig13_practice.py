@@ -63,7 +63,7 @@ box(ax, 0.4, 0.5, 6.0, 1.2, "verifier (검증 전담): 검문소마다 원자료
     fc="#f4fbf6", ec="#2f8f4e", fontsize=9.5)
 box(ax, 7.6, 0.5, 6.0, 1.2, "사람: 대조표의 결정적 항목과 표본을 파일에서 직접 확인, 통과·반려 결정",
     fc="#fdf9f4", ec="#c77b2f", fontsize=9.5)
-ax.text(7.0, 1.95, "단계 사이의 전달은 대화가 아니라 output 폴더의 파일로만 한다",
+ax.text(7.0, 1.95, "단계 사이의 전달은 대화가 아니라 산출물 폴더의 파일로만 한다",
         ha="center", va="center", fontsize=10, color="#333")
 fig.savefig(FIG / "fig13_practice_team.png", dpi=150, bbox_inches="tight")
 plt.close(fig)

@@ -35,18 +35,15 @@ ax.set_ylim(0, 9)
 ax.axis("off")
 
 layers = [
-    (6.3, "일회성 지시 (대화창)", "이번 한 번만 필요한 요청",
-     "\"이 표를 오름차순으로 다시 정렬해 줘\"", "#fdf9f4", "#c77b2f"),
-    (3.5, "Skill (.claude/skills/이름/SKILL.md)", "부르면 실행되는 절차. 필요할 때만 본문이 로드된다",
-     "\"/csv-profile data/sigungu_2023.csv\" 또는 관련 요청 시 자동 사용", "#f4fbf6", "#2f8f4e"),
-    (0.7, "CLAUDE.md (프로젝트 규칙)", "항상 적용되는 규칙. 매 대화에 자동으로 로드된다",
-     "\"표의 숫자는 천 단위 쉼표\", \"그림은 figures 폴더에 저장\"", "#f5f9fd", "#2f6fb0"),
+    (6.3, "일회성 지시 (대화창)\n이번 한 번만 필요한 요청\n"
+     "예: \"이 표를 오름차순으로 다시 정렬해 줘\"", "#fdf9f4", "#c77b2f"),
+    (3.5, "Skill (.claude/skills/이름/SKILL.md)\n부르면 실행되는 절차. 필요할 때만 본문이 로드된다\n"
+     "예: \"/csv-profile 로 sigungu_2023.csv를\n프로파일링해 줘\" 또는 관련 요청 시 자동 사용", "#f4fbf6", "#2f8f4e"),
+    (0.7, "CLAUDE.md (프로젝트 규칙)\n항상 적용되는 규칙. 매 대화에 자동으로 로드된다\n"
+     "예: \"표의 숫자는 천 단위 쉼표\",\n\"그림은 산출물 폴더에 저장\"", "#f5f9fd", "#2f6fb0"),
 ]
-for y, t1, t2, ex, fc, ec in layers:
-    box(ax, 0.6, y, 7.6, 2.2, "", fc=fc, ec=ec)
-    ax.text(4.4, y + 1.72, t1, ha="center", fontsize=12, fontweight="bold")
-    ax.text(4.4, y + 1.12, t2, ha="center", fontsize=10, color="#333")
-    ax.text(4.4, y + 0.48, "예: " + ex, ha="center", fontsize=9.5, color="#555")
+for y, label, fc, ec in layers:
+    box(ax, 0.6, y, 7.6, 2.2, label, fc=fc, ec=ec)
 
 ax.annotate("", xy=(9.2, 8.4), xytext=(9.2, 0.8),
             arrowprops=dict(arrowstyle="-|>", color="#555", lw=1.6))

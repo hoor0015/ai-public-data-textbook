@@ -102,7 +102,7 @@ fig, ax = plt.subplots(figsize=(12.5, 5.8))
 ax.set_xlim(0, 14)
 ax.set_ylim(0, 9)
 ax.axis("off")
-box(ax, 0.3, 3.6, 2.6, 2.2, "② 단계 산출물\noutput/merged.csv", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
+box(ax, 0.3, 3.6, 2.6, 2.2, "② 단계 산출물\n산출물/merged.csv", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
 box(ax, 3.6, 1.7, 7.2, 6.8, "", fc="white", ec="#c0392b")
 ax.text(7.2, 8.05, "검문소", ha="center", fontsize=12, fontweight="bold", color="#c0392b")
 box(ax, 3.85, 4.0, 3.3, 3.7,
