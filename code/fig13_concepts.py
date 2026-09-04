@@ -65,7 +65,7 @@ plt.close(fig)
 # 파이프라인 5단계와 검문소
 fig, ax = plt.subplots(figsize=(12.5, 4.6))
 ax.set_xlim(0, 14)
-ax.set_ylim(0, 8)
+ax.set_ylim(1.0, 7.2)
 ax.axis("off")
 stages = [
     ("수집", "원자료 CSV\n(6주차)", "#f5f9fd", "#2f6fb0"),
@@ -76,22 +76,22 @@ stages = [
 ]
 for i, (t1, t2, fc, ec) in enumerate(stages):
     x = 0.4 + i * 2.75
-    box(ax, x, 4.6, 2.2, 1.7, t1, fc=fc, ec=ec, fontsize=12, weight="bold")
-    box(ax, x, 2.6, 2.2, 1.5, t2, fc="white", ec=ec, fontsize=9.5)
+    box(ax, x, 4.95, 2.2, 1.0, t1, fc=fc, ec=ec, fontsize=12, weight="bold")
+    box(ax, x, 2.9, 2.2, 1.3, t2, fc="white", ec=ec, fontsize=9.5)
     if i < 4:
         arrow(ax, x + 2.3, 5.45, x + 2.65, 5.45)
         # 검문소 표시
         cx = x + 2.475
-        ax.plot([cx], [6.7], marker="v", color="#a04747", markersize=9)
-        ax.text(cx, 7.2, f"검문소 {i + 1}", ha="center", fontsize=9.5,
+        ax.plot([cx], [6.35], marker="v", color="#a04747", markersize=9)
+        ax.text(cx, 6.75, f"검문소 {i + 1}", ha="center", fontsize=9.5,
                 color="#a04747", fontweight="bold")
 checks = [
     "행 수·표본 대조", "병합 손실·요약통계 확인", "수치 재검산·과잉해석 점검", "그림-수치 대조",
 ]
 for i, c in enumerate(checks):
     cx = 0.4 + i * 2.75 + 2.475
-    ax.text(cx, 1.7, c, ha="center", fontsize=8.8, color="#a04747")
-ax.text(7.0, 0.5, "화살표 위의 붉은 표시가 사람이 멈춰서 확인하는 검문소다. 단계 산출물은 모두 파일로 남긴다.",
+    ax.text(cx, 2.35, c, ha="center", fontsize=8.8, color="#a04747")
+ax.text(7.0, 1.35, "화살표 위의 붉은 표시가 사람이 멈춰서 확인하는 검문소다. 단계 산출물은 모두 파일로 남긴다.",
         ha="center", fontsize=10.5, color="#333")
 fig.savefig(FIG / "fig13_pipeline_checkpoints.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
