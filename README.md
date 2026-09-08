@@ -11,7 +11,9 @@ VSCode + Claude Code 조합으로 AI 에이전트를 활용해 한국 공공데�
 
 Kwangwoon University 강의 교재 웹사이트로 빌드되어 있으며, GitHub Pages로 게시된다: https://hoor0015.github.io/ai-public-data-textbook/ (main에 푸시하면 자동 재배포). [index.html](index.html)을 브라우저로 열면 4부·13주 목차와 사이드바 내비게이션(이론/실습 태그, 현재 장의 절 목록 펼침, 목차 접기 버튼)으로 26개 장을 읽을 수 있다. 본문(md)을 고친 뒤 `code/build_html.py`를 실행하면 다시 빌드된다 (index.html + w01-1.html - w14-2.html, 앞뒤 장 이동 링크, 장별 최종 수정일 표시 포함).
 
-## 진행 현황: 26개 장 전체 완성 (그림 79개, 전 장 점검 통과)
+## 진행 현황: 26개 장 전체 완성 (그림 84개, 전 장 점검 통과)
+
+2026-09-08 보강: 맥락창 정리 내용을 세 곳에 나누어 넣었다. 2주차 1회차 1.1에 머리 비유(그림 2-3·2-4, 표 2-1)와 비우기(/clear)·줄이기(/compact)·머리 밖에 적기(CLAUDE.md)·머리 늘리기(서브에이전트)의 네 방법, 1.7에 자동 메모리 문단과 훅 심화 박스, 장 끝에 VSCode 확장 기능 지도 부록(표 2-6, 그림 2-12: 되감기·훅·/btw·자동 메모리). 3주차 2회차에 2.8 되감기 문단과 새 절 2.11 맥락창 정리(/context, 시금석, /compact, 새 대화; 기존 2.11은 2.12로). 13주차 1회차 1.1에 머리 그림 두 장(그림 13-2 오케스트레이터와 서브에이전트, 13-3 위임·갈라내기·팀·다시 열기). 머리 그림 원본은 `figures/head_brain_src.png`, 생성 코드는 `code/fig02_context_head.py`. 같은 내용을 한 주로 묶은 특강(이론 1부와 실습 2부를 한 장에 담은 단일 문서 `특강_에이전트의머리_맥락창이해와관리.md`, 웹 버전 `특강.html`, 빌드는 `code/build_special_html.py`)은 `특강_맥락창관리/`에 별도로 두었다(본 교재 웹 빌드 대상 아님).
 
 2026-09-04 개편: 5주차를 「남이 만든 스킬 가져다 쓰기」(1회차)와 「GitHub의 스킬 설치해 공문서 다루기」(2회차)로 교체했다. 학생은 kordoc 플러그인(chrisryugj/kordoc, MIT)을 대화창에서 설치해 공문서(hwp·hwpx·pdf)를 Markdown으로 바꾸고 그 안의 표를 데이터로 옮긴다. 난이도를 낮추라는 요구에 따라 스킬 인자 문법(`$ARGUMENTS`, `argument-hint`, `arguments:`)과 `context: fork`를 교재 전체에서 없앴고, 모든 스킬은 대화에서 대상과 조건을 말해 주면 알아듣고 빠진 것은 되묻는 방식으로 통일했다. 같은 날 학생이 일부러 오류를 만들어 보는 실습(값·열 삭제, 스크립트 깨뜨리기, 틀린 주소 등록, 왜곡 그래프 제작)도 모두 걷어 냈다. 에이전트가 스스로 틀리는 장면은 그대로 둔다.
 
@@ -55,7 +57,7 @@ index.html, wNN-S.html           웹교재 (빌드 산출물, code/build_html.py
 NN-1_이론_*.md, NN-2_실습_*.md   26개 장 본문 (Markdown 원고)
 code/    그림 생성(figNN_*.py)·분석(chNN_*.py)·빌드(build_html.py) 코드, figfit.py
 data/    예시 공공데이터
-figures/ 본문 삽입 그림 79개 (PNG, dpi=150)
+figures/ 본문 삽입 그림 84개 (PNG, dpi=150) + 머리 그림 원본 head_brain_src.png
 ```
 
 ## 데이터 출처
