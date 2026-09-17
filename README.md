@@ -63,7 +63,7 @@ index.html, wNN-S.html           웹교재 (빌드 산출물, code/build_html.py
 NN-1_이론_*.md, NN-2_실습_*.md   26개 장 본문 (Markdown 원고)
 code/    그림 생성(figNN_*.py)·분석(chNN_*.py)·빌드(build_html.py) 코드, figfit.py
 data/    예시 공공데이터
-figures/ 본문 삽입 그림 83개 (PNG, dpi=150. 교체된 실습의 옛 그림 5개는 쓰이지 않은 채 남아 있다) + 머리 그림 원본 head_brain_src.png
+figures/ 본문 삽입 그림 83개 (PNG, dpi=150) + 머리 그림 원본 head_brain_src.png
 ```
 
 ## 데이터 출처
