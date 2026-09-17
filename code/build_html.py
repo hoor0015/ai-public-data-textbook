@@ -290,7 +290,9 @@ def link_data(html):
 
     def repl(m):
         path = m.group(1)
-        if path in tracked:
+        if path in tracked and path.endswith(".zip"):      # 압축 파일은 바로 내려받는 주소로
+            url = f"{REPO_URL}/raw/main/{quote(path)}"
+        elif path in tracked:
             url = f"{REPO_URL}/blob/main/{quote(path)}"
         elif path.endswith("/") and any(x.startswith(path) for x in tracked):
             url = f"{REPO_URL}/tree/main/{quote(path.rstrip('/'))}"
