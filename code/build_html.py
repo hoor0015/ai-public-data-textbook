@@ -179,6 +179,128 @@ def convert(md_text):
     return html, heads
 
 
+def add_target_ids(html):
+    """그림(<img alt="그림 N-x. …">)과 표 캡션(<strong>표 N-x. …)에 링크 목적지 id를 붙이고
+    {"그림 N-x": id, "표 N-x": id}를 돌려준다."""
+    found = {}
+
+    def fig(m):
+        key = f"그림 {m.group(2)}-{m.group(3)}"
+        if key in found:
+            return m.group(0)
+        found[key] = f"fig-{m.group(2)}-{m.group(3)}"
+        return f'<img id="{found[key]}" {m.group(1)}'
+
+    def tbl(m):
+        key = f"표 {m.group(1)}-{m.group(2)}"
+        if key in found:
+            return m.group(0)
+        found[key] = f"tbl-{m.group(1)}-{m.group(2)}"
+        return f'<p id="{found[key]}"><strong>표 {m.group(1)}-{m.group(2)}.'
+
+    html = re.sub(r'<img ((?:[^>]*? )?alt="그림 (\d+)-(\d+)\.)', fig, html)
+    html = re.sub(r"<p><strong>표 (\d+)-(\d+)\.", tbl, html)
+    return html, found
+
+
+# 상호참조 자동 링크: "N주차 M회차 X.Y", "M회차 X.Y", "N주차 실습", "N주차", 같은 주의 "X.Y(절)",
+# 다른 쪽에 있는 "그림 N-x"·"표 N-x"를 링크로 바꾼다. 절 번호 1.x는 1회차, 2.x는 2회차다.
+_UNIT = r"개|배|명|점|건|회|번|세|위|년|만|억|천|조|시간|분(?!석)|초|원|km|kg|cm|m|\s?퍼센트|\s?%|p"
+_SEC = rf"[12]\.\d{{1,2}}(?![\d.%])(?!{_UNIT})"
+_LIST = rf"{_SEC}절?(?:(?:,\s*|\s*·\s*|[과와]\s+){_SEC}절?)*"
+XREF = re.compile(
+    rf"(?<![\d\-·])(?:(?P<w>\d{{1,2}})주차(?:\s*(?P<s>[12])회차|\s*(?P<k>실습|이론))?"
+    rf"|(?P<s2>[12])회차)(?P<mid>의?\s*)(?P<l>{_LIST})?"
+    rf"|(?<![\d.\-])(?<!\d, )(?<!\d[와과] )(?<!폭을 )(?P<l2>{_LIST})(?!\s*/)"
+    rf"|(?P<ft>(?:그림|표) \d+-\d+)(?!\d)")
+SKIP_TAGS = {"a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "script", "style"}
+
+
+def autolink(html, ch, secmap, targets, pages, log):
+    """태그 밖 본문에서 XREF를 찾아 링크로 바꾼다. 링크·코드·제목·지시문 박스 안은 건드리지 않는다."""
+    week, cur = ch["week"], ch["out"]
+
+    def sec_links(text, w):
+        def one(m):
+            num = m.group(0).rstrip("절")
+            hit = secmap.get((w, num))
+            if not hit:
+                return m.group(0)
+            return f'<a href="{hit[0]}#{hit[1]}">{m.group(0)}</a>'
+        return re.sub(rf"{_SEC}절?", one, text)
+
+    def repl(m):
+        if m.group("ft"):
+            hit = targets.get(m.group("ft"))
+            if not hit or hit[0] == cur:
+                return m.group(0)
+            return f'<a href="{hit[0]}#{hit[1]}">{m.group(0)}</a>'
+        if m.group("l2"):
+            out = sec_links(m.group("l2"), week)
+            if out != m.group("l2"):
+                log.append((cur, m.string[max(0, m.start() - 25):m.end() + 12].replace("\n", " ")))
+            return out
+        w = int(m.group("w")) if m.group("w") else week
+        secs = m.group("l") or ""
+        head = m.group(0)[:len(m.group(0)) - len(secs) - len(m.group("mid"))]
+        sess = m.group("s") or m.group("s2") or {"이론": "1", "실습": "2"}.get(m.group("k"))
+        if not sess and secs:
+            sess = secs[0]
+        if sess:
+            href = pages.get((w, int(sess)))
+        else:
+            href = f"index.html#week-{w}" if (w, 1) in pages and w != week else None
+        if href and href != cur:
+            head = f'<a href="{href}">{head}</a>'
+        return head + m.group("mid") + sec_links(secs, w)
+
+    out, skip, box = [], 0, 0
+    for tok in re.split(r"(<[^>]+>)", html):
+        if tok.startswith("<"):
+            name = re.match(r"</?\s*([a-zA-Z0-9]+)", tok)
+            name = name.group(1).lower() if name else ""
+            if name in SKIP_TAGS:
+                skip += -1 if tok.startswith("</") else 1
+            elif name == "div":
+                if box:
+                    box += -1 if tok.startswith("</") else 1
+                elif "#2f8f4e" in tok:          # 지시문 박스
+                    box = 1
+            out.append(tok)
+        elif skip > 0 or box > 0:
+            out.append(tok)
+        else:
+            out.append(XREF.sub(repl, tok))
+    return "".join(out)
+
+
+REPO_URL = "https://github.com/hoor0015/ai-public-data-textbook"
+
+
+def link_data(html):
+    """본문의 <code>data/파일</code>을 GitHub 저장소의 그 파일로 연결한다.
+    저장소에 올라가 있는(git이 추적하는) 파일만 링크하므로 학생이 실습에서 만드는 파일은 그대로 둔다."""
+    from urllib.parse import quote
+    try:
+        out = subprocess.run(["git", "-C", ROOT, "-c", "core.quotepath=false", "ls-files", "data"],
+                             capture_output=True, text=True, encoding="utf-8").stdout
+    except OSError:
+        return html
+    tracked = set(out.split("\n"))
+
+    def repl(m):
+        path = m.group(1)
+        if path in tracked:
+            url = f"{REPO_URL}/blob/main/{quote(path)}"
+        elif path == "data/":
+            url = f"{REPO_URL}/tree/main/data"
+        else:
+            return m.group(0)
+        return f'<a href="{url}" target="_blank" rel="noopener">{m.group(0)}</a>'
+
+    return re.sub(r"<code>(data/[^<]*)</code>", repl, html)
+
+
 def sidebar(chapters, tocs, current):
     by_week = {}
     for ch in chapters:
@@ -237,6 +359,24 @@ for ch in chapters:
     html, heads = convert(text)
     tocs[ch["out"]], bodies[ch["out"]] = heads, html
 
+# 1-1) 상호참조 자동 링크
+secmap, targets, pages, xref_log = {}, {}, {}, []
+for ch in chapters:
+    pages[(ch["week"], ch["sess"])] = ch["out"]
+    for t, hid in tocs[ch["out"]]:
+        m = re.match(r"([12]\.\d{1,2}) ", t)
+        if m:
+            secmap[(ch["week"], m.group(1))] = (ch["out"], hid)
+    bodies[ch["out"]], found = add_target_ids(bodies[ch["out"]])
+    for key, tid in found.items():
+        targets.setdefault(key, (ch["out"], tid))
+for ch in chapters:
+    bodies[ch["out"]] = autolink(bodies[ch["out"]], ch, secmap, targets, pages, xref_log)
+    bodies[ch["out"]] = link_data(bodies[ch["out"]])
+if os.environ.get("XREF_REPORT"):      # 접두어 없는 절 번호("2.6에서")의 링크 목록. 수치 오인 점검용
+    for cur, ctx in xref_log:
+        print(f"[xref] {cur}: {ctx}")
+
 # 2) 장 페이지
 for i, ch in enumerate(chapters):
     prev_l = ((chapters[i - 1]["out"], chapters[i - 1]["title"]) if i > 0
@@ -276,7 +416,7 @@ for kind_, val in display_units():
     if kind_ == "exam":
         toc_html.append(f'<p class="toc-exam">{val}주차 · {EXAMS[val]}</p>')
         continue
-    toc_html.append("<ul>")
+    toc_html.append(f'<ul id="week-{val}">')
     for ch in by_week.get(val, []):
         kind = "이론" if ch["sess"] == 1 else "실습"
         label = f'{ch["week"]}주차 {ch["sess"]}회차 ({kind}) · {ch["short"]}' 
