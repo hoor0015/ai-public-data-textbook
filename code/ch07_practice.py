@@ -63,16 +63,26 @@ desc = d2023.drop(columns="파일줄번호").describe().T[["min", "max"]]
 print(desc.to_string())
 
 # ------------------------------------------------------------------ 2.3 결측 실험과 이상치
-print("\n=== 2.3 실험: 결측을 0으로 채웠을 때 ===")
+print("\n=== 2.3 실험 1: 헐거운 지시에 에이전트가 고르는 갈래 ===")
 filled = d2023.copy()
 filled["합계출산율"] = filled["합계출산율"].fillna(0)
 cols = ["시도", "시군구", "합계출산율"]
-print("[0 대치 기준 하위 5]")
+print("[(가) 결측을 0으로 채우고 뽑은 하위 5]")
 print(filled.nsmallest(5, "합계출산율")[cols].to_string(index=False))
-print("[원본 기준 하위 5]")
+print("[(나)(다) 결측을 제외하고 뽑은 하위 5 (정답)]")
 print(d2023.nsmallest(5, "합계출산율")[cols].to_string(index=False))
+print("값이 있는 시군구 수:", int(d2023["합계출산율"].count()), "/ 전체 행:", len(d2023))
 print("원본:", stats(d2023["합계출산율"]))
 print("0 대치:", stats(filled["합계출산율"]))
+
+print("\n[평균 대치가 만들어 내는 값: 1회차 1.2의 평균 대치 위험]")
+mean_val = d2023["합계출산율"].mean()
+gw = d2023[d2023["시군구"] == "군위군"].iloc[0]
+print("전국 평균 합계출산율(228곳):", round(mean_val, 3))
+print("군위군: 총인구", int(gw["총인구"]), "/ 고령인구비율", round(gw["고령인구비율"], 1),
+      "/ 고령인구비율 전국 순위(높은 순):", int(d2023["고령인구비율"].rank(ascending=False)[gw.name]))
+print("평균으로 채운 뒤 표준편차:", round(d2023["합계출산율"].fillna(mean_val).std(), 4),
+      "/ 보존했을 때:", round(d2023["합계출산율"].std(), 4))
 
 print("\n=== 2.3 이상치: 박스플롯(IQR 1.5배) 규칙 ===")
 outlier_idx = set()
@@ -132,18 +142,15 @@ saved = pd.read_csv(os.path.join(DATA, "sigungu_tfr_2013_2023.csv"), encoding="u
 print("저장된 병합 파일과 동일:", saved.shape == merged.shape and
       np.allclose(saved["합계출산율_2013"], merged["합계출산율_2013"], equal_nan=True))
 
-# ------------------------------------------------------------------ 2.5 정제 전후 비교
-print("\n=== 2.5 합계출산율(2023) 요약통계: 경로별 ===")
-paths = {"원본(결측 보존)": d2023["합계출산율"], "결측 0 대치": filled["합계출산율"],
-         "이상치 삭제": kept["합계출산율"], "최종 정제(병합 후)": merged["합계출산율"]}
-print(pd.DataFrame({k: stats(v) for k, v in paths.items()}).T.to_string())
-print("\n[합계출산율_2013: 병합 전(264행) vs 병합 후(229행)]")
-print(pd.DataFrame({"2013 원본(264행)": stats(d2013["합계출산율_2013"]),
-                    "병합 후(229행)": stats(merged["합계출산율_2013"]),
-                    "제외된 일반구 33행": stats(ro[is_gu]["합계출산율_2013"])}).T.to_string())
-print("\n[자료형 전후] 총인구:", d2023["총인구"].dtype, "->", d2023["총인구"].astype("int64").dtype,
+# ------------------------------------------------------------------ 2.2 자료형 규칙의 근거
+print("\n=== 2.2 자료형: 실수형으로 읽힌 열을 정수로 바꿔도 합계가 같은가 ===")
+print("[자료형 전후] 총인구:", d2023["총인구"].dtype, "->", d2023["총인구"].astype("int64").dtype,
       "/ 출생아수:", d2023["출생아수"].dtype, "->", d2023["출생아수"].astype("Int64").dtype)
 print("2023 총인구 합계:", int(d2023["총인구"].sum()), "/ 정수 변환 후 합계:", int(d2023["총인구"].astype("int64").sum()))
+
+print("\n=== 2.6 병합이 2023년 값을 건드리지 않았는가 (원본 vs 병합 파일) ===")
+print(pd.DataFrame({"2023 원본": stats(d2023["합계출산율"]),
+                    "병합 파일": stats(merged["합계출산율"])}).T.to_string())
 
 # ------------------------------------------------------------------ 2.6 표본 대조
 print("\n=== 2.6 표본 대조 ===")
@@ -200,69 +207,58 @@ abs_all = abs_sets["합계출산율"] | abs_sets["인구증가율"]
 print("두 열 합집합: 분포 기준", len(dist_all), "곳 / 절대 기준", len(abs_all), "곳 / 겹치는 곳",
       len(dist_all & abs_all), "곳 / 어느 한쪽에라도 걸린 곳", len(dist_all | abs_all), "곳")
 
-# ------------------------------------------------------------------ 2.5 결측 처리 세(네) 방식
-print("\n=== 2.5 결측 처리 방식별 비교 (합계출산율 2023) ===")
-mean_val = d2023["합계출산율"].mean()
-by_mean = d2023["합계출산율"].fillna(mean_val)
-dropped = d2023.dropna(subset=["합계출산율"])
-ways = {"① 표시만 (보존)": d2023["합계출산율"], "② 행 제외 (dropna)": dropped["합계출산율"],
-        "③ 평균 대치": by_mean, "④ 0 대치": filled["합계출산율"]}
-print(pd.DataFrame({k: stats(v) for k, v in ways.items()}).T.to_string())
-print("대치에 쓴 평균값:", round(mean_val, 3))
-gw = d2023[d2023["시군구"] == "군위군"].iloc[0]
-print("군위군: 총인구", int(gw["총인구"]), "/ 고령인구비율", round(gw["고령인구비율"], 1),
-      "/ 고령인구비율 전국 순위(높은 순):", int(d2023["고령인구비율"].rank(ascending=False)[gw.name]))
-rank_zero = int((filled["합계출산율"] < 0).sum() + 1)
-rank_mean = int((by_mean < mean_val).sum() + 1)
-print("군위군의 합계출산율 순위(낮은 순, 229곳 기준): 0 대치", rank_zero, "위 / 평균 대치", rank_mean, "위")
-print("전국 총인구 합계: 보존", int(d2023["총인구"].sum()), "/ 행 제외", int(dropped["총인구"].sum()),
-      "/ 차이", int(d2023["총인구"].sum() - dropped["총인구"].sum()))
-print("행 제외 시 행 수:", len(dropped), "/ 사라지는 시군구:", gw["시도"], gw["시군구"])
+# ------------------------------------------------------------------ 2.5 시도 단위 정제와 병합
+print("\n=== 2.5 grdp_sido.csv 진단 ===")
+grdp = pd.read_csv(os.path.join(DATA, "grdp_sido.csv"), encoding="utf-8-sig")
+print("행", len(grdp), "/ 열", grdp.shape[1], "/ 첫 열 이름:", repr(grdp.columns[0]))
+print("열 이름 전체:", list(grdp.columns))
+print("결측 칸:", int(grdp.isna().sum().sum()), "/ 전체 칸:", grdp.size)
+na_cells = [(grdp.iloc[r, 0], grdp.columns[c]) for r in range(len(grdp)) for c in range(1, grdp.shape[1])
+            if pd.isna(grdp.iloc[r, c])]
+print("결측 위치(시도, 연도):", na_cells)
+year_cols = [c for c in grdp.columns if c.isdigit()]
+print("연도 열:", year_cols[0], "-", year_cols[-1], f"({len(year_cols)}개)")
+g23 = grdp[[grdp.columns[0], "2023"]].copy()
+print("2023년 최댓값:", g23.loc[g23["2023"].idxmax()].to_dict(),
+      "/ 최솟값:", g23.loc[g23["2023"].idxmin()].to_dict())
+s_grdp, s_sgg = set(grdp[grdp.columns[0]]), set(d2023["시도"])
+print("시도 표기가 그대로 일치하는 것:", len(s_grdp & s_sgg), "건")
+print("grdp 표기 17개:", sorted(s_grdp))
+print("긴 형으로 바꾸면:", len(grdp) * len(year_cols), "행 3열")
 
-# ------------------------------------------------------------------ 2.9 오류 심기 ①: 천 단위 쉼표
-print("\n=== 2.9 실험 3: 총인구에 천 단위 쉼표를 넣은 사본 ===")
-comma = d2023.drop(columns="파일줄번호").copy()
-comma["총인구"] = comma["총인구"].map(lambda v: f"{int(v):,}")
-print("사본의 총인구 자료형:", comma["총인구"].dtype, "/ 첫 값:", repr(comma["총인구"].iloc[0]))
-try:
-    print("평균 계산:", comma["총인구"].mean())
-except Exception as e:
-    print("평균 계산 오류:", type(e).__name__, "-", str(e)[:90])
-concat = comma["총인구"].sum()
-print("sum()의 결과 길이:", len(concat), "글자 / 앞 40글자:", concat[:40])
-print("[문자로 정렬한 인구 상위 5]")
-print(comma.sort_values("총인구", ascending=False).head(5)[["시도", "시군구", "총인구"]].to_string(index=False))
-print("[숫자로 정렬한 인구 상위 5 (정답)]")
-print(d2023.nlargest(5, "총인구")[["시도", "시군구", "총인구"]].assign(
-    총인구=lambda x: x["총인구"].map(lambda v: f"{int(v):,}")).to_string(index=False))
-fixed = comma["총인구"].str.replace(",", "", regex=False).astype("int64")
-print("쉼표 제거 후 자료형:", fixed.dtype, "/ 합계:", int(fixed.sum()),
-      "/ 원본 합계와 같은가:", int(fixed.sum()) == int(d2023["총인구"].sum()))
+print("\n[틀리는 장면: 앞 두 글자 규칙으로 표기를 맞추면]")
+naive = grdp.copy()
+naive["시도"] = naive[grdp.columns[0]].str[:2]
+dup = naive["시도"].duplicated(keep=False)
+print("앞 두 글자 결과 중복 키:", sorted(naive.loc[dup, "시도"].unique()),
+      f"({int(dup.sum())}행이 {naive.loc[dup, '시도'].nunique()}개 이름으로)")
+print("시군구 파일의 시도와 안 맞는 표기:", sorted(set(naive["시도"]) - s_sgg))
+print("짝을 못 찾는 시군구 파일 쪽 시도:", sorted(s_sgg - set(naive["시도"])))
 
-# ------------------------------------------------------------------ 2.9 오류 심기 ②: 병합 키의 공백
-print("\n=== 2.9 실험 4: 병합 키에 공백 한 칸이 붙은 사본 ===")
-space = d2013_fix.copy()                      # 미추홀구 이름은 이미 맞춰 둔 상태
-gg = space["시도"] == "경기"
-space.loc[gg, "시군구"] = space.loc[gg, "시군구"] + " "
-print("공백이 붙은 2013 파일 행 수:", int(gg.sum()), "(모두 시도가 경기)")
-print("눈으로 보이는 표기:", [repr(v) for v in space.loc[gg, "시군구"].head(3)])
-bad = d2023.drop(columns="파일줄번호").merge(space, on=KEY, how="left", validate="one_to_one")
-print("병합 결과 행 수:", len(bad), "(기준 데이터와 같으므로 행 수 검증은 통과한다)")
-print("합계출산율_2013이 비어 있는 곳:", int(bad["합계출산율_2013"].isna().sum()), "곳")
-print("비어 있는 곳의 시도 분포:")
-print(bad.loc[bad["합계출산율_2013"].isna(), "시도"].value_counts().to_string())
-print("2023 파일의 경기 시군구 수:", int((d2023["시도"] == "경기").sum()))
-print("진단 지시로 잡는 법 - 키 열의 앞뒤 공백 검사:",
-      int((space["시군구"] != space["시군구"].str.strip()).sum()), "건")
-space_fixed = space.copy()
-for c in KEY:
-    space_fixed[c] = space_fixed[c].str.strip()
-good = d2023.drop(columns="파일줄번호").merge(space_fixed, on=KEY, how="left", validate="one_to_one")
-print("공백 제거 후 다시 병합 - 행:", len(good), "/ 값이 비어 있는 곳:",
-      int(good["합계출산율_2013"].isna().sum()), "곳")
+print("\n[대응표를 쓴 본 병합]")
+SIDO_MAP = {"강원특별자치도": "강원", "경기도": "경기", "경상남도": "경남", "경상북도": "경북",
+            "광주광역시": "광주", "대구광역시": "대구", "대전광역시": "대전", "부산광역시": "부산",
+            "서울특별시": "서울", "세종특별자치시": "세종", "울산광역시": "울산", "인천광역시": "인천",
+            "전라남도": "전남", "전북특별자치도": "전북", "제주특별자치도": "제주",
+            "충청남도": "충남", "충청북도": "충북"}
+g23 = g23.rename(columns={grdp.columns[0]: "원래표기", "2023": "1인당지역내총생산"})
+g23["시도"] = g23["원래표기"].map(SIDO_MAP)
+print("대응표로 바뀐 표기 중 시군구 파일과 안 맞는 것:", sorted(set(g23["시도"]) - s_sgg))
+sido_agg = (d2023.groupby("시도")
+            .agg(시군구수=("시군구", "size"), 합계출산율평균=("합계출산율", "mean"),
+                 출산율값개수=("합계출산율", "count"), 총인구=("총인구", "sum"))
+            .reset_index())
+sido = sido_agg.merge(g23[["시도", "1인당지역내총생산"]], on="시도", how="left", validate="one_to_one")
+print("병합 결과 행 수:", len(sido), "/ GRDP가 안 붙은 시도:", int(sido["1인당지역내총생산"].isna().sum()))
+sido["합계출산율평균"] = sido["합계출산율평균"].round(3)
+sido["1인당지역내총생산"] = sido["1인당지역내총생산"].astype(int)
+print(sido.sort_values("1인당지역내총생산", ascending=False).to_string(index=False))
+print("출산율 평균이 229곳이 아닌 228곳으로 계산된 시도:",
+      sido.loc[sido["시군구수"] != sido["출산율값개수"], ["시도", "시군구수", "출산율값개수"]].to_dict("records"))
+print("시군구 수 합계:", int(sido["시군구수"].sum()), "/ 총인구 합계:", int(sido["총인구"].sum()))
 
-# ------------------------------------------------------------------ 2.10 데이터 사전
-print("\n=== 2.10 최종 산출물의 열 목록 ===")
+# ------------------------------------------------------------------ 2.9 데이터 사전
+print("\n=== 2.9 최종 산출물의 열 목록 ===")
 final = pd.read_csv(os.path.join(DATA, "sigungu_tfr_2013_2023.csv"), encoding="utf-8-sig")
 print("행", len(final), "열", final.shape[1])
 info = pd.DataFrame({"자료형": final.dtypes.astype(str),

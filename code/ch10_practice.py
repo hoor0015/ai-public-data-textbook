@@ -1,4 +1,5 @@
-# 10주차 실습(10-2) 확장 수치 계산: 가정 확인, 차이의 크기, 회귀 진단, 독립 검산, 통제변수 회귀
+# 10주차 실습(10-2) 확장 수치 계산: 가정 확인, 차이의 크기, 변수 반복, 시도별 평균과 신뢰구간,
+# 회귀 진단, 독립 검산, 통제변수 회귀
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 # 본문의 모든 새 수치는 이 스크립트의 출력에서 가져온다. scipy와 numpy만 사용한다(statsmodels는 교차검증 용도).
 from pathlib import Path
@@ -264,63 +265,66 @@ gn = df[df["시군구"] == "강릉시"].iloc[0]
 print("파생변수 손 검산(강릉시): 유소년 %.0f / 총인구 %.0f x 100 = %.4f%%"
       % (gn["유소년"], gn["총인구"], gn["유소년"] / gn["총인구"] * 100))
 
-# ------------------------------------------------------------------ [8] 표본 크기의 효과
-line("[8] 표본 크기의 효과: 229개 전체와 무작위 50개 (2.5절)")
+# ------------------------------------------------------------------ [8] 시도별 평균과 신뢰구간
+line("[8] 시도별 고령인구비율 평균과 95% 신뢰구간 (2.5절)")
 
 
-def compare_group(frame, var):
-    a = frame.loc[frame["권역"] == "수도권", var].dropna()
-    b = frame.loc[frame["권역"] == "비수도권", var].dropna()
-    if len(a) < 2 or len(b) < 2:
-        return None
-    diff_v, se_v, dfv, lo_v, hi_v, _ = welch_ci(a, b)
-    r_v = stats.ttest_ind(b, a, equal_var=False)
-    d_v, _ = cohen_d(a, b)
-    return dict(n수도권=len(a), n비수도권=len(b), 차이=diff_v, 표준오차=se_v, 자유도=dfv,
-                CI하한=lo_v, CI상한=hi_v, CI폭=hi_v - lo_v, t=r_v.statistic, p=r_v.pvalue, d=d_v)
+def mean_ci(v, alpha=0.05):
+    """한 집단의 평균과 95% 신뢰구간. 관측치가 1개면 흩어짐을 잴 수 없어 구간을 만들지 못한다."""
+    n = len(v)
+    m = v.mean()
+    if n < 2:
+        return n, m, np.nan, np.nan, np.nan, np.nan, np.nan
+    sd = v.std(ddof=1)
+    se = sd / np.sqrt(n)
+    tc = stats.t.ppf(1 - alpha / 2, n - 1)
+    return n, m, sd, se, tc, m - tc * se, m + tc * se
 
 
-full = compare_group(df, "고령인구비율")
-print("전체 229개:", {k: round(v, 4) for k, v in full.items()})
-print("  p값(지수 표기) = %.3e" % full["p"])
-rng = np.random.default_rng(2023)
-samp = df.sample(n=50, random_state=2023)
-s50 = compare_group(samp, "고령인구비율")
-print("무작위 50개(시드 2023):", {k: round(v, 4) for k, v in s50.items()}, "p = %.5f" % s50["p"])
-print("  표본 50개의 시도 구성:", samp["시도"].value_counts().to_dict())
-samp2 = df.sample(n=20, random_state=2023)
-s20 = compare_group(samp2, "고령인구비율")
-print("무작위 20개(시드 2023):", {k: round(v, 4) for k, v in s20.items()}, "p = %.5f" % s20["p"])
-# 같은 크기의 표본을 여러 번 뽑았을 때의 분포
-for n_s in (50, 20):
-    ps, widths, diffs, sig = [], [], [], 0
-    for seed in range(500):
-        r = compare_group(df.sample(n=n_s, random_state=seed), "고령인구비율")
-        if r is None:
-            continue
-        ps.append(r["p"])
-        widths.append(r["CI폭"])
-        diffs.append(r["차이"])
-        sig += r["p"] < 0.05
-    ps = np.array(ps)
-    print(f"표본 {n_s}개를 500번 반복: p < 0.05 비율 = {sig/len(ps)*100:.1f}%, "
-          f"p값 중앙값 = {np.median(ps):.2e}, 신뢰구간 폭 중앙값 = {np.median(widths):.2f}%포인트, "
-          f"평균 차이 중앙값 = {np.median(diffs):.2f}, 최소 = {np.min(diffs):.2f}, 최대 = {np.max(diffs):.2f}")
-# 합계출산율은 표본 50개에서 어떻게 되나
-s50_tfr = compare_group(df.sample(n=50, random_state=2023), "합계출산율")
-print("무작위 50개(시드 2023) 합계출산율:", {k: round(v, 4) for k, v in s50_tfr.items()})
-# 시드 재현성: 같은 시드로 두 번 뽑으면 같은 표본인가
-again = df.sample(n=50, random_state=2023)
-print("시드 2023 재현성(두 번 뽑은 표본이 같은가):",
-      bool(samp.index.equals(again.index)), "/ 다른 시드(7)와 같은가:",
-      bool(samp.index.equals(df.sample(n=50, random_state=7).index)))
-# 유의하지 않게 나온 20개 표본의 예 하나
-for seed in range(500):
-    r20 = compare_group(df.sample(n=20, random_state=seed), "고령인구비율")
-    if r20 and r20["p"] > 0.05:
-        print(f"20개 표본에서 유의하지 않게 나온 첫 시드 = {seed}:",
-              {k: round(v, 4) for k, v in r20.items()})
-        break
+rows8 = []
+for sido, v in df.groupby("시도")["고령인구비율"]:
+    n, m, sd, se, tc, lo, hi = mean_ci(v)
+    rows8.append(dict(시도=sido, n=n, 평균=m, 표준편차=sd, 표준오차=se, t임계값=tc,
+                      CI하한=lo, CI상한=hi, CI폭=hi - lo))
+tab8 = pd.DataFrame(rows8).sort_values("평균").reset_index(drop=True)
+print(tab8.round(3).to_string(index=False))
+print(f"시도 수 = {len(tab8)}, 시군구 합 = {int(tab8['n'].sum())}")
+print("구간을 계산할 수 없는 시도:", tab8.loc[tab8["CI폭"].isna(), "시도"].tolist(),
+      "(시군구 수 %s)" % tab8.loc[tab8["CI폭"].isna(), "n"].tolist())
+ok8 = tab8.dropna(subset=["CI폭"]).reset_index(drop=True)
+print(f"구간 폭이 가장 좁은 시도: {ok8.loc[ok8['CI폭'].idxmin(), '시도']} "
+      f"{ok8['CI폭'].min():.2f}%포인트, 가장 넓은 시도: {ok8.loc[ok8['CI폭'].idxmax(), '시도']} "
+      f"{ok8['CI폭'].max():.2f}%포인트")
+print("하한이 0보다 작은 시도:", ok8.loc[ok8["CI하한"] < 0, "시도"].tolist())
+# 평균 순위가 이웃한 시도 쌍의 구간 겹침 여부
+print("평균 순위가 이웃한 시도 쌍의 신뢰구간 겹침:")
+for i in range(len(ok8) - 1):
+    a8, b8 = ok8.loc[i], ok8.loc[i + 1]
+    overlap = a8["CI상한"] >= b8["CI하한"]
+    print(f"  {a8['시도']}({a8['평균']:.2f}) vs {b8['시도']}({b8['평균']:.2f}): "
+          f"[{a8['CI하한']:.2f}, {a8['CI상한']:.2f}] / [{b8['CI하한']:.2f}, {b8['CI상한']:.2f}] "
+          f"-> {'겹침' if overlap else '겹치지 않음'}")
+# 평균 차이가 가장 작은 두 시도와, 구간이 겹치지 않는 가장 가까운 쌍
+gap = ok8["평균"].diff()
+j = int(gap.idxmin())
+print(f"평균이 가장 가까운 두 시도: {ok8.loc[j-1, '시도']} {ok8.loc[j-1, '평균']:.3f} vs "
+      f"{ok8.loc[j, '시도']} {ok8.loc[j, '평균']:.3f} (차이 {gap.min():.3f}%포인트)")
+# 본문 표에 실을 시도 쌍(겹치는 쌍과 겹치지 않는 쌍)
+print("본문 표에 실을 시도 쌍:")
+idx8 = tab8.set_index("시도")
+for s1, s2 in [("전남", "전북"), ("대구", "인천"), ("경기", "서울"), ("서울", "제주"),
+               ("경기", "강원"), ("서울", "경북")]:
+    a8, b8 = idx8.loc[s1], idx8.loc[s2]
+    lo_ov, hi_ov = max(a8["CI하한"], b8["CI하한"]), min(a8["CI상한"], b8["CI상한"])
+    print(f"  {s1}({int(a8['n'])}개, {a8['평균']:.2f}, [{a8['CI하한']:.2f}, {a8['CI상한']:.2f}]) vs "
+          f"{s2}({int(b8['n'])}개, {b8['평균']:.2f}, [{b8['CI하한']:.2f}, {b8['CI상한']:.2f}]): "
+          f"평균 차이 {abs(a8['평균']-b8['평균']):.2f}%포인트 -> "
+          f"{'겹침' if lo_ov <= hi_ov else '겹치지 않음'}")
+print("서울과 경기 비교(관측치는 많고 흩어짐은 다름):")
+for s in ["서울", "경기", "인천", "제주", "울산"]:
+    r8 = tab8[tab8["시도"] == s].iloc[0]
+    print(f"  {s}: n = {int(r8['n'])}, 표준편차 = {r8['표준편차']:.3f}, "
+          f"표준오차 = {r8['표준오차']:.3f}, t임계값 = {r8['t임계값']:.3f}, 폭 = {r8['CI폭']:.2f}")
 
 # ------------------------------------------------------------------ [9] 독립 검산 보조: 절편 공식
 line("[9] 독립 검산 보조: 절편을 평균으로 다시 만들기 (2.10절)")

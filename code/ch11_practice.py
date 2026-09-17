@@ -8,10 +8,13 @@
 #   2.5     상위 단어의 세 가지 셈법(토큰 빈도, 문자열 등장, 포함 문서 수)과 유형별 분포
 #   2.6     토큰 빈도 상위 15개의 문서 빈도·순위 이동·건당 평균, 문자열 기준과의 차이
 #   2.7     규칙 분류에서 "인터넷" 키워드가 끌어온 건수, 정보 부족 사례 수
-#   2.8     규칙 분류 vs 에이전트 직접 분류(기준표 없이 2회, 기준표 있이 2회)의 일치 집계
+#   2.8     규칙 분류 vs 에이전트 직접 분류(기준표를 주고 1회)의 집계,
+#           표본 30건 안의 정보 부족 사례(근거구절을 채울 수 없는 건)
 #   2.9     유형별 상위 10개 단어와 유형 간 겹치는 단어
-#   2.11    키워드 규칙 개정(인터넷 제거, 택배 추가) 전후의 건수와 표본 일치율
-#   2.12    에이전트가 붙인 비고(경계/정보부족)별 불일치율
+#   2.11    키워드 규칙 개정(인터넷 제거, 택배 추가) 전후의 건수와 유형 이동,
+#           시드를 바꿔 새로 뽑은 표본 30건의 구성
+#   2.12    기계적 경계 후보 신호(약한 근거, 경합, 정보부족)와 검증 우선순위 상위 20건,
+#           표본 30건에서 그 표시와 실제 불일치가 겹치는 정도
 #   2.13    유형별 대표 민원(유형 중심 벡터와 코사인 유사도가 가장 높은 문서)
 # 전처리 규칙과 키워드 규칙은 ch10_text.py와 동일하다.
 
@@ -230,11 +233,10 @@ for label in LABELS:
           f"{len(set(per_type[label].head(10).index) & overall10)}개")
 
 # ---------------------------------------------------------------- 2.8 규칙 vs 에이전트 직접 분류
-# 에이전트 직접 분류는 저자가 Claude Code에게 눈가림 표본(유형_규칙 열을 뺀 30건)을 읽혀
-# 새 대화에서 네 번 실행한 결과를 옮겨 적은 것이다.
-#   A1, A2: 기준표 없이 ("내용을 읽고 여섯 유형 중 하나로") 두 번
-#   B1, B2: 2.6의 분류 기준표를 지시문에 넣어 두 번 (비고: 경계 / 정보부족 / 해당없음)
-# 네 번의 실행에서 30건의 유형은 모두 같았다. 달라진 건이 있으면 DIFF에 {사건번호: 유형}으로 적는다.
+# 에이전트 직접 분류는 저자가 Claude Code에게 눈가림 표본(유형_규칙 열을 뺀 30건)과
+# 2.7의 분류 기준표를 함께 주고 새 대화에서 한 번 실행한 결과를 옮겨 적은 것이다.
+# 근거 열에는 적용한 기준표 규칙과 민원 내용 본문에서 그대로 옮긴 구절을 적게 했고,
+# 비고는 경계 / 정보부족 / 해당없음 세 가지다.
 AGENT = {
     1000509527: "보험", 1000506058: "의료", 1000509134: "보험", 1000514847: "보험",
     1002909748: "기타", 1000909776: "의료", 1000926143: "기타", 1001359846: "기타",
@@ -245,8 +247,7 @@ AGENT = {
     1003096476: "기타", 1003098459: "여행·운송", 1003097896: "기타", 1003093891: "기타",
     1003102174: "기타", 1003059458: "의료",
 }
-DIFF = {"A2": {}, "B1": {}, "B2": {}}
-FLAG_B = {  # 기준표 실행(B1, B2 동일)의 비고. 적지 않은 건은 "해당없음"
+FLAG_B = {  # 기준표 실행의 비고. 적지 않은 건은 "해당없음"
     1000509134: "경계", 1000514847: "경계", 1002909748: "경계", 1001359846: "경계",
     1001518580: "경계", 1002061755: "경계", 1002543997: "경계", 1003093891: "경계",
     1001904880: "정보부족", 1003059458: "정보부족",
@@ -256,24 +257,24 @@ sample = pd.read_csv(SAMPLE)
 assert set(sample["사건번호"]) == set(AGENT), "표본 30건의 사건번호와 에이전트 결과의 사건번호가 다르다"
 assert set(df.sample(30, random_state=10)["사건번호"]) == set(sample["사건번호"]), "시드 10 재추출 불일치"
 sample["에이전트"] = sample["사건번호"].map(AGENT)
-for run, diff in DIFF.items():
-    sample[run] = sample["사건번호"].map({**AGENT, **diff})
 sample["비고(기준표)"] = sample["사건번호"].map(FLAG_B).fillna("해당없음")
 sample["일치"] = np.where(sample["유형_규칙"] == sample["에이전트"], "일치", "불일치")
 print("\n[표본 30건: 규칙 vs 에이전트]")
 print(f"일치 {(sample['일치'] == '일치').sum()}건 / 30건 "
       f"({(sample['일치'] == '일치').mean() * 100:.0f}%)")
-for run in DIFF:
-    same = (sample[run] == sample["에이전트"]).sum()
-    print(f"  {run}와 A1의 유형 일치: {same}/30")
+print("  에이전트 분류의 유형 분포:", sample["에이전트"].value_counts().to_dict())
 print("  기준표 실행의 비고:", sample["비고(기준표)"].value_counts().to_dict())
 print("\n교차표 (행: 규칙, 열: 에이전트)")
 print(pd.crosstab(sample["유형_규칙"], sample["에이전트"]).to_string())
 print("\n불일치 건:")
 print(sample.loc[sample["일치"] == "불일치", ["사건번호", "유형_규칙", "에이전트", "제목"]].to_string(index=False))
-print("\n일치했지만 기준표 실행이 '정보부족'으로 표시한 건:")
-print(sample.loc[(sample["일치"] == "일치") & (sample["비고(기준표)"] == "정보부족"),
-                 ["사건번호", "유형_규칙", "에이전트", "제목"]].to_string(index=False))
+# 근거구절을 채울 수 없는 건: 내용이 "첨부파일 참조"이거나 제목과 같은 건
+thin_sample = sample[sample["사건번호"].isin(short["사건번호"])]
+print(f"\n표본 30건 중 근거구절을 내용에서 뽑을 수 없는 건 {len(thin_sample)}건 "
+      f"(제대로 실행되면 인용확인 열의 '내용 없음'이 이만큼 나와야 한다):")
+for _, r in thin_sample.iterrows():
+    src = df.loc[df["사건번호"] == r["사건번호"]].iloc[0]
+    print(f"  {r['사건번호']} | {src['제목']} | 내용: {src['내용'].strip()[:40]}")
 
 # ---------------------------------------------------------------- 2.11 규칙 개정 실험
 # 기준표에 덧붙인 경계 규칙 세 줄을 키워드 규칙에 반영한 것.
@@ -294,11 +295,9 @@ print(pd.DataFrame({"개정 전": df["유형_규칙"].value_counts(),
 print("유형이 바뀐 민원:", int((df["유형_규칙"] != df["유형_개정"]).sum()), "건")
 print(pd.crosstab(df["유형_규칙"], df["유형_개정"]).to_string())
 sample["규칙_개정"] = sample["사건번호"].map(dict(zip(df["사건번호"], df["유형_개정"])))
-n_before = int((sample["유형_규칙"] == sample["에이전트"]).sum())
-n_after = int((sample["규칙_개정"] == sample["에이전트"]).sum())
-print(f"표본 30건 일치: 개정 전 {n_before}/30, 개정 후 {n_after}/30")
-print("개정 후에도 남은 불일치:")
-print(sample.loc[sample["규칙_개정"] != sample["에이전트"],
+# 2.10에서 원문을 읽은 불일치 5건이 개정 규칙에서 어떻게 되었는지 (점수가 아니라 진단)
+print("\n2.10에서 읽은 불일치 5건의 개정 후 유형:")
+print(sample.loc[sample["일치"] == "불일치",
                  ["사건번호", "유형_규칙", "규칙_개정", "에이전트", "제목"]].to_string(index=False))
 # 개정이 새로 만든 오류: 택배가 지나가듯 나와 여행·운송으로 옮겨 간 건
 moved = df[(df["유형_규칙"] != df["유형_개정"]) & (df["유형_개정"] == "여행·운송")]
@@ -315,13 +314,95 @@ print(f"\n개정 후 통신·인터넷 {len(tel_rev)}건 중 통신 서비스 �
 for t in tel_rev.loc[still.values, "제목"]:
     print("  -", t[:60])
 
-# ---------------------------------------------------------------- 2.12 비고별 불일치율
-print("\n[2.12 에이전트가 붙인 비고와 실제 불일치 (개정 전 규칙 기준)]")
-tab = pd.crosstab(sample["비고(기준표)"], sample["일치"])
-tab["불일치 비율(%)"] = (tab.get("불일치", 0) / tab.sum(axis=1) * 100).round(1)
-print(tab.loc[["경계", "정보부족", "해당없음"]].to_string())
-print(f"합계: 30건 중 불일치 {int((sample['일치'] == '불일치').sum())}건 "
-      f"({(sample['일치'] == '불일치').mean() * 100:.1f}%)")
+# ------------------------------------------- 2.11 시드를 바꿔 새로 뽑은 표본 30건
+# 고칠 때 본 표본에서 잰 성과는 증거가 약하다. 개정 규칙은 보지 않았던 표본에서 확인한다.
+NEW_SEED = 23
+new30 = df.sample(30, random_state=NEW_SEED).sort_index()
+print(f"\n[2.11 새 표본 30건 (시드 {NEW_SEED})]")
+print("첫 표본(시드 10)과 겹치는 건:",
+      len(set(new30["사건번호"]) & set(sample["사건번호"])), "건")
+print("개정 규칙의 유형 분포:", new30["유형_개정"].value_counts().to_dict())
+moved_new = new30[new30["유형_규칙"] != new30["유형_개정"]]
+print(f"이 표본에서 개정으로 유형이 바뀐 건 {len(moved_new)}건:")
+print(moved_new[["사건번호", "유형_규칙", "유형_개정", "제목"]].to_string(index=False))
+
+# ------------------------------------- 2.12 기계적 경계 후보와 검증 우선순위 목록
+# 규칙 분류 하나만 돌리고도 "먼저 읽을 건"을 고를 수 있는가. 세 가지 기계적 신호를 쓴다.
+#   s1 약한 근거: 유형을 결정한 키워드가 제목+내용 전체에서 한 번만 나왔다
+#                (제목의 [진료과] 표시로 걸린 건은 구조적 표시이므로 제외)
+#   s2 경합    : 둘 이상 유형의 키워드에 동시에 걸렸다
+#   s3 정보부족 : 내용이 "첨부파일 참조"이거나 제목과 같다
+MED_TAG = r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]"
+
+
+def decide(title, content, rules=RULES):
+    """규칙이 배정한 유형, 그 근거 키워드의 등장 횟수, [진료과] 표시로 걸렸는지."""
+    text = f"{title} {content}"
+    if re.search(rules[0][1], title):
+        return "의료", len(re.findall(rules[0][1], text)), bool(re.search(MED_TAG, title))
+    for label, pat in rules:
+        if re.search(pat, text):
+            return label, len(re.findall(pat, text)), False
+    return "기타", 0, False
+
+
+def hit_count(title, content, rules=RULES):
+    """이 민원이 몇 개 유형의 키워드에 걸리는지."""
+    text = f"{title} {content}"
+    got = {"의료"} if re.search(rules[0][1], title) else set()
+    for label, pat in rules:
+        if re.search(pat, text):
+            got.add(label)
+    return len(got)
+
+
+dec = [decide(t, c) for t, c in zip(df["제목"], df["내용"])]
+df["근거횟수"] = [d[1] for d in dec]
+df["진료과표시"] = [d[2] for d in dec]
+df["걸린유형수"] = [hit_count(t, c) for t, c in zip(df["제목"], df["내용"])]
+df["약한근거"] = (df["유형_규칙"] != "기타") & (df["근거횟수"] <= 1) & (~df["진료과표시"])
+df["경합"] = df["걸린유형수"] >= 2
+df["정보부족"] = df["사건번호"].isin(short["사건번호"])
+df["우선순위점수"] = df[["약한근거", "경합", "정보부족"]].sum(axis=1)
+assert (df["유형_규칙"] == [d[0] for d in dec]).all(), "decide()와 classify()의 배정이 다르다"
+
+print("\n[2.12 기계적 경계 후보 신호]")
+print(f"약한 근거 {int(df['약한근거'].sum())}건, 경합 {int(df['경합'].sum())}건, "
+      f"정보부족 {int(df['정보부족'].sum())}건")
+print("점수 분포:", df["우선순위점수"].value_counts().sort_index().to_dict())
+n_cand = int((df["우선순위점수"] >= 1).sum())
+print(f"하나라도 해당하는 경계 후보 {n_cand}건 ({n_cand / len(df) * 100:.1f}%)")
+print("약한 근거로 표시된 건의 유형 분포:",
+      df[df["약한근거"]]["유형_규칙"].value_counts().to_dict())
+
+top20 = df.sort_values(["우선순위점수", "약한근거", "정보부족", "사건번호"],
+                       ascending=[False, False, False, True]).head(20)
+print("\n검증 우선순위 상위 20건")
+for i, (_, r) in enumerate(top20.iterrows(), 1):
+    sig = ",".join(n for n in ["약한근거", "경합", "정보부족"] if r[n])
+    print(f"{i:2d} {r['사건번호']} 점수{r['우선순위점수']} [{sig}] "
+          f"규칙={r['유형_규칙']} 근거{r['근거횟수']}회 | {r['제목'][:40]}")
+print("상위 20건의 규칙 유형 분포:", top20["유형_규칙"].value_counts().to_dict())
+
+# 이 표시가 쓸모 있는지를 표본 30건의 실제 불일치로 확인한다 (표 11-12)
+flag = df.set_index("사건번호")[["약한근거", "경합", "정보부족", "우선순위점수"]]
+sm = sample.join(flag, on="사건번호")
+sm["후보"] = sm["우선순위점수"] >= 1
+print("\n[표 11-12] 기계적 표시와 실제 불일치 (표본 30건, 개정 전 규칙 기준)")
+rows12 = []
+for name in ["약한근거", "경합", "정보부족"]:
+    sub = sm[sm[name]]
+    rows12.append((name, len(sub), int((sub["일치"] == "불일치").sum())))
+for name, mask in [("하나라도 해당(후보)", sm["후보"]), ("해당 없음", ~sm["후보"])]:
+    sub = sm[mask]
+    rows12.append((name, len(sub), int((sub["일치"] == "불일치").sum())))
+t12 = pd.DataFrame(rows12, columns=["신호", "해당 건수", "불일치"])
+t12["불일치 비율(%)"] = (t12["불일치"] / t12["해당 건수"] * 100).round(1)
+print(t12.to_string(index=False))
+print("\n에이전트가 붙인 비고와 기계적 후보 표시의 교차:")
+print(pd.crosstab(sm["비고(기준표)"], sm["후보"]).to_string())
+print("\n새 표본 30건의 경계 후보:", int((new30["사건번호"].map(
+    df.set_index("사건번호")["우선순위점수"]) >= 1).sum()), "건")
 
 # ---------------------------------------------------------------- 2.13 유형별 대표 민원
 tv = TfidfVectorizer(analyzer=make_tokenizer(STOP_2))

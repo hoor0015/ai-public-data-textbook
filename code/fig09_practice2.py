@@ -1,4 +1,4 @@
-# 9주차 2회차(실습) 확장 그림 생성: 그림 9-6, 9-7, 9-8, 9-9
+# 9주차 2회차(실습) 확장 그림 생성: 그림 9-6(합계출산율·인구증가율 분포), 9-7, 9-8, 9-9
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -96,29 +96,29 @@ fig.savefig(FIG / "fig09_tfr_change.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 9-6
-# 같은 데이터, 세 가지 구간 폭의 히스토그램 (고령인구비율)
-aging = df["고령인구비율"]
-fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), sharey=False)
-for ax, w, tag in [(axes[0], 1.0, "(가)"), (axes[1], 2.5, "(나)"), (axes[2], 5.0, "(다)")]:
-    lo = np.floor(aging.min() / w) * w
-    hi = np.ceil(aging.max() / w) * w
+# 10주차가 이어 쓰는 두 변수의 분포: 합계출산율, 인구증가율
+fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.4))
+for ax, col, unit, w, tag in [(axes[0], "합계출산율", "명", 0.05, "(가)"),
+                              (axes[1], "인구증가율", "%", 0.5, "(나)")]:
+    s = df[col].dropna()
+    lo = np.floor(s.min() / w) * w
+    hi = np.ceil(s.max() / w) * w
     edges = np.arange(lo, hi + w / 2, w)
-    cnt, _ = np.histogram(aging, bins=edges)
-    ax.hist(aging, bins=edges, color="#7fa8d9", edgecolor="white", lw=0.6)
-    ax.axvline(aging.median(), color="#c0392b", lw=1.6, ls="--")
-    k = int(cnt.argmax())
-    ax.set_title(f"{tag} 구간 폭 {w:g}%포인트 (막대 {len(cnt)}개)", fontsize=12)
-    ax.set_xlabel("고령인구비율 (%)")
+    ax.hist(s, bins=edges, color="#7fa8d9", edgecolor="white", lw=0.6)
+    ax.axvline(s.median(), color="#c0392b", lw=1.6, ls="--",
+               label=f"중앙값 {s.median():.2f}{unit}")
+    if col == "인구증가율":
+        ax.axvline(0, color="#444", lw=1.4, ls=":", label="변화 없음 (0)")
+    ax.set_title(f"{tag} {col}의 분포 (2023년, 구간 폭 {w:g}{unit})", fontsize=12)
+    ax.set_xlabel(f"{col} ({unit})")
     ax.set_ylabel("시군구 수 (개)")
-    ax.set_xlim(8, 50)
-    ax.text(0.97, 0.95, f"가장 높은 막대\n{edges[k]:.1f}-{edges[k + 1]:.1f}% ({cnt[k]}개)",
-            transform=ax.transAxes, ha="right", va="top", fontsize=9.5, color="#333",
-            bbox=dict(fc="white", ec="#bbb", boxstyle="round,pad=0.3"))
-axes[0].text(0.97, 0.62, f"빨간 파선: 중앙값 {aging.median():.2f}%", transform=axes[0].transAxes,
-             ha="right", va="top", fontsize=9, color="#c0392b")
-fig.text(0.01, -0.02, SRC + ". 229개 시군구", fontsize=8.5, color="#666", ha="left")
+    ax.legend(fontsize=9, loc="upper right")
+    ax.text(0.98, 0.72, f"n = {len(s)}", transform=ax.transAxes,
+            ha="right", va="top", fontsize=9.5, color="#333")
+fig.text(0.01, -0.02, SRC + ". 합계출산율은 결측 1곳(경북 군위군)을 제외한 228곳",
+         fontsize=8.5, color="#666", ha="left")
 fig.tight_layout()
-fig.savefig(FIG / "fig09_hist_binwidth.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig09_hist_tfr_growth.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 9-8

@@ -1,5 +1,5 @@
 # 12주차 2회차(실습) 그림 생성
-#   그림 12-4 fig12_cite_check.png    인용 검증표의 세 열과 세 가지 판정
+#   그림 12-4 fig12_cite_check.png    인용 검증표의 네 열과 세 가지 판정
 #   그림 12-5 fig12_evidence_skill.png evidence-memo 스킬의 구성과 실행 흐름
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
@@ -31,24 +31,30 @@ def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.6, ls="-"):
 
 # ---------------------------------------------------------------- 그림 12-4
 figfit.SPREAD = 1.0          # 표 모양이므로 칸 사이 글씨 크기를 고르게 맞춘다
-fig, ax = plt.subplots(figsize=(12.6, 6.6))
-ax.set_xlim(0, 12.6)
-ax.set_ylim(0.2, 7.2)
+fig, ax = plt.subplots(figsize=(13.8, 6.9))
+ax.set_xlim(0, 13.8)
+ax.set_ylim(0.2, 7.3)
 ax.axis("off")
 
-XS = [0.2, 3.6, 6.6, 10.0]          # 열 왼쪽 좌표
-WS = [3.2, 2.8, 3.2, 2.4]           # 열 너비
-HEAD = ["답변의 주장", "에이전트가 적은\n근거 위치", "내가 원문에서\n확인한 결과", "판정"]
+XS = [0.2, 1.1, 4.3, 7.1]           # 표 열의 왼쪽 좌표
+WS = [0.8, 3.1, 2.7, 2.4]           # 표 열의 너비
+HEAD = ["번호", "주장", "근거 위치", "원문 인용"]
 ROWS = [
-    ["영리 목적을 이유로\n제한할 수 없다", "공공데이터법.txt\n제3조 제4항",
-     "그 자리에 같은 문장이\n글자까지 그대로 있다", "일치"],
-    ["공공데이터란\n이러이러한 자료다", "공공데이터법.txt\n제2조 제3호",
-     "정의는 제2조 제2호에\n있다. 호 번호가 다르다", "위치 어긋남"],
-    ["별도의 승인 절차를\n거쳐야 한다", "(근거 표시 없음)",
-     "이 문장을 원문에서\n찾지 못했다", "원문에 없음"],
+    ["1", "영리 목적을 이유로\n제한할 수 없다",
+     "공공데이터법.txt\n제3조 제4항", "「(원문 그대로)」"],
+    ["2", "공공데이터란\n이러이러한 자료다",
+     "공공데이터법.txt\n제2조 제3호", "「(원문 그대로)」"],
+    ["3", "별도의 승인 절차를\n거쳐야 한다", "근거 없음", "(없음)"],
+]
+VERDICTS = [
+    "일치\n위치도 문장도 맞다",
+    "위치 어긋남\n문장은 제2조 제2호에 있다",
+    "원문에 없음\n파일에서 찾지 못했다",
 ]
 VERDICT_FC = ["#f4fbf6", "#fdf9f4", "#fbf1f0"]
 VERDICT_EC = ["#2f8f4e", "#c77b2f", "#c0392b"]
+
+VX, VW = 10.7, 2.9                  # 판정 상자의 왼쪽 좌표와 너비
 
 y_head, h_head = 5.20, 0.95
 for x, w, t in zip(XS, WS, HEAD):
@@ -56,26 +62,25 @@ for x, w, t in zip(XS, WS, HEAD):
 
 for i, row in enumerate(ROWS):
     y = 3.95 - i * 1.15
-    for j, (x, w, t) in enumerate(zip(XS, WS, row)):
-        if j == 3:
-            box(ax, x, y, w, 0.95, t, fc=VERDICT_FC[i], ec=VERDICT_EC[i], weight="bold")
-        elif j == 2:
-            box(ax, x, y, w, 0.95, t, fc="#eeeeee", ec="#888888")
-        else:
-            box(ax, x, y, w, 0.95, t, fc="#f5f9fd", ec="#2f6fb0")
+    for x, w, t in zip(XS, WS, row):
+        box(ax, x, y, w, 0.95, t, fc="#f5f9fd", ec="#2f6fb0")
+    arrow(ax, 9.65, y + 0.48, VX - 0.15, y + 0.48, color="#888888", lw=1.3)
+    box(ax, VX, y, VW, 0.95, VERDICTS[i], fc=VERDICT_FC[i], ec=VERDICT_EC[i],
+        weight="bold")
 
-# 열의 주체 표시 (표 위쪽)
-ax.annotate("", xy=(6.4, 6.42), xytext=(0.2, 6.42),
+# 왼쪽은 에이전트의 산출물, 오른쪽은 사람이 읽고 내리는 판정
+ax.annotate("", xy=(9.5, 6.42), xytext=(0.2, 6.42),
             arrowprops=dict(arrowstyle="-", color="#2f6fb0", lw=1.2))
-ax.text(3.3, 6.52, "에이전트가 적는 두 열", ha="center", va="bottom",
+ax.text(4.85, 6.52, "에이전트가 만들어 온 표 (네 열)", ha="center", va="bottom",
         fontsize=11, color="#2f6fb0")
-ax.annotate("", xy=(12.4, 6.42), xytext=(6.6, 6.42),
+ax.annotate("", xy=(13.6, 6.42), xytext=(10.7, 6.42),
             arrowprops=dict(arrowstyle="-", color="#666666", lw=1.2))
-ax.text(9.5, 6.52, "사람만 쓸 수 있는 두 열", ha="center", va="bottom",
+ax.text(12.15, 6.52, "내가 원문을 펴 보고 내리는 판정", ha="center", va="bottom",
         fontsize=11, color="#666666")
 
-ax.text(6.3, 0.72,
-        "판정이 '일치'가 아닌 줄이 하나라도 있으면 그 줄을 근거로 재지시한다. "
+ax.text(6.9, 0.72,
+        "판정은 표에 채워 넣는 칸이 아니라 원문을 펴 보고 정하는 결과다. "
+        "'일치'가 아닌 줄은 그 줄을 근거로 재지시하고, "
         "'원문에 없음'은 그 주장을 메모에서 빼는 사유가 된다.",
         ha="center", va="center", fontsize=11, color="#333",
         bbox=dict(fc="#fdf9f4", ec="#ecd9c6", boxstyle="round,pad=0.5"))

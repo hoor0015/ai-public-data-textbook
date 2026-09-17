@@ -1,5 +1,6 @@
 # 9주차 2회차(실습) 본문 수치 계산: 시도별 관측치 수, 수도권·비수도권 분포 요약,
-# 2013→2023 합계출산율 변화, 새 대화 독립 검산용 값
+# 합계출산율·인구증가율 분포, 2013→2023 합계출산율 변화, 면적-합계출산율 답사와 극단값,
+# 그림 규격 막대그래프, 새 대화 독립 검산용 값 (대괄호 번호 뒤의 절 번호는 본문 기준)
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
@@ -103,7 +104,7 @@ print("청주 행:", cheongju.to_dict("records"))
 
 print()
 print("=" * 60)
-print("[4] 2.11 새 대화 독립 검산용 값 셋")
+print("[4] 2.10 새 대화 독립 검산용 값 셋")
 print("=" * 60)
 print(f"(1) 고령인구비율-합계출산율 상관계수 r = {r:.3f} (n = {len(sub)})")
 cap = df[df["권역"] == "수도권"]["고령인구비율"].median()
@@ -115,7 +116,7 @@ print(f"(3) 2013→2023 하락 폭 최대: {worst['시도']} {worst['시군구']
 
 print()
 print("=" * 60)
-print("[5] 2.12 선택 심화·과제 9-D 기준값")
+print("[5] 2.11 선택 심화·과제 9-D 기준값")
 print("=" * 60)
 s2 = df[["인구증가율", "고령인구비율"]].dropna()
 print(f"인구증가율-고령인구비율 상관계수 r = {s2['인구증가율'].corr(s2['고령인구비율']):.3f} (n = {len(s2)})")
@@ -123,19 +124,30 @@ print(f"2013년 합계출산율-변화량 상관계수 r = {both['합계출산�
 
 print()
 print("=" * 60)
-print("[6] 2.2 히스토그램 구간 폭 세 가지 비교 (고령인구비율)")
+print("[6] 2.2 합계출산율·인구증가율의 분포 (다섯 숫자 요약과 구간 폭)")
 print("=" * 60)
-for w in [1.0, 2.5, 5.0]:
-    lo = np.floor(a.min() / w) * w
-    hi = np.ceil(a.max() / w) * w
-    edges3 = np.arange(lo, hi + w / 2, w)
-    cnt3, _ = np.histogram(a, bins=edges3)
-    k3 = int(cnt3.argmax())
-    peaks = sum(1 for i in range(1, len(cnt3) - 1)
-                if cnt3[i] >= cnt3[i - 1] and cnt3[i] > cnt3[i + 1])
-    print(f"폭 {w:g}%포인트: 막대 {len(cnt3)}개, 가장 높은 막대 "
-          f"{edges3[k3]:.1f}-{edges3[k3 + 1]:.1f}% ({cnt3[k3]}개), "
-          f"국소 봉우리 {peaks}개, 막대 높이 = {list(map(int, cnt3))}")
+for col, w in [("합계출산율", 0.05), ("인구증가율", 0.5)]:
+    s6 = df[col].dropna()
+    q1, med6, q3 = s6.quantile([0.25, 0.5, 0.75])
+    i_min, i_max = s6.idxmin(), s6.idxmax()
+    print(f"{col}: n = {len(s6)}, 결측 {int(df[col].isna().sum())}곳, "
+          f"최소 {s6.min():.3f}({df.loc[i_min,'시도']} {df.loc[i_min,'시군구']}), "
+          f"Q1 {q1:.3f}, 중앙값 {med6:.3f}, Q3 {q3:.3f}, "
+          f"최대 {s6.max():.3f}({df.loc[i_max,'시도']} {df.loc[i_max,'시군구']}), "
+          f"평균 {s6.mean():.3f}")
+    lo = np.floor(s6.min() / w) * w
+    hi = np.ceil(s6.max() / w) * w
+    edges6 = np.arange(lo, hi + w / 2, w)
+    cnt6, _ = np.histogram(s6, bins=edges6)
+    k6 = int(cnt6.argmax())
+    print(f"   구간 폭 {w:g} 기준 막대 {len(cnt6)}개, 가장 높은 막대 "
+          f"{edges6[k6]:.2f}-{edges6[k6+1]:.2f} ({cnt6[k6]}개), 높이 합계 {int(cnt6.sum())}")
+tfr = df["합계출산율"].dropna()
+print(f"합계출산율 1.0명 이상 {int((tfr >= 1.0).sum())}곳, 0.7명 미만 {int((tfr < 0.7).sum())}곳")
+g = df["인구증가율"]
+print(f"인구증가율 양수 {int((g > 0).sum())}곳, 음수 {int((g < 0).sum())}곳, 0 {int((g == 0).sum())}곳")
+print(f"인구증가율 단순 평균 {g.mean():.3f}, 총인구 가중 평균 "
+      f"{np.average(g, weights=df['총인구']):.3f} (의미 없는 평균을 잡는 장면용)")
 
 print()
 print("=" * 60)
@@ -171,23 +183,39 @@ for col in ["고령인구비율", "합계출산율"]:
 
 print()
 print("=" * 60)
-print("[8] 2.6 이상치 한 곳을 빼면 무엇이 달라지는가 (고령인구비율-합계출산율)")
+print("[8] 2.6 면적-합계출산율 답사와 극단값 목록")
 print("=" * 60)
-print("-- 합계출산율 상위 5곳")
-print(sub.nlargest(5, "합계출산율")[["시도", "시군구", "고령인구비율", "합계출산율"]]
-      .round(3).to_string(index=False))
-cases = [("전체 229곳(결측 1 제외)", sub),
-         ("전남 영광군 제외", sub[~((sub["시도"] == "전남") & (sub["시군구"] == "영광군"))]),
-         ("경북 의성군 제외", sub[~((sub["시도"] == "경북") & (sub["시군구"] == "의성군"))]),
-         ("부산 중구 제외", sub[~((sub["시도"] == "부산") & (sub["시군구"] == "중구"))]),
-         ("합계출산율 상위 3곳 제외", sub.drop(sub.nlargest(3, "합계출산율").index))]
-for label, s5 in cases:
-    print(f"{label}: n = {len(s5)}, r = {s5['고령인구비율'].corr(s5['합계출산율']):.3f}, "
-          f"합계출산율 최대 {s5['합계출산율'].max():.3f}, 고령인구비율 최대 {s5['고령인구비율'].max():.2f}")
+print(f"면적-합계출산율 r = {sub['면적'].corr(sub['합계출산율']):.3f}, "
+      f"로그 면적 r = {np.log10(sub['면적']).corr(sub['합계출산율']):.3f} (n = {len(sub)})")
+print(f"면적 500km2 이상 {int((sub['면적'] >= 500).sum())}곳 가운데 합계출산율 1.0명 이상 "
+      f"{int(((sub['면적'] >= 500) & (sub['합계출산율'] >= 1.0)).sum())}곳, "
+      f"면적 100km2 미만 {int((sub['면적'] < 100).sum())}곳 가운데 "
+      f"{int(((sub['면적'] < 100) & (sub['합계출산율'] >= 1.0)).sum())}곳")
+print("-- 면적 최대·최소 시군구")
+print(sub.nlargest(3, "면적")[["시도", "시군구", "면적", "합계출산율"]].round(3).to_string(index=False))
+print(sub.nsmallest(3, "면적")[["시도", "시군구", "면적", "합계출산율"]].round(3).to_string(index=False))
+print("-- 극단값 목록 (표 9-4)")
+for col in ["고령인구비율", "합계출산율", "인구밀도", "면적"]:
+    s8 = df[col].dropna()
+    i_min, i_max = s8.idxmin(), s8.idxmax()
+    print(f"{col}: 최소 {s8.min():,.3f} ({df.loc[i_min,'시도']} {df.loc[i_min,'시군구']}), "
+          f"최대 {s8.max():,.3f} ({df.loc[i_max,'시도']} {df.loc[i_max,'시군구']})")
+print(f"원본 행 수 {len(df)} (극단값을 다루어도 이 값은 변하지 않아야 한다)")
 
 print()
 print("=" * 60)
-print("[9] 2.10 그림 재현: 같은 코드를 두 번 실행하면 같은 파일이 나오는가")
+print("[8-2] 2.8 그림 규격대로 그리는 권역별 평균 합계출산율 막대그래프")
+print("=" * 60)
+for gname in ["수도권", "비수도권"]:
+    s9 = df.loc[df["권역"] == gname, "합계출산율"].dropna()
+    print(f"{gname}: n = {len(s9)}, 평균 {s9.mean():.3f}")
+cap_m = df.loc[df["권역"] == "수도권", "합계출산율"].mean()
+non_m = df.loc[df["권역"] == "비수도권", "합계출산율"].mean()
+print(f"두 막대 길이의 비 = {non_m / cap_m:.3f}배 (세로축을 0에서 시작했을 때)")
+
+print()
+print("=" * 60)
+print("[9] 2.9 그림 재현: 같은 코드를 두 번 실행하면 같은 파일이 나오는가")
 print("=" * 60)
 print("실측(matplotlib 3.10.8, 2026-09): 난수를 쓰지 않는 그림은 두 번 저장한 PNG의")
 print("MD5 값이 같았다. 흔들기(jitter)에 난수를 쓰면 씨앗을 고정하지 않는 한 매번 달랐고,")

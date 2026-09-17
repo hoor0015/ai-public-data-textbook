@@ -1,4 +1,4 @@
-# 10주차 2회차(실습) 그림 생성: 그림 10-5(분석 전 가정 확인), 그림 10-6(표본 크기의 효과),
+# 10주차 2회차(실습) 그림 생성: 그림 10-5(분석 전 가정 확인), 그림 10-6(시도별 평균과 신뢰구간),
 # 그림 10-7(잔차 그림과 한 점의 힘). 번호는 본문 등장 순서를 따른다.
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
@@ -99,69 +99,56 @@ fig.savefig(FIG / "fig10_residuals.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 10-6
-# 표본 크기를 줄이면 결과가 어떻게 흔들리나 (본문 2.5절)
-def welch_diff_ci(frame, var="고령인구비율"):
-    a = frame.loc[frame["권역"] == "수도권", var].dropna()
-    b = frame.loc[frame["권역"] == "비수도권", var].dropna()
-    if len(a) < 2 or len(b) < 2:
-        return None
-    na, nb = len(a), len(b)
-    va, vb = a.var(ddof=1), b.var(ddof=1)
-    se = np.sqrt(va / na + vb / nb)
-    dfw = (va / na + vb / nb) ** 2 / ((va / na) ** 2 / (na - 1) + (vb / nb) ** 2 / (nb - 1))
-    diff = b.mean() - a.mean()
-    tc = stats.t.ppf(0.975, dfw)
-    return diff, diff - tc * se, diff + tc * se
+# 시도별 고령인구비율 평균과 95% 신뢰구간 (본문 2.5절)
+rows = []
+for sido, v in df.groupby("시도")["고령인구비율"]:
+    n, m = len(v), v.mean()
+    if n < 2:
+        rows.append(dict(시도=sido, n=n, 평균=m, 하한=np.nan, 상한=np.nan))
+        continue
+    se = v.std(ddof=1) / np.sqrt(n)
+    tc = stats.t.ppf(0.975, n - 1)
+    rows.append(dict(시도=sido, n=n, 평균=m, 하한=m - tc * se, 상한=m + tc * se))
+sido_ci = pd.DataFrame(rows).sort_values("평균").reset_index(drop=True)
+nation = df["고령인구비율"].mean()
+XLO, XHI = 8.0, 42.0
 
-
-full_d, full_lo, full_hi = welch_diff_ci(df)
-res50 = [welch_diff_ci(df.sample(n=50, random_state=s)) for s in range(500)]
-res20 = [welch_diff_ci(df.sample(n=20, random_state=s)) for s in range(500)]
-res50 = [r for r in res50 if r]
-res20 = [r for r in res20 if r]
-
-fig, axes = plt.subplots(1, 2, figsize=(12, 5.0))
-
-ax = axes[0]
-bins2 = np.arange(0, 20.5, 1.0)
-ax.hist([r[0] for r in res20], bins=bins2, color="#c77b2f", alpha=0.55,
-        edgecolor="white", label="표본 20개 (500번)")
-ax.hist([r[0] for r in res50], bins=bins2, color="#2f6fb0", alpha=0.65,
-        edgecolor="white", label="표본 50개 (500번)")
-ax.axvline(full_d, color="#c0392b", lw=2.2)
-ax.annotate(f"전체 229개의 차이 {full_d:.2f}", (full_d, ax.get_ylim()[1] * 0.62),
-            xytext=(-8, 0), textcoords="offset points", ha="right", color="#c0392b", fontsize=10.5)
-ax.set_xlabel("표본에서 계산한 평균 차이 (%포인트)")
-ax.set_ylabel("표본 수 (500번 중)")
-ax.set_title("(가) 표본을 다시 뽑을 때마다 달라지는 차이", fontsize=12)
-ax.legend(loc="upper right", fontsize=9.5)
-
-ax = axes[1]
-show = res50[:30]
-for i, (d_i, lo_i, hi_i) in enumerate(show):
-    hit = lo_i <= full_d <= hi_i
-    ax.plot([lo_i, hi_i], [i, i], color="#2f6fb0" if hit else "#c0392b", lw=2.0,
-            solid_capstyle="butt")
-    ax.plot([d_i], [i], marker="o", ms=4, color="#2f6fb0" if hit else "#c0392b")
-ax.plot([full_lo, full_hi], [-3, -3], color="black", lw=3.6, solid_capstyle="butt")
-ax.plot([full_d], [-3], marker="D", ms=6.5, color="black")
-ax.axvline(full_d, color="#c0392b", lw=1.4, ls="--")
-ax.text(full_d, -4.6, f"전체 229개의 신뢰구간 {full_lo:.2f} - {full_hi:.2f}",
-        ha="center", va="top", fontsize=9.5)
-ax.set_ylim(-7, 33)
-ax.set_yticks([])
-ax.set_xlabel("평균 차이의 95% 신뢰구간 (%포인트)")
-ax.set_title("(나) 표본 50개로 만든 신뢰구간 30개", fontsize=12)
-n_hit = sum(1 for d_i, lo_i, hi_i in res50 if lo_i <= full_d <= hi_i)
-ax.text(0.02, 0.98, f"파란 구간은 전체 값 {full_d:.2f}를 담은 것,\n"
-                    f"빨간 구간은 담지 못한 것\n"
-                    f"(500개 중 {n_hit}개, {n_hit / len(res50) * 100:.1f}%가 담았다)",
-        transform=ax.transAxes, fontsize=9.5, va="top",
+fig, ax = plt.subplots(figsize=(9.0, 6.6))
+ax.axvline(nation, color="#7a5fa8", lw=1.4, ls="--", zorder=1)
+ax.text(nation + 0.4, -0.75, f"전국 229개 시군구 평균 {nation:.1f}%",
+        color="#7a5fa8", fontsize=9.5, va="center")
+for i, r in sido_ci.iterrows():
+    c = pal["수도권"] if r["시도"] in capital else pal["비수도권"]
+    if np.isnan(r["하한"]):
+        ax.plot([r["평균"]], [i], marker="o", ms=7, color=c, mfc="white", mew=1.8, zorder=4)
+        ax.annotate("시군구가 1개여서 구간을 만들 수 없다", (r["평균"], i), xytext=(10, 0),
+                    textcoords="offset points", va="center", fontsize=9.5, color="#555")
+        continue
+    ax.plot([r["하한"], r["상한"]], [i, i], color=c, lw=2.6, solid_capstyle="butt", zorder=2)
+    for xv in (r["하한"], r["상한"]):
+        if XLO < xv < XHI:
+            ax.plot([xv, xv], [i - 0.22, i + 0.22], color=c, lw=1.6, zorder=3)
+    ax.plot([r["평균"]], [i], marker="o", ms=6.5, color=c, zorder=4)
+jeju = sido_ci[sido_ci["시도"] == "제주"].iloc[0]
+ax.text(XHI - 0.5, sido_ci[sido_ci["시도"] == "제주"].index[0] + 0.52,
+        f"제주의 구간은 {jeju['하한']:.1f}%에서 {jeju['상한']:.1f}%까지다",
+        fontsize=9.5, color="#c0392b", ha="right", va="center",
+        bbox=dict(fc="white", ec="none", pad=1.5))
+ax.set_yticks(range(len(sido_ci)))
+ax.set_yticklabels([f"{r['시도']} ({int(r['n'])}개)" for _, r in sido_ci.iterrows()])
+ax.invert_yaxis()
+ax.set_xlim(XLO, XHI)
+ax.set_ylim(len(sido_ci) - 0.3, -1.3)
+ax.set_xlabel("고령인구비율 (%)")
+ax.set_title("시도별 고령인구비율 평균과 95% 신뢰구간 (2023, 시군구 단위)", fontsize=13)
+ax.text(0.015, 0.03, "점 = 시도 안 시군구의 평균, 가로 막대 = 95% 신뢰구간\n"
+                     "파랑 = 수도권, 주황 = 비수도권, 괄호 안 = 그 시도의 시군구 수",
+        transform=ax.transAxes, ha="left", va="bottom", fontsize=9.5,
         bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
 fig.tight_layout()
-fig.savefig(FIG / "fig10_samplesize.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig10_sido_ci.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print(f"그림 10-6 보조 수치: 전체 차이 {full_d:.4f}, 전체 CI [{full_lo:.4f}, {full_hi:.4f}], "
-      f"50개 표본 500개 중 전체 값 포함 {n_hit}개")
+print(f"그림 10-6 보조 수치: 전국 평균 {nation:.4f}, 시도 수 {len(sido_ci)}, "
+      f"구간 없는 시도 {sido_ci.loc[sido_ci['하한'].isna(), '시도'].tolist()}")
 
 print("saved:", [p.name for p in sorted(FIG.glob("fig10_*.png"))])

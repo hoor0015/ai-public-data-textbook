@@ -1,6 +1,10 @@
 # 11주차 2회차 실습 그림 (실제 데이터)
-# 그림 11-5 불용어 1차/2차 실행의 최빈 단어 대조, 그림 11-6 상위 단어의 세 가지 셈법,
-# 그림 11-7 토큰 빈도 순위와 문서 빈도 순위, 그림 11-8 키워드 규칙 개정 전후
+# 그림 11-4 불용어 1차/2차 실행의 최빈 단어 대조 (fig11_stopword_iter.png)
+# 그림 11-5 상위 단어의 세 가지 셈법 (fig11_count_methods.png)
+# 그림 11-6 토큰 빈도 순위와 문서 빈도 순위 (fig11_freq_vs_docfreq.png)
+# 그림 11-8 키워드 규칙 개정 전후의 유형별 건수와 유형이 옮겨 간 경로 (fig11_rule_revision.png)
+# (그림 11-1 문서-단어 행렬, 그림 11-2 핵심어 빈도, 그림 11-3 유형별 TF-IDF,
+#  그림 11-7 유형 문서 간 코사인 유사도는 code/fig11_text.py, code/fig11_concepts.py에 있다)
 # 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건)
 # 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 import re
@@ -166,7 +170,7 @@ fig.savefig(FIG / "fig11_freq_vs_docfreq.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 11-8
-# 키워드 규칙 개정 전후: 567건의 유형별 건수와 표본 30건의 일치 건수
+# 키워드 규칙 개정 전후: 567건의 유형별 건수와 유형이 옮겨 간 경로
 RULES = [
     ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
     ("보험", r"보험"),
@@ -214,20 +218,20 @@ axes[0].set_xlabel("민원 건수 (전체 567건)")
 axes[0].set_title("규칙 개정 전후의 유형별 건수", fontsize=12)
 axes[0].legend(loc="upper right", fontsize=9, frameon=False)
 
-match = [25, 29]
-miss = [5, 1]
-x = np.arange(2)
-axes[1].bar(x, match, 0.5, label="규칙과 에이전트 일치", color="#6aa56a")
-axes[1].bar(x, miss, 0.5, bottom=match, label="불일치", color="#c47f5b")
-for i, (m, s) in enumerate(zip(match, miss)):
-    axes[1].text(i, m / 2, f"{m}건", ha="center", va="center", fontsize=11, color="white")
-    axes[1].text(i, m + s + 0.7, f"불일치 {s}건", ha="center", va="bottom", fontsize=9.5, color="#333")
-axes[1].set_xticks(x)
-axes[1].set_xticklabels(["개정 전", "개정 후"], fontsize=11)
-axes[1].set_ylim(0, 41)
-axes[1].set_ylabel("표본 30건")
-axes[1].set_title("표본 30건의 일치 건수", fontsize=12)
-axes[1].legend(loc="upper center", fontsize=8.5, frameon=False, ncol=1, handlelength=1.2)
+cross = pd.crosstab(before, after)
+moves = [(b, a, int(cross.loc[b, a])) for b in cross.index for a in cross.columns
+         if b != a and cross.loc[b, a] > 0]
+moves.sort(key=lambda m: m[2])
+ylab = [f"{b}\n-> {a}" for b, a, _ in moves]
+vals = [m[2] for m in moves]
+axes[1].barh(np.arange(len(moves)), vals, 0.5, color="#c47f5b")
+for i, v in enumerate(vals):
+    axes[1].text(v + 0.6, i, f"{v}건", va="center", fontsize=10, color="#333")
+axes[1].set_yticks(np.arange(len(moves)))
+axes[1].set_yticklabels(ylab, fontsize=10)
+axes[1].set_xlim(0, max(vals) * 1.25)
+axes[1].set_xlabel("민원 건수")
+axes[1].set_title(f"유형이 옮겨 간 경로 (모두 {sum(vals)}건)", fontsize=12)
 sns.despine()
 fig.suptitle("키워드 규칙을 기준표에 맞춰 고치면 무엇이 달라지는가", fontsize=13)
 fig.tight_layout()
