@@ -292,8 +292,8 @@ def link_data(html):
         path = m.group(1)
         if path in tracked:
             url = f"{REPO_URL}/blob/main/{quote(path)}"
-        elif path == "data/":
-            url = f"{REPO_URL}/tree/main/data"
+        elif path.endswith("/") and any(x.startswith(path) for x in tracked):
+            url = f"{REPO_URL}/tree/main/{quote(path.rstrip('/'))}"
         else:
             return m.group(0)
         return f'<a href="{url}" target="_blank" rel="noopener">{m.group(0)}</a>'
