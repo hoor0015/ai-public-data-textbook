@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-"""2주차 2회차 실습 장(02-2)에 쓰는 수치를 data/sigungu_2023.csv에서 직접 계산한다.
+"""2주차 2회차 실습 장(02-2) 개정본에 쓰는 수치를 data/sigungu_2023.csv에서 직접 계산한다.
 
-실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python code/ch02_practice.py
+기준 원본은 커밋 7cc165e의 code/ch02_practice.py다. 계산식은 그대로 두고, 저장소 루트를
+한 단계 위에서 찾도록 경로를 고치고 절 번호 주석만 개정본에 맞추었다.
+실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "개정예정_2027/code/ch02_practice.py"
 "파일 줄 번호"는 VSCode에서 CSV를 열었을 때의 줄 번호다 (열 이름 줄이 1번째 줄, 첫 데이터가 2번째 줄).
 """
 import io
@@ -61,15 +63,15 @@ print("강원 합계출산율 최고:", g.loc[g["합계출산율"].idxmax(), ["�
 print("강원 합계출산율 최저:", g.loc[g["합계출산율"].idxmin(), ["시군구", "합계출산율"]].to_dict())
 print("강원 총인구 합계:", int(g["총인구"].sum()))
 
-print("\n=== 2.6 고령인구비율 상위 5 / 하위 5 ===")
+print("\n=== 2.7 라이브러리 재사용: 고령인구비율 상위 5 / 하위 5 ===")
 cols = ["시도", "시군구", "고령인구비율", "파일줄번호"]
 print(df.nlargest(5, "고령인구비율")[cols].to_string(index=False))
 print(df.nsmallest(5, "고령인구비율")[cols].to_string(index=False))
 print("고령인구비율 평균:", round(df["고령인구비율"].mean(), 2), " 중앙값:", round(df["고령인구비율"].median(), 2))
 
 # ---------------------------------------------------------------
-# 확장분 (2026-09-03): 2.2 다섯 손잡이, 2.3 세 번 반복, 2.4 시도별 시군구 수,
-# 2.6 맥락창 실습, 2.7 CLAUDE.md 전후, 2.8 오류 심기 실험에 쓰는 값
+# 확장분: 2.2 다섯 손잡이, 2.3 반복 실험과 시도별 시군구 수,
+# 2.4 요약 문장, 2.7 CLAUDE.md 규칙 추가, 2.8 검산에 쓰는 값
 # ---------------------------------------------------------------
 pd.set_option("display.max_rows", 300)
 
@@ -85,12 +87,12 @@ print("출생아수 합계(228곳):", int(df["출생아수"].sum()))
 print("고령인구비율 평균(229곳):", round(df["고령인구비율"].mean(), 2))
 print("고령인구비율 중앙값:", round(df["고령인구비율"].median(), 2))
 
-print("\n=== 2.3 세 번 반복 실험에 쓰는 고정값 ===")
+print("\n=== 2.3 반복 실험에 쓰는 고정값 ===")
 for name in ["수원시", "울릉군", "의성군", "영광군", "중구"]:
     sub = df[df["시군구"] == name][["시도", "시군구", "총인구", "고령인구비율", "합계출산율", "파일줄번호"]]
     print(sub.to_string(index=False))
 
-print("\n=== 2.4 세 번째 과제: 시도별 시군구 수 ===")
+print("\n=== 2.3 실험 1과 지시문 라이브러리 3번: 시도별 시군구 수 ===")
 vc = df["시도"].value_counts().sort_values(ascending=False)
 print("시도 수:", df["시도"].nunique())
 print(vc.to_string())
@@ -101,29 +103,29 @@ print(g.to_string())
 print("\n세종 행:")
 print(df[df["시도"] == "세종"][["시도", "시군구", "총인구", "고령인구비율", "합계출산율", "파일줄번호"]].to_string(index=False))
 
-print("\n=== 2.6 맥락창 실습: 인구밀도 ===")
+print("\n=== 참고(본문 미사용): 인구밀도 ===")
 cols = ["시도", "시군구", "인구밀도", "총인구", "면적", "파일줄번호"]
 print(df.nlargest(3, "인구밀도")[cols].to_string(index=False))
 print(df.nsmallest(3, "인구밀도")[cols].to_string(index=False))
 print("인구밀도 중앙값:", round(df["인구밀도"].median(), 1))
 
-print("\n=== 2.6 맥락창 실습: 인구증가율 ===")
+print("\n=== 참고(본문 미사용): 인구증가율 ===")
 cols = ["시도", "시군구", "인구증가율", "총인구", "파일줄번호"]
 print(df.nlargest(3, "인구증가율")[cols].to_string(index=False))
 print(df.nsmallest(3, "인구증가율")[cols].to_string(index=False))
 
-print("\n=== 2.8 오류 심기 실험: 합계출산율 상위 5 / 하위 5 (재확인) ===")
+print("\n=== 2.8 검산: 합계출산율 상위 5 / 하위 5 (재확인) ===")
 cols = ["시도", "시군구", "합계출산율", "파일줄번호"]
 top5 = df.nlargest(5, "합계출산율")[cols]
 bot5 = df.nsmallest(5, "합계출산율")[cols]
 print(top5.to_string(index=False))
 print(bot5.to_string(index=False))
-print("상위 6위(행 빼기 실험에서 밀려 올라오는 곳):")
+print("상위 6위(2.8 검산이 흔들리는 자리):")
 print(df.nlargest(6, "합계출산율")[cols].tail(1).to_string(index=False))
 print("하위 6위:")
 print(df.nsmallest(6, "합계출산율")[cols].tail(1).to_string(index=False))
 
-print("\n=== 2.7 CLAUDE.md 규칙 전후 비교에 쓰는 값 ===")
+print("\n=== 2.4 요약 문장과 2.7 CLAUDE.md 규칙 추가에 쓰는 값 ===")
 print("합계출산율 단순평균(228곳):", round(df["합계출산율"].mean(), 3))
 print("합계출산율 중앙값(228곳):", round(df["합계출산율"].median(), 3))
 w = df.dropna(subset=["합계출산율"])
