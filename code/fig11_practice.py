@@ -1,10 +1,9 @@
 # 11주차 2회차 실습 그림 (실제 데이터)
 # 그림 11-4 불용어 1차/2차 실행의 최빈 단어 대조 (fig11_stopword_iter.png)
-# 그림 11-5 상위 단어의 세 가지 셈법 (fig11_count_methods.png)
-# 그림 11-6 토큰 빈도 순위와 문서 빈도 순위 (fig11_freq_vs_docfreq.png)
-# 그림 11-8 키워드 규칙 개정 전후의 유형별 건수와 유형이 옮겨 간 경로 (fig11_rule_revision.png)
+# 그림 11-5 토큰 빈도 순위와 문서 빈도 순위 (fig11_freq_vs_docfreq.png)
+# 그림 11-7 키워드 규칙 개정 전후의 유형별 건수와 유형이 옮겨 간 경로 (fig11_rule_revision.png)
 # (그림 11-1 문서-단어 행렬, 그림 11-2 핵심어 빈도, 그림 11-3 유형별 TF-IDF,
-#  그림 11-7 유형 문서 간 코사인 유사도는 code/fig11_text.py, code/fig11_concepts.py에 있다)
+#  그림 11-6 유형 문서 간 코사인 유사도는 code/fig11_text.py, code/fig11_concepts.py에 있다)
 # 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건)
 # 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 import re
@@ -84,7 +83,7 @@ def word_freq(stopwords):
 freq1 = word_freq(STOP_1)
 freq2 = word_freq(STOP_2)
 
-# ---------------------------------------------------------------- 그림 11-5
+# ---------------------------------------------------------------- 그림 11-4
 # 불용어 1차 실행과 2차 실행의 최빈 단어 상위 15개. 1차에서 불용어로 추가된 토큰은 회색
 N = 15
 fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True)
@@ -106,37 +105,7 @@ fig.tight_layout()
 fig.savefig(FIG / "fig11_stopword_iter.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 11-6
-# 상위 5개 단어와 '요구'의 세 가지 셈법: 토큰 빈도, 문자열 등장 횟수, 포함 문서 수
-words = list(freq2.head(5).index) + ["요구"]
-token = [int(freq2[w]) for w in words]
-string = [sum(d.count(w) for d in docs) for w in words]
-docn = [sum(1 for d in docs if w in d) for w in words]
-
-x = np.arange(len(words))
-width = 0.27
-fig, ax = plt.subplots(figsize=(9.5, 5.5))
-bars = [
-    ax.bar(x - width, token, width, label="토큰 빈도 (전처리 후 세기)", color="#5b8ac4"),
-    ax.bar(x, string, width, label="문자열 등장 횟수 (원문에서 글자 검색)", color="#c47f5b"),
-    ax.bar(x + width, docn, width, label="포함 문서 수 (그 단어가 든 민원 건수)", color="#6aa56a"),
-]
-for group in bars:
-    for b in group:
-        ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 4, str(int(b.get_height())),
-                ha="center", va="bottom", fontsize=8.5, color="#333")
-ax.set_xticks(x)
-ax.set_xticklabels(words, fontsize=11)
-ax.set_ylabel("횟수 또는 건수")
-ax.set_ylim(0, max(string) * 1.15)
-ax.set_title("같은 단어, 세 가지 셈법: 토큰 빈도 상위 5개 단어와 '요구'", fontsize=13)
-ax.legend(loc="upper right", fontsize=9, frameon=False)
-sns.despine()
-fig.tight_layout()
-fig.savefig(FIG / "fig11_count_methods.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-
-# ---------------------------------------------------------------- 그림 11-7
+# ---------------------------------------------------------------- 그림 11-5
 # 토큰 빈도 상위 15개 단어가 문서 빈도(그 토큰이 든 민원 건수)로는 몇 위인지 잇는 그림
 cv2 = CountVectorizer(analyzer=make_tokenizer(STOP_2))
 dtm2 = cv2.fit_transform(docs)
@@ -169,7 +138,7 @@ fig.tight_layout()
 fig.savefig(FIG / "fig11_freq_vs_docfreq.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 11-8
+# ---------------------------------------------------------------- 그림 11-7
 # 키워드 규칙 개정 전후: 567건의 유형별 건수와 유형이 옮겨 간 경로
 RULES = [
     ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
