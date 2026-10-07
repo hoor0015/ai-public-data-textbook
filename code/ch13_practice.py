@@ -1,4 +1,4 @@
-# 13주차 2회차(실습) 본문 수치 계산: 파이프라인 검문소 대조표, 틀리는 장면, 재현성 대조
+# 13주차 2차시(실습) 본문 수치 계산: 파이프라인 검문소 대조표, 틀리는 장면, 재현성 대조
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

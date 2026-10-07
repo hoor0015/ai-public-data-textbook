@@ -1,4 +1,4 @@
-# 2주차 1회차 개념도 생성 (지시 설계 부분. 옛 3주차 그림)
+# 2주차 1차시 개념도 생성 (지시 설계 부분. 옛 3주차 그림)
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

@@ -1,4 +1,4 @@
-# 9주차 2회차(실습) 확장 그림 생성: 그림 9-6(합계출산율·인구증가율 분포), 9-7, 9-8, 9-9
+# 9주차 2차시(실습) 확장 그림 생성: 그림 9-6(합계출산율·인구증가율 분포), 9-7, 9-8, 9-9
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

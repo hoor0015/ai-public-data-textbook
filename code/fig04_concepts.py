@@ -1,4 +1,4 @@
-# 4주차 1회차 개념도 생성 (Skill: 3층 구조, 작동 흐름)
+# 4주차 1차시 개념도 생성 (Skill: 3층 구조, 작동 흐름)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

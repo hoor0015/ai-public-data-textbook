@@ -130,7 +130,7 @@ def mod_date(md_path):
 
 
 def find_chapters():
-    """NN-S_*.md 파일을 (주차, 회차) 순으로 수집하고 h1 제목을 뽑는다."""
+    """NN-S_*.md 파일을 (주차, 차시) 순으로 수집하고 h1 제목을 뽑는다."""
     chapters = []
     for path in sorted(glob.glob(os.path.join(ROOT, "[0-9][0-9]-[12]_*.md"))):
         name = os.path.basename(path)
@@ -139,8 +139,8 @@ def find_chapters():
             continue
         week, sess = int(m.group(1)), int(m.group(2))
         first = open(path, encoding="utf-8").readline().strip()
-        title = re.sub(r"^#\s*", "", first)                      # "N주차 N회차. 제목"
-        short = re.sub(r"^\d+주차 \d회차\.\s*", "", title)        # "제목"
+        title = re.sub(r"^#\s*", "", first)                      # "N주차 N차시. 제목"
+        short = re.sub(r"^\d+주차 \d차시\.\s*", "", title)        # "제목"
         chapters.append({
             "week": week, "sess": sess, "md": path,
             "out": f"w{week:02d}-{sess}.html",
@@ -203,14 +203,14 @@ def add_target_ids(html):
     return html, found
 
 
-# 상호참조 자동 링크: "N주차 M회차 X.Y", "M회차 X.Y", "N주차 실습", "N주차", 같은 주의 "X.Y(절)",
-# 다른 쪽에 있는 "그림 N-x"·"표 N-x"를 링크로 바꾼다. 절 번호 1.x는 1회차, 2.x는 2회차다.
+# 상호참조 자동 링크: "N주차 M차시 X.Y", "M차시 X.Y", "N주차 실습", "N주차", 같은 주의 "X.Y(절)",
+# 다른 쪽에 있는 "그림 N-x"·"표 N-x"를 링크로 바꾼다. 절 번호 1.x는 1차시, 2.x는 2차시다.
 _UNIT = r"개|배|명|점|건|회|번|세|위|년|만|억|천|조|시간|분(?!석)|초|원|km|kg|cm|m|\s?퍼센트|\s?%|p"
 _SEC = rf"[12]\.\d{{1,2}}(?![\d.%])(?!{_UNIT})"
 _LIST = rf"{_SEC}절?(?:(?:,\s*|\s*·\s*|[과와]\s+){_SEC}절?)*"
 XREF = re.compile(
-    rf"(?<![\d\-·])(?:(?P<w>\d{{1,2}})주차(?:\s*(?P<s>[12])회차|\s*(?P<k>실습|이론))?"
-    rf"|(?P<s2>[12])회차)(?P<mid>의?\s*)(?P<l>{_LIST})?"
+    rf"(?<![\d\-·])(?:(?P<w>\d{{1,2}})주차(?:\s*(?P<s>[12])차시|\s*(?P<k>실습|이론))?"
+    rf"|(?P<s2>[12])차시)(?P<mid>의?\s*)(?P<l>{_LIST})?"
     rf"|(?<![\d.\-])(?<!\d, )(?<!\d[와과] )(?<!폭을 )(?P<l2>{_LIST})(?!\s*/)"
     rf"|(?P<ft>(?:그림|표) \d+-\d+)(?!\d)")
 SKIP_TAGS = {"a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "script", "style"}
@@ -399,7 +399,7 @@ toc_html = [
     f"<h1>{BOOK_TITLE}</h1>",
     f"<p><strong>{BOOK_SUBTITLE}.</strong> "
     "AI 에이전트를 활용해 한국 공공데이터를 분석하는 학부 수준의 강의 교재입니다. "
-    "13개 주차가 각각 이론(1회차)과 실습(2회차)으로 나뉘며, "
+    "13개 주차가 각각 이론(1차시)과 실습(2차시)으로 나뉘며, "
     "학생의 역할은 코딩이 아니라 에이전트에 대한 지시, 결과의 검증, 정책적 해석입니다. "
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
     "<p>광운대학교 행정학과 조교수 김경동(kdkim@kw.ac.kr)</p>",
@@ -421,7 +421,7 @@ for kind_, val in display_units():
     toc_html.append(f'<ul id="week-{val}">')
     for ch in by_week.get(val, []):
         kind = "이론" if ch["sess"] == 1 else "실습"
-        label = f'{ch["week"]}주차 {ch["sess"]}회차 ({kind}) · {ch["short"]}' 
+        label = f'{ch["week"]}주차 {ch["sess"]}차시 ({kind}) · {ch["short"]}' 
         toc_html.append(
             f'<li style="margin-top:10px"><strong><a href="{ch["out"]}">'
             f'{label}</a></strong>'

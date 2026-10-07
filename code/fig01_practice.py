@@ -1,4 +1,4 @@
-# 1주차 2회차 실습 개념도 생성: 그림 1-4 VSCode 화면 구성(네 구역)
+# 1주차 2차시 실습 개념도 생성: 그림 1-4 VSCode 화면 구성(네 구역)
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

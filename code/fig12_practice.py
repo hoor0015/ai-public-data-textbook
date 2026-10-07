@@ -1,4 +1,4 @@
-# 12주차 2회차(실습) 그림 생성
+# 12주차 2차시(실습) 그림 생성
 #   그림 12-4 fig12_cite_check.png    인용 검증표의 네 열과 세 가지 판정
 #   그림 12-5 fig12_evidence_skill.png evidence-memo 스킬의 구성과 실행 흐름
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"

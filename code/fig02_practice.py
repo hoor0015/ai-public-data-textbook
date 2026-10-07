@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 2주차 2회차 실습 장 그림. 2.2절 실험 C(손잡이를 하나씩 붙이기)의 개념도.
+# 2주차 2차시 실습 장 그림. 2.2절 실험 C(손잡이를 하나씩 붙이기)의 개념도.
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

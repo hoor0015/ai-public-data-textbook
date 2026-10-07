@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>9주차 1회차. 탐색적 데이터 분석과 시각화 - AI 기반 공공데이터 분석</title>
+<title>9주차 1차시. 탐색적 데이터 분석과 시각화 - AI 기반 공공데이터 분석</title>
 <style>
 :root { --accent:#2f6fb0; --sidebar-w:320px; }
 * { box-sizing:border-box; }
@@ -110,8 +110,8 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
-<main><h1>9주차 1회차. 탐색적 데이터 분석과 시각화</h1>
-<p class="moddate">최종 수정: 2026-10-01 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<main><h1>9주차 1차시. 탐색적 데이터 분석과 시각화</h1>
+<p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>그림의 가장 큰 가치는, 우리가 전혀 예상하지 못했던 것을 알아차리도록 강제할 때 드러난다.
 (존 튜키, 『탐색적 데이터 분석』)</p>
@@ -267,7 +267,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <p>이 표를 관통하는 원리는 하나다. 그림의 시각적 요소(길이, 넓이, 기울기)가 데이터의 값과 비례 관계를 유지하면 정직한 그림이고, 그 비례를 깨뜨리면 왜곡이다. 여러분은 이 수법들을 두 방향에서 알아야 한다. 읽는 사람으로서 속지 않기 위해서, 그리고 만드는 사람으로서 저지르지 않기 위해서다. 공공기관의 이름으로 나가는 그래프가 왜곡을 담고 있으면, 그것이 실수였더라도 기관의 신뢰가 손상된다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 에이전트가 그린 그래프도 예외가 아니다</strong><br>
-왜곡은 악의에서만 나오지 않는다. 그래프 도구들은 보기 좋으라고 축 범위를 데이터에 맞춰 자동으로 좁히곤 하며, 에이전트도 지시가 없으면 그 기본값을 따른다. 즉 여러분이 시키지 않아도 축이 잘린 막대그래프가 나올 수 있다. 에이전트가 만든 그래프를 받으면 축의 시작점 확인을 검증 목록에 반드시 넣어야 하는 이유다. 이 확인은 <a href="w09-2.html">2회차</a> 실습에서 직접 해 본다.
+왜곡은 악의에서만 나오지 않는다. 그래프 도구들은 보기 좋으라고 축 범위를 데이터에 맞춰 자동으로 좁히곤 하며, 에이전트도 지시가 없으면 그 기본값을 따른다. 즉 여러분이 시키지 않아도 축이 잘린 막대그래프가 나올 수 있다. 에이전트가 만든 그래프를 받으면 축의 시작점 확인을 검증 목록에 반드시 넣어야 하는 이유다. 이 확인은 <a href="w09-2.html">2차시</a> 실습에서 직접 해 본다.
 </div>
 
 <h3>좋은 그래프의 조건</h3>
@@ -293,7 +293,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 (c) 재정자립도가 높은 지역일수록 복지 예산 비중이 낮은가
 (d) 특별시·광역시·도 세 유형 사이에 공무원 1인당 주민 수의 분포가 다른가</p>
 <p><strong>9-2. 그림 읽기.</strong> 그림 9-2(시도별 박스플롯)를 다시 보라. (a) 인천의 상자가 서울의 상자보다 훨씬 긴 이유를 인천의 행정구역 구성(도심의 구와 외곽의 군)을 떠올려 추측해 보라. (b) 어떤 시도의 "평균 고령인구비율"이 같더라도 상자의 길이가 다르면 정책적으로 무엇이 달라지는지 한 단락으로 써 보라.</p>
-<p><strong>9-3. 왜곡 잡아내기.</strong> 어느 기관의 보도자료에 "청년 취업자 수, 2배 증가 시각화"라는 막대그래프가 실렸다. 세로축은 130만 명에서 시작하고, 두 막대는 132만 명(작년)과 138만 명(올해)이다. (a) 실제 증가율은 몇 %인가. (b) 그림에서 막대의 높이는 몇 배로 보이겠는가. (c) 이 그래프를 정직하게 다시 그리려면 무엇을 바꿔야 하는가. (d) 신문 기사, 보고서, 광고 등에서 이 장의 표 9-1에 해당하는 실제 사례를 하나 찾아 어떤 수법이 쓰였는지 분석해 보라.</p><div class="pager"><span><a href="w07-2.html">← 7주차 2회차. 에이전트로 데이터 정제하기</a></span><span><a href="w09-2.html">9주차 2회차. 에이전트로 EDA 수행하기 →</a></span></div></main>
+<p><strong>9-3. 왜곡 잡아내기.</strong> 어느 기관의 보도자료에 "청년 취업자 수, 2배 증가 시각화"라는 막대그래프가 실렸다. 세로축은 130만 명에서 시작하고, 두 막대는 132만 명(작년)과 138만 명(올해)이다. (a) 실제 증가율은 몇 %인가. (b) 그림에서 막대의 높이는 몇 배로 보이겠는가. (c) 이 그래프를 정직하게 다시 그리려면 무엇을 바꿔야 하는가. (d) 신문 기사, 보고서, 광고 등에서 이 장의 표 9-1에 해당하는 실제 사례를 하나 찾아 어떤 수법이 쓰였는지 분석해 보라.</p><div class="pager"><span><a href="w07-2.html">← 7주차 2차시. 에이전트로 데이터 정제하기</a></span><span><a href="w09-2.html">9주차 2차시. 에이전트로 EDA 수행하기 →</a></span></div></main>
 <script>
 (function(){var h=document.documentElement;
 function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}

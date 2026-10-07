@@ -1,4 +1,4 @@
-# 14주차 2회차(실습) 그림 생성: 그림 14-4(근거 사슬 개념도), 그림 14-5(2013년 대비 2023년 출산율 변화)
+# 14주차 2차시(실습) 그림 생성: 그림 14-4(근거 사슬 개념도), 그림 14-5(2013년 대비 2023년 출산율 변화)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

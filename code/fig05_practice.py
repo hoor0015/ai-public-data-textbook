@@ -1,4 +1,4 @@
-# 5주차 2회차 개념도 생성 (그림 5-4: 공문서 -> kordoc 스킬 -> Markdown -> 데이터)
+# 5주차 2차시 개념도 생성 (그림 5-4: 공문서 -> kordoc 스킬 -> Markdown -> 데이터)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

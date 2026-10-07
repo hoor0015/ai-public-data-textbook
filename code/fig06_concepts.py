@@ -1,4 +1,4 @@
-# 6주차 1회차 개념도 생성 (공공데이터 생태계 지도, MCP 개념도)
+# 6주차 1차시 개념도 생성 (공공데이터 생태계 지도, MCP 개념도)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

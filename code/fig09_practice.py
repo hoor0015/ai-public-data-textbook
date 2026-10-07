@@ -1,4 +1,4 @@
-# 9주차 2회차(실습) 그림 생성: 그림 9-10 (그림 규격 여섯 줄의 자리)
+# 9주차 2차시(실습) 그림 생성: 그림 9-10 (그림 규격 여섯 줄의 자리)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

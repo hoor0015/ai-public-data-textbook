@@ -1,4 +1,4 @@
-# 3주차 2회차(실습) 그림 생성: 그림 3-4 총인구 상위 10개 시군구, 그림 3-5 재현 테스트의 흐름
+# 3주차 2차시(실습) 그림 생성: 그림 3-4 총인구 상위 10개 시군구, 그림 3-5 재현 테스트의 흐름
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

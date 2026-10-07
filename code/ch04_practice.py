@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""4주차 2회차 실습 장(04-2)에 쓰는 수치를 data/ 파일에서 직접 계산한다.
+"""4주차 2차시 실습 장(04-2)에 쓰는 수치를 data/ 파일에서 직접 계산한다.
 
 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python code/ch04_practice.py
 "파일 줄 번호"는 VSCode에서 CSV를 열었을 때의 줄 번호다 (열 이름 줄이 1번째 줄, 첫 데이터가 2번째 줄).

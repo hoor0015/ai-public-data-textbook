@@ -1,4 +1,4 @@
-# 6주차 2회차(실습) 그림 생성: 그림 6-5 kosis-collect 스킬의 절차와 검증 손잡이
+# 6주차 2차시(실습) 그림 생성: 그림 6-5 kosis-collect 스킬의 절차와 검증 손잡이
 # 개념도이므로 데이터 없이 도형으로 그린다. 상자 글씨는 figfit이 자동으로 맞춘다.
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path

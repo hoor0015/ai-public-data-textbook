@@ -1,4 +1,4 @@
-# 11주차 2회차 실습 확장 단계의 계산 코드
+# 11주차 2차시 실습 확장 단계의 계산 코드
 # 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건),
 #         data/minwon_sample30.csv (교차검증 표본 30건, ch10_text.py가 시드 10으로 추출)
 # 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"

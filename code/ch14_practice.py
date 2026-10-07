@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 14주차 2회차 실습 예시 수치 계산 스크립트
+# 14주차 2차시 실습 예시 수치 계산 스크립트
 # 본문의 숫자 대조표(2.3절), 제언-근거 연결표(2.4절), 재현 검증(2.6절)에 쓰인
 # 모든 수치는 이 스크립트가 data/ 폴더의 원본에서 직접 계산한 값이다.
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"

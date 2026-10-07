@@ -1,4 +1,4 @@
-# 13주차 2회차(실습) 그림 생성: 그림 13-4 (팀 배치도), 그림 13-5 (검문소 4 대조용 그림)
+# 13주차 2차시(실습) 그림 생성: 그림 13-4 (팀 배치도), 그림 13-5 (검문소 4 대조용 그림)
 # 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

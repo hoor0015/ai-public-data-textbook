@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """근거 메모의 문서 인용을 원문 파일에서 다시 찾아 대조한다.
 
-12주차 2회차 evidence-memo 스킬의 scripts/cite_check.py 참고 구현.
+12주차 2차시 evidence-memo 스킬의 scripts/cite_check.py 참고 구현.
 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일>" <근거메모.md> <문서폴더>
 
 메모의 "문서 근거" 절에서 다음 형식의 줄을 찾는다.

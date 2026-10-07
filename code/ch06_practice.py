@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""6주차 2회차 실습 장(06-2)의 2.8절에 쓰는 수치를 실제 수집 결과로 확인한다.
+"""6주차 2차시 실습 장(06-2)의 2.8절에 쓰는 수치를 실제 수집 결과로 확인한다.
 
 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 

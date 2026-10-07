@@ -1,4 +1,4 @@
-# 4주차 2회차: sigungu_2023.csv 열별 결측 현황 막대그래프
+# 4주차 2차시: sigungu_2023.csv 열별 결측 현황 막대그래프
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

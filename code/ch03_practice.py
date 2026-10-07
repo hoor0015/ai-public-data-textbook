@@ -1,4 +1,4 @@
-# 3주차 2회차(실습) 본문 수치 계산
+# 3주차 2차시(실습) 본문 수치 계산
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 # 본문의 요약통계·최댓값·최솟값·결측 관련 수치는 모두 이 스크립트의 출력에서 가져온다.
 from pathlib import Path

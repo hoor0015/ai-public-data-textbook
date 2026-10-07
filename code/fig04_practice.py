@@ -1,4 +1,4 @@
-# 4주차 2회차 개념도: 스킬의 테스트와 개선 순환 (그림 4-4)
+# 4주차 2차시 개념도: 스킬의 테스트와 개선 순환 (그림 4-4)
 # 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 

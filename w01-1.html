@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>1주차 1회차. AI 에이전트 시대의 공공데이터 분석 - AI 기반 공공데이터 분석</title>
+<title>1주차 1차시. AI 에이전트 시대의 공공데이터 분석 - AI 기반 공공데이터 분석</title>
 <style>
 :root { --accent:#2f6fb0; --sidebar-w:320px; }
 * { box-sizing:border-box; }
@@ -109,7 +109,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
-<main><h1>1주차 1회차. AI 에이전트 시대의 공공데이터 분석</h1>
+<main><h1>1주차 1차시. AI 에이전트 시대의 공공데이터 분석</h1>
 <p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>측정할 수 있는 모든 것이 중요한 것은 아니며, 중요한 모든 것을 측정할 수 있는 것도 아니다.
@@ -174,7 +174,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 </div>
 
 <h3>이 과목의 표준 도구: VSCode와 Claude Code</h3>
-<p>에이전트에도 여러 제품이 있다. 이 과목은 그중 Claude Code를 표준 도구로 쓴다. Claude Code는 Anthropic이 만든 에이전트로, 프로그래머들이 쓰는 무료 편집기인 VSCode(Visual Studio Code) 안에 확장 프로그램으로 설치해 쓸 수 있다. 화면 왼쪽에는 내 폴더와 파일이 보이고, 오른쪽의 대화창에서 에이전트에게 한국어로 일을 시키면, 에이전트가 그 폴더 안에서 실제로 작업한다. 설치와 첫 사용은 바로 다음 회차(<a href="w01-2.html">1주차 2회차</a>)에서 손으로 해 본다.</p>
+<p>에이전트에도 여러 제품이 있다. 이 과목은 그중 Claude Code를 표준 도구로 쓴다. Claude Code는 Anthropic이 만든 에이전트로, 프로그래머들이 쓰는 무료 편집기인 VSCode(Visual Studio Code) 안에 확장 프로그램으로 설치해 쓸 수 있다. 화면 왼쪽에는 내 폴더와 파일이 보이고, 오른쪽의 대화창에서 에이전트에게 한국어로 일을 시키면, 에이전트가 그 폴더 안에서 실제로 작업한다. 설치와 첫 사용은 바로 다음 차시(<a href="w01-2.html">1주차 2차시</a>)에서 손으로 해 본다.</p>
 <p>한 가지 미리 말해 둘 것이 있다. VSCode가 프로그래머용 편집기라는 점은 이 과목을 수강하는 데 부담이 되지 않는다. 우리는 VSCode를 코드를 작성하는 곳이 아니라, 에이전트에게 작업을 지시하고 그 작업 과정을 확인하는 작업 환경으로 쓴다. 여러분이 이 과목에서 코드를 한 줄씩 작성하는 일은 없다. 다만 에이전트가 짠 코드가 무슨 일을 하는지 알아보는 눈은 조금씩 기르게 된다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 에이전트는 만능이 아니다</strong><br>
@@ -238,7 +238,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <h2 id="15-이-교재의-로드맵과-학습법">1.5 이 교재의 로드맵과 학습법</h2>
 <h3>한 학기의 구성</h3>
 <p><img id="fig-1-3" alt="그림 1-3. 교재 4부 구성" src="figures/fig01_roadmap.png" /></p>
-<p>그림 1-3은 한 학기의 구성을 보여 준다. 교재는 4부, 13개 주로 구성되며 각 주는 이론(1회차)과 실습(<a href="w01-2.html">2회차</a>)으로 나뉜다.</p>
+<p>그림 1-3은 한 학기의 구성을 보여 준다. 교재는 4부, 13개 주로 구성되며 각 주는 이론(1차시)과 실습(<a href="w01-2.html">2차시</a>)으로 나뉜다.</p>
 <ul>
 <li><strong>1부 (1-5주) 에이전트와 도구.</strong> 에이전트가 무엇이고 어떻게 작동하는지 이해하고, 일 시키는 법(지시 설계)을 훈련하고, 내 노트북에 분석 환경을 갖추고, 반복 작업을 Skill로 표준화하고, 남이 공개한 스킬을 설치해 쓰는 법까지 익힌다(4-5주). 환경 구축조차 에이전트에게 지시해서 한다.</li>
 <li><strong>2부 (6-7주) 공공데이터의 수집과 정리.</strong> 한국 공공데이터가 어디에 어떤 형태로 있는지 익히고, MCP로 에이전트가 직접 수집하게 하고, 정제되지 않은 데이터를 분석 가능한 상태로 정제한다.</li>
@@ -260,7 +260,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 (d) 주민 공청회에서 나온 반대 의견에 대한 기관의 공식 답변 작성하기
 (e) 데이터 파일 50개의 이름을 규칙에 맞게 일괄 변경하기</p>
 <p><strong>1-2. 챗봇 vs 에이전트.</strong> <a href="w01-1.html#12-챗봇에서-에이전트로-무엇이-달라졌나">1.2절</a>의 어린이집 사례를 참고하여, "우리 학교 도서관의 학과별 대출 데이터를 분석해 학과별 인기 도서 목록을 만드는 일"을 챗봇에게 시킬 때와 에이전트에게 시킬 때 각각 어떤 단계가 필요한지 순서대로 써 보라. 사람이 개입해야 하는 단계에 밑줄을 그어 보라.</p>
-<p><strong>1-3. 검증의 습관.</strong> 에이전트가 "우리 시의 합계출산율은 0.58로 전국 최저 수준입니다"라고 보고했다고 하자. 이 문장을 보고서에 옮겨 적기 전에 확인해야 할 것을 세 가지 이상 나열하라. (힌트: 숫자 자체, 비교 기준, 자료의 출처와 시점)</p><div class="pager"><span><a href="index.html">← 목차</a></span><span><a href="w01-2.html">1주차 2회차. 첫 만남: VSCode와 Claude Code →</a></span></div></main>
+<p><strong>1-3. 검증의 습관.</strong> 에이전트가 "우리 시의 합계출산율은 0.58로 전국 최저 수준입니다"라고 보고했다고 하자. 이 문장을 보고서에 옮겨 적기 전에 확인해야 할 것을 세 가지 이상 나열하라. (힌트: 숫자 자체, 비교 기준, 자료의 출처와 시점)</p><div class="pager"><span><a href="index.html">← 목차</a></span><span><a href="w01-2.html">1주차 2차시. 첫 만남: VSCode와 Claude Code →</a></span></div></main>
 <script>
 (function(){var h=document.documentElement;
 function set(c){h.classList.toggle('nav-collapsed',c);try{localStorage.setItem('textbook-nav',c?'closed':'open')}catch(e){}}

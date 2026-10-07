@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""7주차 2회차 실습 장(07-2)에 쓰는 수치를 data/의 원자료에서 직접 계산한다.
+"""7주차 2차시 실습 장(07-2)에 쓰는 수치를 data/의 원자료에서 직접 계산한다.
 
 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "code/ch07_practice.py"
 "파일 줄 번호"는 VSCode에서 CSV를 열었을 때의 줄 번호다 (열 이름 줄이 1번째 줄, 첫 데이터가 2번째 줄).
@@ -75,7 +75,7 @@ print("값이 있는 시군구 수:", int(d2023["합계출산율"].count()), "/ 
 print("원본:", stats(d2023["합계출산율"]))
 print("0 대치:", stats(filled["합계출산율"]))
 
-print("\n[평균 대치가 만들어 내는 값: 1회차 1.2의 평균 대치 위험]")
+print("\n[평균 대치가 만들어 내는 값: 1차시 1.2의 평균 대치 위험]")
 mean_val = d2023["합계출산율"].mean()
 gw = d2023[d2023["시군구"] == "군위군"].iloc[0]
 print("전국 평균 합계출산율(228곳):", round(mean_val, 3))
