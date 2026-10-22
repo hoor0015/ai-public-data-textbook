@@ -23,6 +23,8 @@ nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; bord
   padding:0 5px; margin-right:5px; vertical-align:1px; }
 nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
 nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+nav.sidebar .t3 { background:#fbeee0; color:#c77b2f; }
+nav.sidebar .t4 { background:#eee9f8; color:#6b4fb0; }
 main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
 main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
 main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
@@ -104,22 +106,22 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
 <li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 공통 데이터를 모아 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 서브에이전트, 문서 그라운딩, RAG</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 서브에이전트와 그라운딩으로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 에이전트로 민원 텍스트 분석하기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t4">통합</span>13주차 서브에이전트를 활용한 분석</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t3">특강</span>13주차 특강. AI 에이전트, 누가 책임지는가: 자율성과 책임의 문제</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t4">통합</span>14주차 서브에이전트를 활용한 검증</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t3">특강</span>14주차 특강. 믿을 수 있는 AI 에이전트: 투명성, 공정성, 신뢰</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>3주차 2차시. 에이전트로 분석 환경 구축하기</h1>
-<p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-10-22 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
 <p><a href="w03-1.html">1차시</a>에서 분석 환경의 구성 요소(로컬, 터미널, 파이썬과 패키지, uv, 폴더 구조)를 이해했다. 오늘은 그 구성대로 여러분의 노트북에 실제 환경을 구축한다. <a href="w03-1.html">1차시</a>에서 배운 개념은 그것이 필요한 단계에서 화면에 나온 결과를 놓고 다시 짚는다. 단계마다 있는 "먼저 알아 둘 것"과 "짚고 가기"가 그 자리다. 단, 구축하는 것은 에이전트다. 여러분은 설치 명령을 한 줄도 외우지 않는다. 대신 에이전트에게 지시하고, 에이전트가 명령을 실행하는 과정을 관찰하고, 완성된 환경을 검증한다. 오늘 만든 환경 위에서 남은 학기의 모든 분석이 돌아간다. 다음 주(<a href="index.html#week-4">4주차</a>)의 첫 Skill도, <a href="index.html#week-6">6주차</a>의 MCP 수집도 이 환경에서 실행된다.</p>
 <p>이 실습이 끝나면 다음이 갖춰진다.</p>
@@ -363,7 +365,7 @@ max,1190964.0,45.278,1.651
 <p>이 누락은 매번 말로 보완하는 것보다 규칙으로 보완하는 편이 낫다. <a href="w03-2.html#210-환경-검증-무엇이-어디에-설치되었나-확인">2.10절</a>에서 "산출물은 산출물 폴더에 저장할 것"을 CLAUDE.md에 적어 두면, 그다음부터는 지시문에 저장 위치를 쓰지 않아도 에이전트가 정해진 위치에 저장한다. (자세한 설명은 <a href="w03-1.html">1차시</a> <a href="w03-1.html#15-분석-프로젝트의-폴더-구조-데이터코드산출물">1.5</a>)</p>
 <p><strong>검증.</strong> 파일이 어디에 생겼는지부터 본다. 산출물 폴더가 아니면 재지시한다. "요약통계_3주차.csv를 산출물 폴더로 옮기고, main.py의 저장 경로도 산출물/요약통계_3주차.csv로 고쳐서 다시 실행해 줘. data 폴더에는 원본 파일만 둔다." 고친 뒤 산출물 폴더에만 파일이 있고 엉뚱한 자리의 파일은 지워졌는지 확인한다. 위치가 바로잡혔으면 파일을 열어 count 줄이 229, 229, 228인지, max 줄의 총인구가 <a href="w03-2.html#24-첫-실행-CSV를-읽고-요약통계-출력">2.4절</a>에서 본 수원시 값(1190964.0)과 같은지 대조한다.</p>
 <h2 id="26-패키지-추가하기-필요한-패키지는-늘어난다">2.6 패키지 추가하기: 필요한 패키지는 늘어난다</h2>
-<p><strong>무엇을 왜 하는가.</strong> 환경은 한 번 구축하고 끝나는 것이 아니라 필요할 때 늘려 간다. <a href="index.html#week-10">10주차</a>의 통계 검정에는 scipy가, <a href="index.html#week-11">11주차</a>의 텍스트 분석에는 scikit-learn이 필요하다. 지금 두 패키지를 추가하면서, 추가 전후로 pyproject.toml과 uv.lock이 어떻게 달라지는지 대조해 본다. <a href="w03-2.html#23-의존성-명세-읽기-pyprojecttoml과-uvlock">2.3절</a>에서 읽는 법을 배운 두 파일이 검증의 근거다.</p>
+<p><strong>무엇을 왜 하는가.</strong> 환경은 한 번 구축하고 끝나는 것이 아니라 필요할 때 늘려 간다. <a href="index.html#week-11">11주차</a>의 통계 검정에는 scipy가, <a href="index.html#week-12">12주차</a>의 텍스트 분석에는 scikit-learn이 필요하다. 지금 두 패키지를 추가하면서, 추가 전후로 pyproject.toml과 uv.lock이 어떻게 달라지는지 대조해 본다. <a href="w03-2.html#23-의존성-명세-읽기-pyprojecttoml과-uvlock">2.3절</a>에서 읽는 법을 배운 두 파일이 검증의 근거다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>지시문 예시</strong><br>
 "scipy와 scikit-learn 두 패키지를 이 프로젝트에 추가해 줘. 반드시 uv add를 쓸 것. 추가하기 전에 pyproject.toml의 dependencies 부분과 uv.lock의 패키지 개수를 먼저 보여 주고, 추가한 뒤에 같은 두 가지를 다시 보여 줘서 무엇이 달라졌는지 비교해 줘. 끝나면 uv run으로 두 패키지를 import해서 설치된 버전을 출력해 줘."
@@ -585,7 +587,7 @@ Installed 21 packages in 1.75s
 <p><strong>검증.</strong> (3)의 답에 나온 규칙을 CLAUDE.md와 대조한다. <a href="w03-2.html#210-환경-검증-무엇이-어디에-설치되었나-확인">2.10절</a>에서 추가한 여섯 규칙 가운데 (1)번과 (5)번이 답에 있어야 한다. (1)이나 (2)에 도구 호출 없이 구체적인 답이 나왔다면 근거를 묻는다. 새 대화가 알 수 없는 것을 아는 것처럼 답했다면 <a href="w02-2.html">2주차</a> <a href="w02-2.html#26-맥락창-관찰-새-대화는-무엇을-잊는가">2.6절</a>의 기억 없이 답하기와 같은 장면이다.</p>
 <div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>왜 압축이 아니라 새 대화에서 검산하는가?</strong><br>
-다음 절의 독립 검산은 압축한 대화가 아니라 새 대화에서 한다. 압축한 대화의 요약에는 "환경보고서를 이렇게 썼다"는 결론이 남아 있어서, 검산을 시켜도 그 결론을 되풀이하기 쉽기 때문이다. 압축은 하던 일을 이어 갈 때 쓰고, 검산처럼 앞의 결론에서 독립해야 하는 일은 비워진 맥락창에서 한다. 같은 원리가 <a href="index.html#week-13">13주차</a>의 검증 서브에이전트에도 적용된다. 검증을 맡는 서브에이전트는 본 대화의 결론을 물려받지 않는 새 맥락창에서 일한다.
+다음 절의 독립 검산은 압축한 대화가 아니라 새 대화에서 한다. 압축한 대화의 요약에는 "환경보고서를 이렇게 썼다"는 결론이 남아 있어서, 검산을 시켜도 그 결론을 되풀이하기 쉽기 때문이다. 압축은 하던 일을 이어 갈 때 쓰고, 검산처럼 앞의 결론에서 독립해야 하는 일은 비워진 맥락창에서 한다. 같은 원리가 <a href="index.html#week-10">10주차</a>의 검증 서브에이전트에도 적용된다. 검증을 맡는 서브에이전트는 본 대화의 결론을 물려받지 않는 새 맥락창에서 일한다.
 </div>
 
 <p><strong>단계 5. 되감기로 파일만 되돌린다.</strong> <a href="w03-2.html#28-오류가-나면-에이전트와-함께-디버깅하기">2.8절</a>에서 읽어 둔 되감기를 이제 써 본다. 단계 4에서 연 새 대화에서 이어서, <a href="w03-2.html#210-환경-검증-무엇이-어디에-설치되었나-확인">2.10절</a>에 만든 보고서에 한 줄을 더하게 한다. 이 지시가 되감기의 대상이 되므로 반드시 새 메시지로 준다.</p>
@@ -614,7 +616,7 @@ Installed 21 packages in 1.75s
 <p>마지막으로 원래 대화에서 "메모/환경보고서_3주차.md의 마지막 줄(갈라낸 대화에서 적은 줄)을 지워 줘. 다른 줄은 건드리지 마"라고 시켜 보고서를 원래대로 돌려놓는다. 혼자 해 보기 3-A에서 남길 파일이기 때문이다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 되감기, 분기, 서브에이전트의 구별</strong><br>
-셋 다 맥락창을 다루는 기능이지만 무엇을 남기고 무엇을 새로 만드는지가 다르다. 되감기는 지금 맥락창 하나를 과거 시점으로 되돌린다(파일만, 대화만, 또는 둘 다). 분기는 과거 시점의 맥락창을 복사해 둘로 만든다(파일은 하나). 서브에이전트(<a href="index.html#week-13">13주차</a>)는 비어 있는 맥락창을 새로 만들어 일을 맡긴다(지시서와 CLAUDE.md만 받는다). 실험을 견주거나 원래 맥락창을 가볍게 유지하려면 분기, 잘못을 물리려면 되감기, 큰 일을 나누려면 서브에이전트다.
+셋 다 맥락창을 다루는 기능이지만 무엇을 남기고 무엇을 새로 만드는지가 다르다. 되감기는 지금 맥락창 하나를 과거 시점으로 되돌린다(파일만, 대화만, 또는 둘 다). 분기는 과거 시점의 맥락창을 복사해 둘로 만든다(파일은 하나). 서브에이전트(<a href="index.html#week-10">10주차</a>)는 비어 있는 맥락창을 새로 만들어 일을 맡긴다(지시서와 CLAUDE.md만 받는다). 실험을 견주거나 원래 맥락창을 가볍게 유지하려면 분기, 잘못을 물리려면 되감기, 큰 일을 나누려면 서브에이전트다.
 </div>
 
 <p><strong>선택 심화 1. 압축 규칙을 CLAUDE.md에 적어 둔다.</strong> 단계 3에서 명령 뒤에 적은 "남길 것"은 이 프로젝트에서 매번 같을 것이다. 그렇다면 CLAUDE.md에 올려 둘 수 있다.</p>
@@ -652,7 +654,7 @@ Installed 21 packages in 1.75s
 </div>
 
 <p><strong>예상되는 에이전트의 행동과 결과.</strong> 새 대화의 에이전트는 CLAUDE.md만 읽은 상태에서 확인 명령을 처음부터 실행하고 검산 보고서를 저장한 다음, 두 보고서를 항목별로 비교한 표를 보여 준다. 대개는 버전 항목이 모두 일치하고 폴더 구조 항목만 다르다. 검산 시점에는 검산 보고서 자체가 새로 생겨 있기 때문이며, 오류가 아니라 시점 차이다. 반대로 버전 항목이 다르다면 진짜 문제다. 원본 보고서에 pandas가 "3.0.5 이상"으로, 검산에 "3.0.5"로 적혀 있다면 원본은 pyproject.toml의 조건을 베낀 것이고 검산은 설치된 값을 측정한 것이다.</p>
-<p><strong>검증.</strong> 비교 표에서 불일치로 표시된 항목 하나를 골라, 그 항목의 확인 명령을 다시 실행시키고 터미널 원문과 두 보고서를 삼자 대조한다. 이 절차는 사람 손으로 새 대화를 열고, 읽지 말라고 당부하고, 비교시키는 일이었다. <a href="index.html#week-13">13주차</a>에는 이 검산을 전담하는 검증 서브에이전트(verifier)를 만들어, 당부하지 않아도 독립된 검산이 붙게 한다.</p>
+<p><strong>검증.</strong> 비교 표에서 불일치로 표시된 항목 하나를 골라, 그 항목의 확인 명령을 다시 실행시키고 터미널 원문과 두 보고서를 삼자 대조한다. 이 절차는 사람 손으로 새 대화를 열고, 읽지 말라고 당부하고, 비교시키는 일이었다. <a href="index.html#week-10">10주차</a>에는 이 검산을 전담하는 검증 서브에이전트(verifier)를 만들어, 당부하지 않아도 독립된 검산이 붙게 한다.</p>
 <h2 id="검증-체크리스트">검증 체크리스트</h2>
 <ul>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> <code>uv --version</code>의 출력을 터미널에서 직접 확인했다</li>

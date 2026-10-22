@@ -23,6 +23,8 @@ nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; bord
   padding:0 5px; margin-right:5px; vertical-align:1px; }
 nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
 nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+nav.sidebar .t3 { background:#fbeee0; color:#c77b2f; }
+nav.sidebar .t4 { background:#eee9f8; color:#6b4fb0; }
 main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
 main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
 main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
@@ -100,22 +102,22 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
 <li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 공통 데이터를 모아 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 서브에이전트, 문서 그라운딩, RAG</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 서브에이전트와 그라운딩으로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 에이전트로 민원 텍스트 분석하기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t4">통합</span>13주차 서브에이전트를 활용한 분석</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t3">특강</span>13주차 특강. AI 에이전트, 누가 책임지는가: 자율성과 책임의 문제</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t4">통합</span>14주차 서브에이전트를 활용한 검증</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t3">특강</span>14주차 특강. 믿을 수 있는 AI 에이전트: 투명성, 공정성, 신뢰</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>2주차 2차시. 에이전트 관찰과 지시문 워크숍</h1>
-<p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-10-22 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
 <p><a href="w02-1.html">1차시</a>에서 에이전트의 내부 작동 방식(LLM과 맥락창, 에이전트 루프와 도구, 검증 가능성)과 에이전트에게 일을 시키는 법(좋은 지시의 다섯 요소, 계획 모드, CLAUDE.md, 검증을 내장한 지시)을 원리로 배웠다. 이번 실습은 그 원리를 내 눈으로 목격하고 손으로 해 보는 워크숍이다. <a href="w02-1.html">1차시</a>에서 배운 개념은 그것이 필요한 단계에서 화면에 나온 결과를 놓고 다시 짚는다. 단계마다 있는 "먼저 알아 둘 것"과 "짚고 가기"가 그 자리다. 전반부(<a href="w02-2.html#21-요약-작업을-시키고-도구-호출-로그-읽기">2.1</a>-2.3)는 관찰 실험이다. 무엇이 나올지 미리 예상해 보고, 실험하고, 화면에 무엇이 나타나는지 살핀다. 후반부(<a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4</a>-2.8)는 지시문 워크숍이며, 그 가운데 <a href="w02-2.html#26-맥락창-관찰-새-대화는-무엇을-잊는가">2.6절</a>은 맥락창을 다시 관찰하는 자리다. 다섯 요소를 갖춘 지시문으로 실제 산출물을 만들고, 학기 내내 쓸 CLAUDE.md와 지시문 라이브러리를 만든다.</p>
 <p>오늘 쓰는 자료는 sigungu_2023.csv 하나뿐이다. 자료가 같으니 결과의 차이는 온전히 지시의 차이에서 나온다. 오늘은 분석 결과를 많이 만드는 날이 아니라 에이전트라는 도구의 성질을 실험하고, 그 성질에 맞게 지시하는 법을 손에 익히는 날이다.</p>
@@ -595,10 +597,10 @@ Claude Code에는 권한 모드가 여럿 있다. 기본 모드는 파일을 바
 <p><strong>짚고 가기: 오늘 쌓은 세 겹.</strong> 방금 손에서 끝난 확인이 오늘 배운 검증의 마지막 겹이다. <a href="w02-1.html#fig-2-7">그림 2-7</a>이 세 겹 전체다.</p>
 <p><img id="fig-2-7" alt="그림 2-7. 검증의 세 겹: 지시문의 손잡이, 별도 검증, 사람의 눈" src="figures/fig02_verification_layers.png" /></p>
 <p><a href="w02-1.html#fig-2-7">그림 2-7</a>을 왼쪽부터 읽으며 오늘 한 일을 하나씩 얹어 보자. 첫째 겹의 아래 칸에 적힌 세 가지(근거의 위치를 보고하게 한다, 자료에서 직접 계산·조회하게 한다, 없다고 답할 자리를 만든다)는 <a href="w02-2.html#22-검증-조건-넣기-확인할-수-있게-묻는다">2.2절</a>에서 의성군을 물을 때 지시문에 넣은 바로 그 세 문장이고, <a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4절</a>에서는 제약 칸과 산출물 칸으로 들어갔으며, <a href="w02-2.html#27-CLAUDEmd-작성과-지시문-라이브러리-시작">2.7절</a>에서는 CLAUDE.md의 규칙 한 줄로 올라갔다. 둘째 겹의 아래 칸에 적힌 "같은 대화에서 재검산 지시, 새 대화에서 독립 검산"이 방금 1단계와 2단계로 한 일이다. 셋째 겹의 아래 칸에 적힌 "결정적 항목 하나를 직접 확인, '일치' 칸 두어 개를 표본 대조"가 바로 앞 문단의 검증이다.</p>
-<p>그림 맨 아래 문장이 이 그림의 요점이다. 겹이 늘수록 사람이 봐야 할 양은 줄어들지만 마지막 눈은 끝까지 남는다. <a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4</a>에서는 열 칸짜리 표를 놓고 여러분이 파일에서 직접 찾아본 자리가 세 줄이었고, 지금은 검증 보고의 두 칸이다. 그런데 0이 되지는 않았다. 검증 보고 역시 에이전트가 만든 산출물이고, 산출물은 검증의 대상이기 때문이다. 앞으로 주차가 갈수록 검증 조건과 별도 검증이 늘어나면서 눈으로 볼 양은 더 줄어든다. <a href="index.html#week-12">12주차</a>에서는 문서에 근거해 인용과 함께 답하게 하는 그라운딩이 첫째 겹에 더해지고, <a href="index.html#week-13">13주차</a>에서는 둘째 겹이 검증 전담 서브에이전트라는 상시 구성 요소가 된다. 그래도 남는 것은 사람의 눈이 아니면 잡히지 않는 것들이다. <a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4</a>의 틀리는 장면 4에서 본 "전국 합계출산율"처럼 계산은 맞지만 보고된 표현과 계산 대상이 어긋난 경우가 그 예다. (자세한 설명은 <a href="w02-1.html">1차시</a> <a href="w02-1.html#13-검증-가능성-맞는지-확인할-수-있게-묻는다">1.3</a>, <a href="w02-1.html#17-CLAUDEmd와-검증을-내장한-지시">1.7</a>)</p>
+<p>그림 맨 아래 문장이 이 그림의 요점이다. 겹이 늘수록 사람이 봐야 할 양은 줄어들지만 마지막 눈은 끝까지 남는다. <a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4</a>에서는 열 칸짜리 표를 놓고 여러분이 파일에서 직접 찾아본 자리가 세 줄이었고, 지금은 검증 보고의 두 칸이다. 그런데 0이 되지는 않았다. 검증 보고 역시 에이전트가 만든 산출물이고, 산출물은 검증의 대상이기 때문이다. 앞으로 주차가 갈수록 검증 조건과 별도 검증이 늘어나면서 눈으로 볼 양은 더 줄어든다. <a href="index.html#week-10">10주차</a>에서는 문서에 근거해 인용과 함께 답하게 하는 그라운딩이 첫째 겹에 더해지고, <a href="index.html#week-10">10주차</a>에서는 둘째 겹이 검증 전담 서브에이전트라는 상시 구성 요소가 된다. 그래도 남는 것은 사람의 눈이 아니면 잡히지 않는 것들이다. <a href="w02-2.html#24-다섯-요소로-지시문-짓기-출산율-상하위-표-만들기">2.4</a>의 틀리는 장면 4에서 본 "전국 합계출산율"처럼 계산은 맞지만 보고된 표현과 계산 대상이 어긋난 경우가 그 예다. (자세한 설명은 <a href="w02-1.html">1차시</a> <a href="w02-1.html#13-검증-가능성-맞는지-확인할-수-있게-묻는다">1.3</a>, <a href="w02-1.html#17-CLAUDEmd와-검증을-내장한-지시">1.7</a>)</p>
 <div style="border:1px solid #e0d8ea;border-left:5px solid #7a5fa8;background:#faf8fc;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>왜 새 대화가 "독립"인가?</strong><br>
-결과를 만든 대화의 맥락창에는 자기가 세운 계획과 코드와 결론이 들어 있어서, 그 대화에 "검산해 줘"라고 하면 에이전트는 그 기억을 참조하며 검산한다. 처음의 착각이 그대로 이어질 수 있다. 새 대화는 <a href="w02-1.html">1차시</a> <a href="w02-1.html#11-LLM은-어떻게-말을-만드는가-토큰-확률-맥락창">1.1절</a>에서 배운 대로, 그리고 <a href="w02-2.html#26-맥락창-관찰-새-대화는-무엇을-잊는가">2.6절</a>에서 <a href="w02-1.html#fig-2-3">그림 2-3</a>으로 확인한 대로 비워진 맥락창에서 시작한다. 원본과 결과만 주면 에이전트는 결과를 만든 쪽의 판단을 물려받지 않은 채 독립적으로 검산한다. <a href="index.html#week-13">13주차</a>에서는 이 검산 역할을 `.claude/agents/verifier.md` 파일로 등록해 두고 필요할 때마다 호출하는 검증 전담 서브에이전트로 구성한다. 그때까지는 오늘처럼 새 대화를 여는 것으로 충분하다.
+결과를 만든 대화의 맥락창에는 자기가 세운 계획과 코드와 결론이 들어 있어서, 그 대화에 "검산해 줘"라고 하면 에이전트는 그 기억을 참조하며 검산한다. 처음의 착각이 그대로 이어질 수 있다. 새 대화는 <a href="w02-1.html">1차시</a> <a href="w02-1.html#11-LLM은-어떻게-말을-만드는가-토큰-확률-맥락창">1.1절</a>에서 배운 대로, 그리고 <a href="w02-2.html#26-맥락창-관찰-새-대화는-무엇을-잊는가">2.6절</a>에서 <a href="w02-1.html#fig-2-3">그림 2-3</a>으로 확인한 대로 비워진 맥락창에서 시작한다. 원본과 결과만 주면 에이전트는 결과를 만든 쪽의 판단을 물려받지 않은 채 독립적으로 검산한다. <a href="index.html#week-10">10주차</a>에서는 이 검산 역할을 `.claude/agents/verifier.md` 파일로 등록해 두고 필요할 때마다 호출하는 검증 전담 서브에이전트로 구성한다. 그때까지는 오늘처럼 새 대화를 여는 것으로 충분하다.
 </div>
 
 <h2 id="검증-체크리스트">검증 체크리스트</h2>

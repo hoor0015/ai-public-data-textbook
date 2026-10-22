@@ -1,144 +1,210 @@
-# 12주차 2차시(실습) 그림 생성
-#   그림 12-4 fig12_cite_check.png    인용 검증표의 네 열과 세 가지 판정
-#   그림 12-5 fig12_evidence_skill.png evidence-memo 스킬의 구성과 실행 흐름
-# 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 12주차 2차시 실습 그림 (실제 데이터)
+# 그림 12-4 불용어 1차/2차 실행의 최빈 단어 대조 (fig12_stopword_iter.png)
+# 그림 12-5 토큰 빈도 순위와 문서 빈도 순위 (fig12_freq_vs_docfreq.png)
+# 그림 12-7 키워드 규칙 개정 전후의 유형별 건수와 유형이 옮겨 간 경로 (fig12_rule_revision.png)
+# (그림 12-1 문서-단어 행렬, 그림 12-2 핵심어 빈도, 그림 12-3 유형별 TF-IDF,
+#  그림 12-6 유형 문서 간 코사인 유사도는 code/fig12_text.py, code/fig12_concepts.py에 있다)
+# 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건)
+# 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 
-sns.set_style("white")
+sns.set_style("whitegrid")
 import koreanize_matplotlib  # noqa: E402,F401
-import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+from sklearn.feature_extraction.text import CountVectorizer  # noqa: E402
 
-FIG = Path(__file__).resolve().parent.parent / "figures"
+BASE = Path(__file__).resolve().parent.parent
+FIG = BASE / "figures"
 FIG.mkdir(exist_ok=True)
 
+# ---- 전처리 규칙 (ch12_practice.py, ch11_text.py와 동일) ---------------------
+JOSA = sorted(
+    ["으로부터", "에서부터", "에게서", "으로써", "으로는", "으로도", "이라고",
+     "라고", "에서는", "에서도", "까지", "부터", "에서", "에게", "한테", "으로",
+     "이라", "라는", "이나", "하고", "와의", "과의", "은", "는", "이", "가",
+     "을", "를", "에", "의", "도", "와", "과", "로", "만", "요"],
+    key=len, reverse=True,
+)
+PREDICATE = re.compile(
+    r"(습니다|입니다|합니다|니다|세요|어요|아요|해요|한다|았다|었다|였다|"
+    r"하여|해서|하고|하는|하던|되어|되는|하지|되지|있는|없는|같은|위해|"
+    r"대한|따라|통해|관한|드립니다|바랍니다|는지|은지|다고|다는|는데)$"
+)
+STOP_1 = {
+    "저는", "제가", "저의", "저희", "우리", "그런데", "그리고", "그러나",
+    "하지만", "그래서", "또한", "및", "등", "때문", "경우", "정도", "관련",
+    "여부", "이후", "당시", "현재", "다시", "함께", "가장", "매우", "일부",
+    "모두", "다른", "어떤", "무엇", "어떻게", "생각", "내용", "사실",
+    "하나", "지금", "동안", "상태", "상황", "문제", "가능", "필요",
+}
+ADDED = {
+    "받을", "받은", "받고", "받아", "않아", "않고", "있을", "있을까",
+    "할까", "원을", "만원", "개월", "이었", "되었", "됩니", "합니",
+    "이런", "그런", "저런", "어떠한",
+}
+STOP_2 = STOP_1 | ADDED
 
-def box(ax, x, y, w, h, text, fc="#f5f9fd", ec="#2f6fb0", fontsize=10, weight="normal"):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.08",
-                                fc=fc, ec=ec, lw=1.4))
-    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
-            fontsize=fontsize, fontweight=weight)
+
+def make_tokenizer(stopwords):
+    def tokenize(text):
+        text = re.sub(r"[^가-힣\s]", " ", str(text))
+        tokens = []
+        for w in text.split():
+            for j in JOSA:
+                if w.endswith(j) and len(w) - len(j) >= 2:
+                    w = w[: -len(j)]
+                    break
+            if len(w) < 2 or w in stopwords or PREDICATE.search(w):
+                continue
+            tokens.append(w)
+        return tokens
+    return tokenize
 
 
-def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.6, ls="-"):
-    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>",
-                                 mutation_scale=16, color=color, lw=lw, linestyle=ls))
+df = pd.read_csv(BASE / "data" / "minwon_cases_2021.csv", on_bad_lines="skip")
+df.columns = ["사건번호", "제목", "내용", "답변"]
+df = df.dropna(subset=["제목", "내용"]).reset_index(drop=True)
+docs = (df["제목"] + " " + df["내용"]).tolist()
 
+
+def word_freq(stopwords):
+    cv = CountVectorizer(analyzer=make_tokenizer(stopwords))
+    dtm = cv.fit_transform(docs)
+    freq = pd.Series(dtm.sum(axis=0).A1, index=cv.get_feature_names_out())
+    return freq.sort_values(ascending=False)
+
+
+freq1 = word_freq(STOP_1)
+freq2 = word_freq(STOP_2)
 
 # ---------------------------------------------------------------- 그림 12-4
-figfit.SPREAD = 1.0          # 표 모양이므로 칸 사이 글씨 크기를 고르게 맞춘다
-fig, ax = plt.subplots(figsize=(13.8, 6.9))
-ax.set_xlim(0, 13.8)
-ax.set_ylim(0.2, 7.3)
-ax.axis("off")
-
-XS = [0.2, 1.1, 4.3, 7.1]           # 표 열의 왼쪽 좌표
-WS = [0.8, 3.1, 2.7, 2.4]           # 표 열의 너비
-HEAD = ["번호", "주장", "근거 위치", "원문 인용"]
-ROWS = [
-    ["1", "영리 목적을 이유로\n제한할 수 없다",
-     "공공데이터법.txt\n제3조 제4항", "「(원문 그대로)」"],
-    ["2", "공공데이터란\n이러이러한 자료다",
-     "공공데이터법.txt\n제2조 제3호", "「(원문 그대로)」"],
-    ["3", "별도의 승인 절차를\n거쳐야 한다", "근거 없음", "(없음)"],
-]
-VERDICTS = [
-    "일치\n위치도 문장도 맞다",
-    "위치 어긋남\n문장은 제2조 제2호에 있다",
-    "원문에 없음\n파일에서 찾지 못했다",
-]
-VERDICT_FC = ["#f4fbf6", "#fdf9f4", "#fbf1f0"]
-VERDICT_EC = ["#2f8f4e", "#c77b2f", "#c0392b"]
-
-VX, VW = 10.7, 2.9                  # 판정 상자의 왼쪽 좌표와 너비
-
-y_head, h_head = 5.20, 0.95
-for x, w, t in zip(XS, WS, HEAD):
-    box(ax, x, y_head, w, h_head, t, fc="#f7f7fc", ec="#5b6ee1", weight="bold")
-
-for i, row in enumerate(ROWS):
-    y = 3.95 - i * 1.15
-    for x, w, t in zip(XS, WS, row):
-        box(ax, x, y, w, 0.95, t, fc="#f5f9fd", ec="#2f6fb0")
-    arrow(ax, 9.65, y + 0.48, VX - 0.15, y + 0.48, color="#888888", lw=1.3)
-    box(ax, VX, y, VW, 0.95, VERDICTS[i], fc=VERDICT_FC[i], ec=VERDICT_EC[i],
-        weight="bold")
-
-# 왼쪽은 에이전트의 산출물, 오른쪽은 사람이 읽고 내리는 판정
-ax.annotate("", xy=(9.5, 6.42), xytext=(0.2, 6.42),
-            arrowprops=dict(arrowstyle="-", color="#2f6fb0", lw=1.2))
-ax.text(4.85, 6.52, "에이전트가 만들어 온 표 (네 열)", ha="center", va="bottom",
-        fontsize=11, color="#2f6fb0")
-ax.annotate("", xy=(13.6, 6.42), xytext=(10.7, 6.42),
-            arrowprops=dict(arrowstyle="-", color="#666666", lw=1.2))
-ax.text(12.15, 6.52, "내가 원문을 펴 보고 내리는 판정", ha="center", va="bottom",
-        fontsize=11, color="#666666")
-
-ax.text(6.9, 0.72,
-        "판정은 표에 채워 넣는 칸이 아니라 원문을 펴 보고 정하는 결과다. "
-        "'일치'가 아닌 줄은 그 줄을 근거로 재지시하고, "
-        "'원문에 없음'은 그 주장을 메모에서 빼는 사유가 된다.",
-        ha="center", va="center", fontsize=11, color="#333",
-        bbox=dict(fc="#fdf9f4", ec="#ecd9c6", boxstyle="round,pad=0.5"))
-
-fig.savefig(FIG / "fig12_cite_check.png", dpi=150, bbox_inches="tight")
+# 불용어 1차 실행과 2차 실행의 최빈 단어 상위 15개. 1차에서 불용어로 추가된 토큰은 회색
+N = 15
+fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True)
+for ax, freq, title in zip(axes, [freq1, freq2],
+                           ["1차 실행 (기본 불용어만)", "2차 실행 (동사 조각·단위 추가 제거)"]):
+    top = freq.head(N)[::-1]
+    colors = ["#b0b0b0" if w in ADDED else "#5b8ac4" for w in top.index]
+    ax.barh(top.index, top.values, color=colors)
+    for i, v in enumerate(top.values):
+        ax.text(v + 2, i, str(v), va="center", fontsize=9, color="#333")
+    ax.set_title(title, fontsize=12)
+    ax.set_xlabel("등장 횟수 (토큰 빈도, 567건 합계)")
+    ax.tick_params(axis="y", labelsize=10)
+axes[0].text(0.98, 0.02, "회색: 2차에서 불용어로 추가한 토큰", transform=axes[0].transAxes,
+             ha="right", va="bottom", fontsize=9, color="#555")
+fig.suptitle("불용어 사전을 한 번 다듬기 전후의 최빈 단어 상위 15개", fontsize=13)
+sns.despine(left=True)
+fig.tight_layout()
+fig.savefig(FIG / "fig12_stopword_iter.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("saved:", FIG / "fig12_cite_check.png")
-
 
 # ---------------------------------------------------------------- 그림 12-5
-figfit.SPREAD = 1.15         # 기본값으로 되돌린다
-fig, ax = plt.subplots(figsize=(13, 5.6))
-ax.set_xlim(0, 14)
-ax.set_ylim(1.9, 9)
-ax.axis("off")
+# 토큰 빈도 상위 15개 단어가 문서 빈도(그 토큰이 든 민원 건수)로는 몇 위인지 잇는 그림
+cv2 = CountVectorizer(analyzer=make_tokenizer(STOP_2))
+dtm2 = cv2.fit_transform(docs)
+vocab2 = cv2.get_feature_names_out()
+tokfreq = pd.Series(np.asarray(dtm2.sum(axis=0)).ravel(), index=vocab2).sort_values(ascending=False)
+docfreq = pd.Series(np.asarray((dtm2 > 0).sum(axis=0)).ravel(), index=vocab2)
+rank_tok = {w: i + 1 for i, w in enumerate(tokfreq.index)}
+rank_doc = {w: i + 1 for i, w in enumerate(docfreq.sort_values(ascending=False).index)}
+top15 = list(tokfreq.head(15).index)
 
-# 호출과 SKILL.md
-box(ax, 0.3, 6.3, 3.0, 1.9,
-    "부탁 (조건을 문장으로)\n/evidence-memo 를 부르고\ndata/laws 의 문서로 인구 감소 추세를\n묻는 근거 메모를 만들어 달라고 적는다",
-    fc="#fdf9f4", ec="#c77b2f")
-box(ax, 4.0, 6.4, 3.0, 1.7, "SKILL.md\n절차 10단계\n(폴더와 질문은 대화에서 받는다)",
-    fc="#f5f9fd", ec="#2f6fb0", weight="bold")
-arrow(ax, 3.3, 7.25, 4.0, 7.25)
-
-# 보조 파일 (필요할 때만 읽힘)
-box(ax, 3.4, 3.4, 2.1, 1.7, "reference.md\n근거 표기 규칙\n(필요할 때만 읽힘)",
-    fc="#faf8fc", ec="#7a5fa8")
-box(ax, 5.7, 3.4, 2.3, 1.7, "scripts/cite_check.py\n인용을 원문에서\n다시 찾아 대조",
-    fc="#faf8fc", ec="#7a5fa8")
-arrow(ax, 5.0, 6.3, 4.6, 5.1, color="#7a5fa8", ls="--")
-arrow(ax, 6.0, 6.3, 6.6, 5.1, color="#7a5fa8")
-
-# 근거의 원천
-box(ax, 8.0, 7.35, 2.6, 1.35, "data/laws/ 파일 읽기\n(문서 근거)", fc="#f4fbf6", ec="#2f8f4e")
-box(ax, 8.0, 5.45, 2.6, 1.35, "kosis MCP로 통계 조회\n(데이터 근거)", fc="#f4fbf6", ec="#2f8f4e")
-arrow(ax, 7.0, 7.5, 8.0, 8.0)
-arrow(ax, 7.0, 7.0, 8.0, 6.1)
-
-# 산출물
-box(ax, 11.2, 6.0, 2.5, 2.3, "산출물/\n근거메모_인구감소.md\n일곱 절 고정 양식",
-    fc="white", ec="#c0392b")
-arrow(ax, 10.6, 8.0, 11.2, 7.5)
-arrow(ax, 10.6, 6.1, 11.2, 6.7)
-arrow(ax, 8.0, 4.25, 11.3, 6.0, color="#7a5fa8", ls="--")
-ax.text(9.9, 4.55, "검산 결과를\n7절에 붙임", ha="center", fontsize=9, color="#7a5fa8")
-
-# 사람의 확인
-box(ax, 10.6, 2.5, 3.0, 1.6, "사람의 확인 (마지막 겹)\n인용 1건을 원문과 대조\n수치 1건을 포털과 대조",
-    fc="#eeeeee", ec="#888888")
-arrow(ax, 12.45, 6.0, 12.1, 4.1, color="#888888")
-
-# 범례
-ax.text(1.75, 4.25,
-        "삼각대가 한 스킬 안에 있다\n문서 근거: data/laws 읽기\n데이터 근거: kosis MCP\n"
-        "절차 근거: SKILL.md, reference.md,\nscripts, 7절의 검산 기록",
-        ha="center", va="center", fontsize=9.8, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
-
-fig.savefig(FIG / "fig12_evidence_skill.png", dpi=150, bbox_inches="tight")
+fig, ax = plt.subplots(figsize=(8.5, 7.5))
+for w in top15:
+    r1, r2 = rank_tok[w], rank_doc[w]
+    color = "#c47f5b" if r2 > r1 else ("#5b8ac4" if r2 < r1 else "#999999")
+    ax.plot([0, 1], [r1, r2], color=color, lw=1.8, marker="o", ms=5, alpha=0.9)
+    ax.text(-0.04, r1, f"{w} {int(tokfreq[w])}회", ha="right", va="center", fontsize=10)
+    ax.text(1.04, r2, f"{w} {int(docfreq[w])}건", ha="left", va="center", fontsize=10)
+ax.set_xlim(-0.55, 1.55)
+ax.set_ylim(28.5, 0.2)
+ax.set_yticks([1, 5, 10, 15, 20, 25])
+ax.set_yticklabels(["1위", "5위", "10위", "15위", "20위", "25위"], fontsize=9)
+ax.set_xticks([0, 1])
+ax.set_xticklabels(["토큰 빈도 순위", "문서 빈도 순위"], fontsize=12)
+ax.grid(axis="x", visible=False)
+ax.set_title("같은 단어의 두 순위: 토큰 빈도 상위 15개가 문서 빈도로는 몇 위인가", fontsize=13)
+ax.text(0.5, 27.6, "주황: 문서 빈도 순위가 내려간 단어   파랑: 올라간 단어",
+        ha="center", va="center", fontsize=9.5, color="#555")
+sns.despine(left=True, bottom=True)
+fig.tight_layout()
+fig.savefig(FIG / "fig12_freq_vs_docfreq.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("saved:", FIG / "fig12_evidence_skill.png")
+
+# ---------------------------------------------------------------- 그림 12-7
+# 키워드 규칙 개정 전후: 567건의 유형별 건수와 유형이 옮겨 간 경로
+RULES = [
+    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
+    ("보험", r"보험"),
+    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|인터넷|요금제"),
+    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션"),
+    ("자동차", r"자동차|중고차|차량|정비"),
+]
+RULES_REV = [
+    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
+    ("보험", r"보험"),
+    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션|택배"),
+    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|요금제|초고속인터넷|인터넷\s*요금|인터넷\s*약정"),
+    ("자동차", r"자동차|중고차|차량|정비"),
+]
+
+
+def classify(title, content, rules):
+    text = f"{title} {content}"
+    if re.search(rules[0][1], title):
+        return "의료"
+    for label, pat in rules:
+        if re.search(pat, text):
+            return label
+    return "기타"
+
+
+before = pd.Series([classify(t, c, RULES) for t, c in zip(df["제목"], df["내용"])])
+after = pd.Series([classify(t, c, RULES_REV) for t, c in zip(df["제목"], df["내용"])])
+labels = ["의료", "보험", "통신·인터넷", "여행·운송", "자동차", "기타"]
+b = [int((before == l).sum()) for l in labels]
+a = [int((after == l).sum()) for l in labels]
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5), gridspec_kw={"width_ratios": [2.1, 1]})
+y = np.arange(len(labels))
+h = 0.36
+axes[0].barh(y + h / 2, b, h, label="개정 전", color="#b8c6d9")
+axes[0].barh(y - h / 2, a, h, label="개정 후", color="#5b8ac4")
+for i, (vb, va) in enumerate(zip(b, a)):
+    axes[0].text(vb + 4, i + h / 2, str(vb), va="center", fontsize=9, color="#555")
+    axes[0].text(va + 4, i - h / 2, str(va), va="center", fontsize=9, color="#333")
+axes[0].set_yticks(y)
+axes[0].set_yticklabels(labels, fontsize=11)
+axes[0].invert_yaxis()
+axes[0].set_xlabel("민원 건수 (전체 567건)")
+axes[0].set_title("규칙 개정 전후의 유형별 건수", fontsize=12)
+axes[0].legend(loc="upper right", fontsize=9, frameon=False)
+
+cross = pd.crosstab(before, after)
+moves = [(b, a, int(cross.loc[b, a])) for b in cross.index for a in cross.columns
+         if b != a and cross.loc[b, a] > 0]
+moves.sort(key=lambda m: m[2])
+ylab = [f"{b}\n-> {a}" for b, a, _ in moves]
+vals = [m[2] for m in moves]
+axes[1].barh(np.arange(len(moves)), vals, 0.5, color="#c47f5b")
+for i, v in enumerate(vals):
+    axes[1].text(v + 0.6, i, f"{v}건", va="center", fontsize=10, color="#333")
+axes[1].set_yticks(np.arange(len(moves)))
+axes[1].set_yticklabels(ylab, fontsize=10)
+axes[1].set_xlim(0, max(vals) * 1.25)
+axes[1].set_xlabel("민원 건수")
+axes[1].set_title(f"유형이 옮겨 간 경로 (모두 {sum(vals)}건)", fontsize=12)
+sns.despine()
+fig.suptitle("키워드 규칙을 기준표에 맞춰 고치면 무엇이 달라지는가", fontsize=13)
+fig.tight_layout()
+fig.savefig(FIG / "fig12_rule_revision.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+
+print("saved:", [p.name for p in sorted(FIG.glob("fig12_*.png"))])

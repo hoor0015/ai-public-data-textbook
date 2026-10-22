@@ -1,5 +1,5 @@
-# 9주차 2차시(실습) 그림 생성: 그림 9-10 (그림 규격 여섯 줄의 자리)
-# 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 9주차 2차시(실습) 그림 생성: 그림 9-23 (그림 규격 여섯 줄의 자리)
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 code/fig09_practice.py
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -14,10 +14,10 @@ BASE = Path(__file__).resolve().parent.parent
 FIG = BASE / "figures"
 FIG.mkdir(exist_ok=True)
 
-df = pd.read_csv(BASE / "data" / "sigungu_2023.csv", encoding="utf-8-sig")
-SRC = "출처: 행정안전부 주민등록인구, 국가데이터처 인구동향조사 (KOSIS)"
+df = pd.read_csv(BASE / "data" / "sigungu_mcp_2023.csv", encoding="utf-8-sig")
+SRC = "출처: 국가데이터처 인구동향조사 시군구 합계출산율 2023년 (kosis MCP)"
 
-# ---------------------------------------------------------------- 그림 9-10
+# ---------------------------------------------------------------- 그림 9-23
 # 그림 규격 여섯 줄이 그림의 어디에 놓이는가 (권역별 평균 합계출산율 막대그래프)
 df["권역"] = np.where(df["시도"].isin(["서울", "경기", "인천"]), "수도권", "비수도권")
 means, counts = [], []
@@ -45,7 +45,7 @@ ax.annotate("(6) 막대그래프의 세로축은\n0에서 시작한다",
             fontsize=10.5, color="#c0392b", ha="left", va="center",
             arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1.3))
 fig.text(0.01, -0.02,
-         "(5) " + SRC + ". 합계출산율이 결측인 1곳(경북 군위군)은 제외",
+         "(5) " + SRC,
          fontsize=8.5, color="#666", ha="left")
 fig.tight_layout()
 fig.savefig(FIG / "fig09_bar_region_spec.png", dpi=150, bbox_inches="tight")

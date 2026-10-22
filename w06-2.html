@@ -23,6 +23,8 @@ nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; bord
   padding:0 5px; margin-right:5px; vertical-align:1px; }
 nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
 nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+nav.sidebar .t3 { background:#fbeee0; color:#c77b2f; }
+nav.sidebar .t4 { background:#eee9f8; color:#6b4fb0; }
 main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
 main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
 main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
@@ -100,22 +102,22 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
 <li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 공통 데이터를 모아 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 서브에이전트, 문서 그라운딩, RAG</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 서브에이전트와 그라운딩으로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 에이전트로 민원 텍스트 분석하기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t4">통합</span>13주차 서브에이전트를 활용한 분석</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t3">특강</span>13주차 특강. AI 에이전트, 누가 책임지는가: 자율성과 책임의 문제</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t4">통합</span>14주차 서브에이전트를 활용한 검증</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t3">특강</span>14주차 특강. 믿을 수 있는 AI 에이전트: 투명성, 공정성, 신뢰</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>6주차 2차시. kosis MCP로 데이터 찾고 수집하기</h1>
-<p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-10-22 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <h2 id="이-실습에서-하는-것">이 실습에서 하는 것</h2>
 <p><a href="w06-1.html">1차시</a>에서 공공데이터의 소재(어디에 있나), 받기 전에 읽을 것(형식·메타데이터·이용허락), 그리고 에이전트에 외부 도구를 연결하는 표준(MCP)을 배웠다. 이번 실습은 그 내용을 적용해 실제로 데이터를 찾고 수집한다. <a href="w06-1.html">1차시</a>에서 배운 개념은 그것이 필요한 단계에서 화면에 나온 결과를 놓고 다시 짚는다. 단계마다 있는 "먼저 알아 둘 것"과 "짚고 가기"가 그 자리다. 전반부에서는 에이전트의 웹 검색으로 데이터를 찾는 연습을 하고, 후반부에서는 kosis MCP 서버를 주소 한 줄로 등록해 에이전트가 KOSIS 통계를 직접 검색·수집하게 만든다. 수집은 같은 통계표에서 두 번 한다. 2023년 시도별 총인구(한 시점, 여러 지역)와 전국 총인구의 2019-2023년 추이(한 지역, 여러 시점)다. 수집한 값은 결정적 값 하나를 포털 화면과 맞춰 본 뒤 CSV와 수집기록으로 남기며, <a href="index.html#week-4">4주차</a>에 만든 csv-profile 스킬로 첫 진단까지 마친다. 마지막으로 두 번 반복한 수집 절차를 <a href="index.html#week-4">4주차</a>에서 배운 방식대로 스킬 하나로 표준화하고, 그 스킬을 새 조건으로 한 번 돌려 시도별 다섯 해 치를 한꺼번에 받는다. 다음 데이터부터는 통계표와 조건만 말해 주면 같은 순서가 그대로 돌아간다.</p>
 <p>이 실습이 끝나면 다음 산출물이 남는다.</p>
@@ -241,7 +243,7 @@ kosis 서버의 도구 (일부)
 <p><strong>짚고 가기: 방금 화면에 늘어난 도구 목록이 MCP가 한 일이다.</strong> 지금 <code>/mcp</code> 화면 아래쪽에 보이는 네 줄이 오늘 등록으로 생긴 변화의 전부다. 어제까지 에이전트가 쓸 수 있던 도구는 내 노트북 안의 파일과 터미널, 그리고 웹 검색이었다. 거기에 통계 검색, 지역 통계 검색, 통계표 구조 확인, 통계값 조회라는 네 개가 나란히 더해졌다. MCP(Model Context Protocol)는 에이전트를 외부 도구·데이터베이스·서비스와 연결하기 위한 개방형 표준이고, 이 표준을 따르는 연결 통로를 MCP 서버라고 부른다. 규격이 통일되어 있으므로 MCP 규격을 따르는 서버는 종류와 관계없이 주소 한 줄로 연결된다.</p>
 <p><img id="fig-6-2" alt="그림 6-2. MCP: 에이전트와 외부 시스템을 잇는 공통 규격" src="figures/fig06_mcp.png" /></p>
 <p><a href="w06-1.html#fig-6-2">그림 6-2</a>를 화면과 맞춰 읽는다. 왼쪽의 에이전트가 여러분의 Claude Code이고, 가운데의 MCP가 방금 <code>claude mcp add</code>로 연결한 규격이며, 오른쪽 맨 위의 통계 데이터베이스(KOSIS 등)가 kosis 서버가 닿아 있는 곳이다. 오른쪽의 다른 상자들, 곧 업무 시스템이나 메일·저장소 같은 외부 서비스도 같은 방식으로 연결된다. 여기서 알 수 있는 것은 에이전트 입장에서 오른쪽에 무엇이 연결되든 대화 방식이 같다는 점이다. 그래서 잠시 뒤 여러분은 KOSIS의 인증키를 발급받거나 API 문서를 읽지 않고도, 파일을 읽어 달라고 말하듯 통계를 받아 달라고 말하게 된다. 다만 오른쪽에 연결되는 것이 읽기 전용 통계 조회일 수도, 파일을 지우거나 메일을 보내는 서버일 수도 있다는 점이 등록 전 신뢰 점검을 세 가지나 거친 이유다. (자세한 설명은 <a href="w06-1.html">1차시</a> <a href="w06-1.html#14-MCP-에이전트와-외부-도구를-연결하는-표준">1.4</a>)</p>
-<p><strong>등록 범위.</strong> MCP 서버 등록은 저장되는 범위가 셋이다. 지금 연 프로젝트 폴더에서 나만 쓰는 local, 프로젝트 폴더의 설정 파일에 남아 폴더를 함께 쓰는 사람에게 전달되는 project, 내 계정 전체에 남아 어느 폴더를 열어도 보이는 user다. 오늘의 kosis 서버는 다른 폴더에서도, <a href="w12-2.html">12주차 실습</a>에서도 쓰므로 위 지시문에서 user로 등록하게 했다. 화면에서 읽을 것은 셋이다. 이름이 kosis인가, 주소가 내가 준 주소인가, 범위가 사용자인가. 재시작한 뒤 다른 폴더를 열어 <code>/mcp</code>를 눌러 보면 kosis가 그대로 보이고, 이것이 범위가 사용자로 잡혔다는 화면 증거다.</p>
+<p><strong>등록 범위.</strong> MCP 서버 등록은 저장되는 범위가 셋이다. 지금 연 프로젝트 폴더에서 나만 쓰는 local, 프로젝트 폴더의 설정 파일에 남아 폴더를 함께 쓰는 사람에게 전달되는 project, 내 계정 전체에 남아 어느 폴더를 열어도 보이는 user다. 오늘의 kosis 서버는 다른 폴더에서도, <a href="w10-2.html">10주차 실습</a>에서도 쓰므로 위 지시문에서 user로 등록하게 했다. 화면에서 읽을 것은 셋이다. 이름이 kosis인가, 주소가 내가 준 주소인가, 범위가 사용자인가. 재시작한 뒤 다른 폴더를 열어 <code>/mcp</code>를 눌러 보면 kosis가 그대로 보이고, 이것이 범위가 사용자로 잡혔다는 화면 증거다.</p>
 <p>등록 성공과 연결됨은 서로 다른 상태다. 등록 성공은 "주소를 적어 두었다"는 뜻이고 연결됨은 "그 주소에 실제로 서버가 있고 대화가 된다"는 뜻이다. 등록 명령은 주소를 받아 적을 뿐 그 주소에 서버가 있는지 확인하지 않으므로, 주소에 오타가 있어도 등록 자체는 성공한다. 차이는 <code>/mcp</code> 화면에서 드러난다. 그러니 연결이 되지 않을 때 가장 먼저 의심할 것은 서버가 아니라 주소의 오타이며, 화면의 메시지에 주소가 통째로 다시 적혀 있으므로 그것을 내가 준 주소와 한 글자씩 대조하는 것이 첫 걸음이다.</p>
 <p><strong>검증.</strong> 재시작 후 <code>/mcp</code> 화면에서 kosis가 연결됨이고 검색·구조 확인·조회 도구가 보이는지 본다.</p>
 <h2 id="23-통계표-찾고-메타데이터-읽기-이-표가-내-질문에-맞는가">2.3 통계표 찾고 메타데이터 읽기: 이 표가 내 질문에 맞는가</h2>
@@ -502,9 +504,9 @@ kosis MCP를 쓴 답변에는 "시범서비스 안내"라는 문구와 통계표
 </tbody>
 </table>
 <p><strong>짚고 가기: 이 표가 없으면 셋째 달에 숫자가 어긋난다.</strong> 수집기록은 재현성(reproducibility), 곧 같은 절차로 같은 결과를 다시 만들 수 있는 성질을 확보하기 위한 것이다. 수집 조건이 어디에도 남지 않으면 반복할 때마다 지역 수준이나 항목이 달라져 두 시점의 숫자를 비교할 수 없게 되므로, 표 6-6의 "조회 조건" 칸이 그 조건을 고정한다. (자세한 설명은 <a href="w06-1.html">1차시</a> <a href="w06-1.html#13-클릭-수집의-한계-자동-수집과-재현성">1.3</a>)</p>
-<p><strong>검증.</strong> data/sido_pop_2023.csv가 헤더 1행 + 데이터 17행이고 첫 행이 표 6-5의 경기도, 13630821로 총인구가 쉼표 없는 숫자인지 본다. 수집기록의 재수집 지시문은 <a href="index.html#week-13">13주차</a>에서 검증 전담 서브에이전트(verifier)에게 건네는 지시서에 다시 쓰인다.</p>
+<p><strong>검증.</strong> data/sido_pop_2023.csv가 헤더 1행 + 데이터 17행이고 첫 행이 표 6-5의 경기도, 13630821로 총인구가 쉼표 없는 숫자인지 본다. 수집기록의 재수집 지시문은 <a href="index.html#week-10">10주차</a>에서 검증 전담 서브에이전트(verifier)에게 건네는 지시서에 다시 쓰인다.</p>
 <h2 id="26-두-번째-수집-전국-총인구-2019-2023년-추이">2.6 두 번째 수집: 전국 총인구 2019-2023년 추이</h2>
-<p><strong>무엇을 왜 하는가.</strong> 같은 표에서 조회 조건만 바꿔 한 번 더 수집한다. 지역을 전국 하나로 고정하고 시점을 2019-2023년 다섯 해로 늘린다. 이 수집에서는 시계열 수집에서 시작·끝 시점을 명시해야 한다는 점을 다룬다. 이 다섯 값은 <a href="index.html#week-12">12주차</a>에서 "우리나라 인구는 감소 추세다"라는 문장의 근거 메모에 다시 쓴다. 조회 조건을 기록해 두었으므로 내년에 2024년 값을 덧붙이는 일은 지시문의 숫자 하나를 바꾸는 일이 된다.</p>
+<p><strong>무엇을 왜 하는가.</strong> 같은 표에서 조회 조건만 바꿔 한 번 더 수집한다. 지역을 전국 하나로 고정하고 시점을 2019-2023년 다섯 해로 늘린다. 이 수집에서는 시계열 수집에서 시작·끝 시점을 명시해야 한다는 점을 다룬다. 이 다섯 값은 <a href="index.html#week-10">10주차</a>에서 "우리나라 인구는 감소 추세다"라는 문장의 근거 메모에 다시 쓴다. 조회 조건을 기록해 두었으므로 내년에 2024년 값을 덧붙이는 일은 지시문의 숫자 하나를 바꾸는 일이 된다.</p>
 <div style="border:1px solid #cfe3d4;border-left:5px solid #2f8f4e;background:#f4fbf6;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>지시문 예시</strong><br>
 "같은 통계표(행정구역(시군구)별 성별 인구수, DT_1B040A3)에서 전국의 총인구수를 2019년부터 2023년까지 연도별로 kosis MCP로 조회해 줘. 시작 시점 2019년, 끝 시점 2023년이야. 연도와 총인구 두 열의 표로 보여 주고, 다섯 해가 모두 있는지 건수를 세어 보고해 줘. 다섯 건이 아니면 값을 보여 주기 전에 이유부터 말해 줘. 전년 대비 증감과 2019년 대비 2023년의 누적 증감도 계산해서 표에 열로 넣어 줘. 서버가 붙이는 안내문이 있으면 요약하지 말고 원문 그대로 붙여 줘. 저장은 아직 하지 마."
@@ -656,7 +658,7 @@ description: kosis MCP로 KOSIS 통계표의 값을 조회해 CSV와 수집기�
 <p>부탁은 한 문장인데 화면에는 일곱 걸음이 다 지나간다. <a href="w06-2.html#24-MCP로-통계-수집하기-2023년-시도별-총인구">2.4</a>와 <a href="w06-2.html#26-두-번째-수집-전국-총인구-2019-2023년-추이">2.6</a>에서 지시문에 일일이 적어 주었던 요구, 곧 항목을 하나로 좁히고 지역 수준을 한정하고 시작·끝 시점을 명시하고 건수를 세어 보고하는 일이 이번에는 요구하지 않아도 따라온다. 스킬에 적어 둔 것이 문장이 아니라 판단이기 때문이다.</p>
 <p><strong>짚고 가기: 85라는 숫자가 클릭 수집과 갈리는 자리다.</strong> 방금 받은 것은 <a href="w06-2.html#25-수집-결과-검증과-저장-화면-대조-CSV-수집기록">2.5</a>의 18건보다 네 배 넘게 많은 85건이다. 이만큼을 포털 화면에서 직접 받으려면 지역 열일곱 곳과 다섯 해를 골라 조회한 다음, 화면의 숫자 여든다섯 개를 파일로 옮겨 적어야 한다. 자동 수집은 그 옮겨 적는 단계를 없앤다. 값이 도구에서 파일로 바로 가므로 사람이 할 일은 몇 건이 와야 하는지 미리 정해 두는 일 하나로 줄어든다. SKILL.md의 절차 2가 곱셈 한 줄로 되어 있는 이유다. (자세한 설명은 <a href="w06-1.html">1차시</a> <a href="w06-1.html#13-클릭-수집의-한계-자동-수집과-재현성">1.3</a>)</p>
 <p><strong>검증.</strong> 건수 기준과 실제 수신 건수가 모두 85이고, 새 파일의 2023년 행(경기도 13,630,821, 서울특별시 9,386,034, 세종특별자치시 386,525)이 <a href="w06-2.html#25-수집-결과-검증과-저장-화면-대조-CSV-수집기록">2.5</a>에서 저장한 <code>data/sido_pop_2023.csv</code>의 같은 값과 같은지 본다.</p>
-<p>이 스킬은 뒤에서 다시 만난다. <a href="index.html#week-12">12주차</a>에서는 MCP 조회를 근거 메모 절차 안에 넣은 스킬(evidence-memo)을 만들고, <a href="index.html#week-13">13주차</a>에서는 수집 단계를 파이프라인의 첫 칸에 놓아 서브에이전트에게 맡긴다. 오늘의 kosis-collect가 그 첫 칸의 원형이다.</p>
+<p>이 스킬은 뒤에서 다시 만난다. <a href="index.html#week-10">10주차</a>에서는 MCP 조회를 근거 메모 절차 안에 넣은 스킬(evidence-memo)을 만들고, <a href="index.html#week-13">13주차</a>에서는 수집 단계를 파이프라인의 첫 칸에 놓아 서브에이전트에게 맡긴다. 오늘의 kosis-collect가 그 첫 칸의 원형이다.</p>
 <h2 id="검증-체크리스트">검증 체크리스트</h2>
 <ul>
 <li style="list-style:none; margin-left:-18px;"><input type="checkbox"> 재시작 후 <code>/mcp</code>에서 kosis가 연결됨 상태로 도구 목록과 함께 보인다</li>

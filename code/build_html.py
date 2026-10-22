@@ -68,6 +68,8 @@ nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; bord
   padding:0 5px; margin-right:5px; vertical-align:1px; }
 nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
 nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+nav.sidebar .t3 { background:#fbeee0; color:#c77b2f; }
+nav.sidebar .t4 { background:#eee9f8; color:#6b4fb0; }
 main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
 main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
 main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
@@ -141,8 +143,10 @@ def find_chapters():
         first = open(path, encoding="utf-8").readline().strip()
         title = re.sub(r"^#\s*", "", first)                      # "N주차 N차시. 제목"
         short = re.sub(r"^\d+주차 \d차시\.\s*", "", title)        # "제목"
+        kind = ("특강" if "_특강_" in name else "통합" if "_통합_" in name
+                else "이론" if sess == 1 else "실습")
         chapters.append({
-            "week": week, "sess": sess, "md": path,
+            "week": week, "sess": sess, "kind": kind, "md": path,
             "out": f"w{week:02d}-{sess}.html",
             "title": title, "short": short, "date": mod_date(path),
         })
@@ -316,8 +320,8 @@ def sidebar(chapters, tocs, current):
             items.append(f'<li class="exam">{val}주차 · {EXAMS[val]}</li>')
             continue
         for ch in by_week.get(val, []):
-            tag = ('<span class="tag t1">이론</span>' if ch["sess"] == 1
-                   else '<span class="tag t2">실습</span>')
+            cls = {"이론": "t1", "실습": "t2", "특강": "t3", "통합": "t4"}[ch["kind"]]
+            tag = f'<span class="tag {cls}">{ch["kind"]}</span>'
             cur = ' cur' if ch["out"] == current else ''
             items.append(f'<li class="chap{cur}"><a href="{ch["out"]}">'
                          f'{tag}{ch["week"]}주차 {ch["short"]}</a></li>')
@@ -399,7 +403,7 @@ toc_html = [
     f"<h1>{BOOK_TITLE}</h1>",
     f"<p><strong>{BOOK_SUBTITLE}.</strong> "
     "AI 에이전트를 활용해 한국 공공데이터를 분석하는 학부 수준의 강의 교재입니다. "
-    "13개 주차가 각각 이론(1차시)과 실습(2차시)으로 나뉘며, "
+    "13개 주차가 각각 이론(1차시)과 실습(2차시)으로 나뉘며(13·14주차 2차시는 외부 특강), "
     "학생의 역할은 코딩이 아니라 에이전트에 대한 지시, 결과의 검증, 정책적 해석입니다. "
     "모든 그림과 수치는 실제 공공데이터(KOSIS, 공공데이터포털 등)에서 코드로 생성했습니다.</p>",
     "<p>광운대학교 행정학과 조교수 김경동(kdkim@kw.ac.kr)</p>",
@@ -420,7 +424,7 @@ for kind_, val in display_units():
         continue
     toc_html.append(f'<ul id="week-{val}">')
     for ch in by_week.get(val, []):
-        kind = "이론" if ch["sess"] == 1 else "실습"
+        kind = ch["kind"]
         label = f'{ch["week"]}주차 {ch["sess"]}차시 ({kind}) · {ch["short"]}' 
         toc_html.append(
             f'<li style="margin-top:10px"><strong><a href="{ch["out"]}">'

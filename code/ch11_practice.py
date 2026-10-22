@@ -1,416 +1,383 @@
-# 11주차 2차시 실습 확장 단계의 계산 코드
-# 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건),
-#         data/minwon_sample30.csv (교차검증 표본 30건, ch10_text.py가 시드 10으로 추출)
-# 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
-#
-# 이 파일이 계산하는 것 (본문의 절 번호)
-#   2.2-2.3 불용어 1차/2차 실행의 최빈 단어 대조, 토큰화 예시
-#   2.5     상위 단어의 세 가지 셈법(토큰 빈도, 문자열 등장, 포함 문서 수)과 유형별 분포
-#   2.6     토큰 빈도 상위 15개의 문서 빈도·순위 이동·건당 평균, 문자열 기준과의 차이
-#   2.7     규칙 분류에서 "인터넷" 키워드가 끌어온 건수, 정보 부족 사례 수
-#   2.8     규칙 분류 vs 에이전트 직접 분류(기준표를 주고 1회)의 집계,
-#           표본 30건 안의 정보 부족 사례(근거구절을 채울 수 없는 건)
-#   2.9     유형별 상위 10개 단어와 유형 간 겹치는 단어
-#   2.11    키워드 규칙 개정(인터넷 제거, 택배 추가) 전후의 건수와 유형 이동,
-#           시드를 바꿔 새로 뽑은 표본 30건의 구성
-#   2.12    기계적 경계 후보 신호(약한 근거, 경합, 정보부족)와 검증 우선순위 상위 20건,
-#           표본 30건에서 그 표시와 실제 불일치가 겹치는 정도
-#   2.13    유형별 대표 민원(유형 중심 벡터와 코사인 유사도가 가장 높은 문서)
-# 전처리 규칙과 키워드 규칙은 ch10_text.py와 동일하다.
-
-import re
-from collections import Counter
+# 11주차 실습(11-2) 확장 수치 계산: 가정 확인, 차이의 크기, 변수 반복, 시도별 평균과 신뢰구간,
+# 회귀 진단, 통제변수 회귀
+# 데이터: 9주차 2차시 2.1-2.2에서 kosis MCP로 수집·결합한 data/sigungu_mcp_2023.csv (229개 시군구)
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 code/ch11_practice.py
+# 본문의 모든 새 수치는 이 스크립트의 출력에서 가져온다. scipy와 numpy만 사용한다(statsmodels는 교차검증 용도).
+# 결측: 인구증가율 1건(대구 군위군, 2023년 7월 경북에서 대구로 편입). 인구증가율을 쓰는 분석에서만 제외한다.
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from scipy import stats
 
-BASE = Path(__file__).resolve().parent.parent
-DATA = BASE / "data" / "minwon_cases_2021.csv"
-SAMPLE = BASE / "data" / "minwon_sample30.csv"
+DATA = Path(__file__).resolve().parent.parent / "data" / "sigungu_mcp_2023.csv"
+df = pd.read_csv(DATA, encoding="utf-8-sig")
 
-# ---------------------------------------------------------------- 전처리 규칙
-JOSA = sorted(
-    ["으로부터", "에서부터", "에게서", "으로써", "으로는", "으로도", "이라고",
-     "라고", "에서는", "에서도", "까지", "부터", "에서", "에게", "한테", "으로",
-     "이라", "라는", "이나", "하고", "와의", "과의", "은", "는", "이", "가",
-     "을", "를", "에", "의", "도", "와", "과", "로", "만", "요"],
-    key=len, reverse=True,
-)
-PREDICATE = re.compile(
-    r"(습니다|입니다|합니다|니다|세요|어요|아요|해요|한다|았다|었다|였다|"
-    r"하여|해서|하고|하는|하던|되어|되는|하지|되지|있는|없는|같은|위해|"
-    r"대한|따라|통해|관한|드립니다|바랍니다|는지|은지|다고|다는|는데)$"
-)
-# 1차 실행: 처음부터 넣어 둔 기본 불용어
-STOP_1 = {
-    "저는", "제가", "저의", "저희", "우리", "그런데", "그리고", "그러나",
-    "하지만", "그래서", "또한", "및", "등", "때문", "경우", "정도", "관련",
-    "여부", "이후", "당시", "현재", "다시", "함께", "가장", "매우", "일부",
-    "모두", "다른", "어떤", "무엇", "어떻게", "생각", "내용", "사실",
-    "하나", "지금", "동안", "상태", "상황", "문제", "가능", "필요",
-}
-# 2차 실행: 1차 결과의 최빈 단어를 눈으로 보고 추가한 것 (서술어 조각, 단위, 지시어)
-STOP_2 = STOP_1 | {
-    "받을", "받은", "받고", "받아", "않아", "않고", "있을", "있을까",
-    "할까", "원을", "만원", "개월", "이었", "되었", "됩니", "합니",
-    "이런", "그런", "저런", "어떠한",
-}
+capital = ["서울", "경기", "인천"]
+df["권역"] = df["수도권"]  # 데이터의 수도권 열(서울·인천·경기)
+assert set(df.loc[df["권역"] == "수도권", "시도"]) == set(capital)
+g_cap = df.loc[df["권역"] == "수도권", "고령인구비율"]
+g_non = df.loc[df["권역"] == "비수도권", "고령인구비율"]
 
 
-def make_tokenizer(stopwords):
-    def tokenize(text):
-        text = re.sub(r"[^가-힣\s]", " ", str(text))
-        tokens = []
-        for w in text.split():
-            for j in JOSA:
-                if w.endswith(j) and len(w) - len(j) >= 2:
-                    w = w[: -len(j)]
-                    break
-            if len(w) < 2 or w in stopwords or PREDICATE.search(w):
-                continue
-            tokens.append(w)
-        return tokens
-    return tokenize
+def line(title):
+    print()
+    print("=" * 64)
+    print(title)
+    print("=" * 64)
 
 
-# ---------------------------------------------------------------- 데이터 읽기
-df = pd.read_csv(DATA, on_bad_lines="skip")
-df.columns = ["사건번호", "제목", "내용", "답변"]
-df = df.dropna(subset=["제목", "내용"]).reset_index(drop=True)
-docs = (df["제목"] + " " + df["내용"]).tolist()
-print(f"민원 사례 수: {len(df)}건, 사건번호 고유값 {df['사건번호'].nunique()}개")
-
-
-def word_freq(stopwords):
-    cv = CountVectorizer(analyzer=make_tokenizer(stopwords))
-    dtm = cv.fit_transform(docs)
-    freq = pd.Series(dtm.sum(axis=0).A1, index=cv.get_feature_names_out())
-    return freq.sort_values(ascending=False), dtm.shape
-
-
-# 2.2 토큰화 예시 (본문에 싣는 한 문장. 첫 민원 내용에서 그대로 가져온 문장이다)
-SENT = ("보험 회사는 과거 간경화로 치료 받은 사실이 있었는데도 보험을 청약할 때 "
-        "고지하지 않았으므로 고지의무 위반이라며 사망 보험금을 제외한 "
-        "암진단 급여금(1천만원)과 이미 납입한 보험료만 환급해 주었습니다.")
-print("\n[2.2 토큰화 예시]")
-print("원문:", SENT)
-print("1차 토큰:", " / ".join(make_tokenizer(STOP_1)(SENT)))
-print("2차 토큰:", " / ".join(make_tokenizer(STOP_2)(SENT)))
-
-
-# ---------------------------------------------------------------- 2.2-2.3 불용어 반복
-freq1, shape1 = word_freq(STOP_1)
-freq2, shape2 = word_freq(STOP_2)
-print(f"\n[1차 실행] 행렬 {shape1[0]}행 x {shape1[1]}열")
-print(freq1.head(20).to_string())
-print(f"\n[2차 실행] 행렬 {shape2[0]}행 x {shape2[1]}열")
-print(freq2.head(20).to_string())
-compare = pd.DataFrame({
-    "1차 단어": freq1.head(10).index, "1차 횟수": freq1.head(10).values,
-    "2차 단어": freq2.head(10).index, "2차 횟수": freq2.head(10).values,
-})
-print("\n[상위 10개 대조표]")
-print(compare.to_string(index=False))
-add = STOP_2 - STOP_1
-cv1 = CountVectorizer(analyzer=make_tokenizer(STOP_1))
-cv1.fit(docs)
-vocab1 = set(cv1.get_feature_names_out())
-print(f"추가 불용어 {len(add)}개 중 1차 어휘에 없던 것:",
-      sorted(w for w in add if w not in vocab1))
-
-# ------------------------------------------------- 2.6 토큰 빈도와 문서 빈도
-cv2 = CountVectorizer(analyzer=make_tokenizer(STOP_2))
-dtm2 = cv2.fit_transform(docs)
-vocab2 = cv2.get_feature_names_out()
-tokfreq = pd.Series(np.asarray(dtm2.sum(axis=0)).ravel(), index=vocab2).sort_values(ascending=False)
-docfreq = pd.Series(np.asarray((dtm2 > 0).sum(axis=0)).ravel(), index=vocab2)
-rank_tok = {w: i + 1 for i, w in enumerate(tokfreq.index)}
-rank_doc = {w: i + 1 for i, w in enumerate(docfreq.sort_values(ascending=False).index)}
-rows6 = [(w, int(tokfreq[w]), rank_tok[w], int(docfreq[w]),
-          round(docfreq[w] / len(docs) * 100, 1), rank_doc[w],
-          rank_tok[w] - rank_doc[w], round(tokfreq[w] / docfreq[w], 2))
-         for w in tokfreq.head(15).index]
-print("\n[2.6 토큰 빈도 상위 15개의 문서 빈도]")
-print(pd.DataFrame(rows6, columns=["단어", "토큰빈도", "빈도순위", "문서수", "문서비율",
-                                   "문서순위", "순위이동", "건당평균"]).to_string(index=False))
-# 표 11-5(문자열 기준 포함 문서 수)와 표 11-6(토큰 기준 문서 빈도)의 차이
-col = list(vocab2).index("환급")
-tok_docs = set(np.where(np.asarray(dtm2[:, col].todense()).ravel() > 0)[0])
-str_docs = {i for i, d in enumerate(docs) if "환급" in d}
-gap = Counter()
-tk2 = make_tokenizer(STOP_2)
-for i in sorted(str_docs - tok_docs):
-    for w in tk2(docs[i]):
-        if "환급" in w:
-            gap[w] += 1
-print(f"'환급' 문자열 포함 {len(str_docs)}건, 토큰 포함 {len(tok_docs)}건, "
-      f"차이 {len(str_docs - tok_docs)}건. 그 문서들의 환급 관련 토큰: {gap.most_common(10)}")
-yogu = docfreq[[w for w in vocab2 if w.startswith("요구")]].sort_values(ascending=False)
-print(f"'요구' 문자열 포함 {sum(1 for d in docs if '요구' in d)}건, "
-      f"토큰별 문서 수: {yogu.head(5).to_dict()}")
-
-# ---------------------------------------------------------------- 2.5 세 가지 셈법
-print("\n[상위 5개 단어 + '요구'의 세 가지 셈법]")
+# ------------------------------------------------------------------ [1] 분석 전 가정 확인
+line("[1] 분석 전 가정 확인: 두 집단의 분포 모양과 흩어짐 (고령인구비율)")
 rows = []
-for w in list(freq2.head(5).index) + ["요구"]:
-    s_cnt = sum(d.count(w) for d in docs)          # 문자열 등장 횟수
-    d_cnt = sum(1 for d in docs if w in d)         # 포함 문서 수
-    rows.append((w, int(freq2[w]), s_cnt, d_cnt, round(d_cnt / len(docs) * 100, 1)))
-methods = pd.DataFrame(rows, columns=["단어", "토큰 빈도", "문자열 등장", "포함 문서", "문서 비율(%)"])
-print(methods.to_string(index=False))
-print("포함 문서 수 기준 순위:", ", ".join(methods.sort_values("포함 문서", ascending=False)["단어"]))
+for name, g in [("수도권", g_cap), ("비수도권", g_non)]:
+    q1, q3 = g.quantile(0.25), g.quantile(0.75)
+    sw_stat, sw_p = stats.shapiro(g)
+    rows.append(dict(집단=name, n=len(g), 평균=g.mean(), 표준편차=g.std(ddof=1), 분산=g.var(ddof=1),
+                     최소=g.min(), Q1=q1, 중앙값=g.median(), Q3=q3, 최대=g.max(),
+                     왜도=stats.skew(g, bias=False), 샤피로p=sw_p))
+tab = pd.DataFrame(rows).set_index("집단")
+pd.set_option("display.width", 200)
+print(tab.round(3).T)
+var_ratio = g_non.var(ddof=1) / g_cap.var(ddof=1)
+sd_ratio = g_non.std(ddof=1) / g_cap.std(ddof=1)
+print(f"분산 비(비수도권/수도권) = {var_ratio:.2f}, 표준편차 비 = {sd_ratio:.2f}")
+lev_stat, lev_p = stats.levene(g_cap, g_non, center="median")
+print(f"Levene 등분산 검정: 통계량 = {lev_stat:.2f}, p = {lev_p:.2e}")
+# 등분산 가정 t검정(Student)과 Welch의 대비
+t_s, p_s = stats.ttest_ind(g_non, g_cap, equal_var=True)
+t_w, p_w = stats.ttest_ind(g_non, g_cap, equal_var=False)
+print(f"Student t(등분산 가정) = {t_s:.2f} (p = {p_s:.2e}) / Welch t = {t_w:.2f} (p = {p_w:.2e})")
+# 30% 초과 시군구 수(분포 모양 서술용)
+print(f"고령인구비율 30% 초과: 수도권 {(g_cap > 30).sum()}개, 비수도권 {(g_non > 30).sum()}개")
+print(f"고령인구비율 15% 미만: 수도권 {(g_cap < 15).sum()}개, 비수도권 {(g_non < 15).sum()}개")
+print(f"비수도권 40% 초과: {(g_non > 40).sum()}개 -> "
+      f"{', '.join(df.loc[(df['권역']=='비수도권') & (df['고령인구비율']>40), '시도'] + ' ' + df.loc[(df['권역']=='비수도권') & (df['고령인구비율']>40), '시군구'])}")
 
-# ---------------------------------------------------------------- 규칙 분류 (ch10_text.py와 동일)
-RULES = [
-    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
-    ("보험", r"보험"),
-    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|인터넷|요금제"),
-    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션"),
-    ("자동차", r"자동차|중고차|차량|정비"),
-]
-
-
-def classify(title, content, rules=RULES):
-    text = f"{title} {content}"
-    if re.search(rules[0][1], title):
-        return "의료"
-    for label, pat in rules:
-        if re.search(pat, text):
-            return label
-    return "기타"
-
-
-df["유형_규칙"] = [classify(t, c) for t, c in zip(df["제목"], df["내용"])]
-print("\n[규칙 분류 건수]")
-print(df["유형_규칙"].value_counts().to_string())
-
-# 환급 포함 문서의 유형별 비율 (2.5 "주요 불만" 단정 검증)
-full = df["제목"] + " " + df["내용"]
-has_hwan = full.str.contains("환급")
-ratio = (df[has_hwan]["유형_규칙"].value_counts() / df["유형_규칙"].value_counts() * 100).round(1)
-print(f"\n'환급' 포함 문서 {int(has_hwan.sum())}건, 유형별 포함 비율(%):")
-print(ratio.sort_values(ascending=False).to_string())
-
-# ---------------------------------------------------------------- 2.7 기준표 설계 근거
-tel = df[df["유형_규칙"] == "통신·인터넷"]
-tel_text = tel["제목"] + " " + tel["내용"]
-only_internet = tel_text.apply(
-    lambda s: bool(re.search("인터넷", s)) and not re.search(r"통신|휴대폰|핸드폰|이동전화|요금제", s))
-service = tel_text.apply(lambda s: bool(re.search(
-    r"초고속|인터넷\s*서비스|인터넷\s*요금|인터넷\s*가입|인터넷\s*약정|인터넷\s*해지|인터넷\s*설치|인터넷\s*회선", s)))
-print(f"\n통신·인터넷 규칙 {len(tel)}건 중 '인터넷' 한 단어로만 걸린 건 {int(only_internet.sum())}건, "
-      f"그중 통신 서비스 표현(초고속, 인터넷 요금·가입·약정 등)이 있는 건 {int((only_internet & service).sum())}건")
-RULES_NO_INTERNET = [(l, p.replace("|인터넷", "")) if l == "통신·인터넷" else (l, p) for l, p in RULES]
-df["유형_규칙_인터넷제외"] = [classify(t, c, RULES_NO_INTERNET) for t, c in zip(df["제목"], df["내용"])]
-print("'인터넷' 키워드를 뺀 규칙의 건수:", df["유형_규칙_인터넷제외"].value_counts().to_dict())
-short = df[df["내용"].str.strip().isin(["첨부파일 참조"]) | (df["내용"].str.strip() == df["제목"].str.strip())]
-print(f"내용이 '첨부파일 참조'이거나 제목과 같은 정보 부족 사례 {len(short)}건, "
-      f"그중 규칙 분류가 기타로 보낸 건 {(short['유형_규칙'] == '기타').sum()}건")
-print(f"'택배' 포함 문서 {int(full.str.contains('택배').sum())}건")
-
-# ---------------------------------------------------------------- 2.9 유형별 상위 10개 단어
-LABELS = ["의료", "보험", "통신·인터넷", "여행·운송", "자동차", "기타"]
-per_type = {}
-for label in LABELS:
-    idx = df.index[df["유형_규칙"] == label]
-    cvt = CountVectorizer(analyzer=make_tokenizer(STOP_2))
-    mt = cvt.fit_transform([docs[i] for i in idx])
-    per_type[label] = pd.Series(np.asarray(mt.sum(axis=0)).ravel(),
-                                index=cvt.get_feature_names_out()).sort_values(ascending=False)
-print("\n[2.9 유형별 상위 10개 단어 (유형 안에서만 센 토큰 빈도)]")
-print(pd.DataFrame({f"{l} ({int((df['유형_규칙'] == l).sum())}건)":
-                    [f"{w} {int(v)}" for w, v in per_type[l].head(10).items()]
-                    for l in ["의료", "보험", "통신·인터넷", "기타"]}).to_string())
-for a, b in [("의료", "보험"), ("통신·인터넷", "기타")]:
-    both = sorted(set(per_type[a].head(10).index) & set(per_type[b].head(10).index))
-    print(f"{a} 상위10 과 {b} 상위10 의 겹치는 단어 {len(both)}개: {both}")
-overall10 = set(freq2.head(10).index)
-for label in LABELS:
-    print(f"  {label}: 상위10 중 전체 상위10과 겹치는 단어 "
-          f"{len(set(per_type[label].head(10).index) & overall10)}개")
-
-# ---------------------------------------------------------------- 2.8 규칙 vs 에이전트 직접 분류
-# 에이전트 직접 분류는 저자가 Claude Code에게 눈가림 표본(유형_규칙 열을 뺀 30건)과
-# 2.7의 분류 기준표를 함께 주고 새 대화에서 한 번 실행한 결과를 옮겨 적은 것이다.
-# 근거 열에는 적용한 기준표 규칙과 민원 내용 본문에서 그대로 옮긴 구절을 적게 했고,
-# 비고는 경계 / 정보부족 / 해당없음 세 가지다.
-AGENT = {
-    1000509527: "보험", 1000506058: "의료", 1000509134: "보험", 1000514847: "보험",
-    1002909748: "기타", 1000909776: "의료", 1000926143: "기타", 1001359846: "기타",
-    1001360312: "기타", 1001360120: "기타", 1001518580: "기타", 1001911777: "보험",
-    1001912410: "의료", 1001901173: "자동차", 1001899140: "기타", 1001905113: "기타",
-    1001902733: "기타", 1001908313: "기타", 1001904880: "기타", 1002061755: "여행·운송",
-    1002543997: "기타", 1003097124: "기타", 1003088380: "통신·인터넷", 1003087655: "기타",
-    1003096476: "기타", 1003098459: "여행·운송", 1003097896: "기타", 1003093891: "기타",
-    1003102174: "기타", 1003059458: "의료",
-}
-FLAG_B = {  # 기준표 실행의 비고. 적지 않은 건은 "해당없음"
-    1000509134: "경계", 1000514847: "경계", 1002909748: "경계", 1001359846: "경계",
-    1001518580: "경계", 1002061755: "경계", 1002543997: "경계", 1003093891: "경계",
-    1001904880: "정보부족", 1003059458: "정보부족",
-}
-
-sample = pd.read_csv(SAMPLE)
-assert set(sample["사건번호"]) == set(AGENT), "표본 30건의 사건번호와 에이전트 결과의 사건번호가 다르다"
-assert set(df.sample(30, random_state=10)["사건번호"]) == set(sample["사건번호"]), "시드 10 재추출 불일치"
-sample["에이전트"] = sample["사건번호"].map(AGENT)
-sample["비고(기준표)"] = sample["사건번호"].map(FLAG_B).fillna("해당없음")
-sample["일치"] = np.where(sample["유형_규칙"] == sample["에이전트"], "일치", "불일치")
-print("\n[표본 30건: 규칙 vs 에이전트]")
-print(f"일치 {(sample['일치'] == '일치').sum()}건 / 30건 "
-      f"({(sample['일치'] == '일치').mean() * 100:.0f}%)")
-print("  에이전트 분류의 유형 분포:", sample["에이전트"].value_counts().to_dict())
-print("  기준표 실행의 비고:", sample["비고(기준표)"].value_counts().to_dict())
-print("\n교차표 (행: 규칙, 열: 에이전트)")
-print(pd.crosstab(sample["유형_규칙"], sample["에이전트"]).to_string())
-print("\n불일치 건:")
-print(sample.loc[sample["일치"] == "불일치", ["사건번호", "유형_규칙", "에이전트", "제목"]].to_string(index=False))
-# 근거구절을 채울 수 없는 건: 내용이 "첨부파일 참조"이거나 제목과 같은 건
-thin_sample = sample[sample["사건번호"].isin(short["사건번호"])]
-print(f"\n표본 30건 중 근거구절을 내용에서 뽑을 수 없는 건 {len(thin_sample)}건 "
-      f"(제대로 실행되면 인용확인 열의 '내용 없음'이 이만큼 나와야 한다):")
-for _, r in thin_sample.iterrows():
-    src = df.loc[df["사건번호"] == r["사건번호"]].iloc[0]
-    print(f"  {r['사건번호']} | {src['제목']} | 내용: {src['내용'].strip()[:40]}")
-
-# ---------------------------------------------------------------- 2.11 규칙 개정 실험
-# 기준표에 덧붙인 경계 규칙 세 줄을 키워드 규칙에 반영한 것.
-#   (1) 통신·인터넷에서 "인터넷"을 빼고 통신 서비스 표현만 남긴다
-#   (2) 여행·운송에 "택배"를 넣고 통신·인터넷보다 먼저 적용한다
-#   (3) 정보부족 표시는 규칙이 아니라 비고로 다루므로 여기서는 건드리지 않는다
-RULES_REV = [
-    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
-    ("보험", r"보험"),
-    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션|택배"),
-    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|요금제|초고속인터넷|인터넷\s*요금|인터넷\s*약정"),
-    ("자동차", r"자동차|중고차|차량|정비"),
-]
-df["유형_개정"] = [classify(t, c, RULES_REV) for t, c in zip(df["제목"], df["내용"])]
-print("\n[2.11 규칙 개정 전후]")
-print(pd.DataFrame({"개정 전": df["유형_규칙"].value_counts(),
-                    "개정 후": df["유형_개정"].value_counts()}).loc[LABELS].to_string())
-print("유형이 바뀐 민원:", int((df["유형_규칙"] != df["유형_개정"]).sum()), "건")
-print(pd.crosstab(df["유형_규칙"], df["유형_개정"]).to_string())
-sample["규칙_개정"] = sample["사건번호"].map(dict(zip(df["사건번호"], df["유형_개정"])))
-# 2.10에서 원문을 읽은 불일치 5건이 개정 규칙에서 어떻게 되었는지 (점수가 아니라 진단)
-print("\n2.10에서 읽은 불일치 5건의 개정 후 유형:")
-print(sample.loc[sample["일치"] == "불일치",
-                 ["사건번호", "유형_규칙", "규칙_개정", "에이전트", "제목"]].to_string(index=False))
-# 개정이 새로 만든 오류: 택배가 지나가듯 나와 여행·운송으로 옮겨 간 건
-moved = df[(df["유형_규칙"] != df["유형_개정"]) & (df["유형_개정"] == "여행·운송")]
-print(f"\n여행·운송으로 옮겨 간 {len(moved)}건의 제목:")
-for t in moved["제목"]:
-    print("  -", t[:60])
-# 개정 뒤에도 남은 오류: "통신판매"의 통신에 걸린 전자상거래 분쟁
-tel_rev = df[df["유형_개정"] == "통신·인터넷"]
-tel_rev_text = tel_rev["제목"] + " " + tel_rev["내용"]
-still = ~tel_rev_text.str.contains(r"휴대폰|핸드폰|이동전화|요금제|초고속인터넷|인터넷\s*요금|"
-                                   r"인터넷\s*약정|통신사|통신서비스|통신요금|통화")
-print(f"\n개정 후 통신·인터넷 {len(tel_rev)}건 중 통신 서비스 표현 없이 "
-      f"'통신판매' 등으로만 걸린 건 {int(still.sum())}건:")
-for t in tel_rev.loc[still.values, "제목"]:
-    print("  -", t[:60])
-
-# ------------------------------------------- 2.11 시드를 바꿔 새로 뽑은 표본 30건
-# 고칠 때 본 표본에서 잰 성과는 증거가 약하다. 개정 규칙은 보지 않았던 표본에서 확인한다.
-NEW_SEED = 23
-new30 = df.sample(30, random_state=NEW_SEED).sort_index()
-print(f"\n[2.11 새 표본 30건 (시드 {NEW_SEED})]")
-print("첫 표본(시드 10)과 겹치는 건:",
-      len(set(new30["사건번호"]) & set(sample["사건번호"])), "건")
-print("개정 규칙의 유형 분포:", new30["유형_개정"].value_counts().to_dict())
-moved_new = new30[new30["유형_규칙"] != new30["유형_개정"]]
-print(f"이 표본에서 개정으로 유형이 바뀐 건 {len(moved_new)}건:")
-print(moved_new[["사건번호", "유형_규칙", "유형_개정", "제목"]].to_string(index=False))
-
-# ------------------------------------- 2.12 기계적 경계 후보와 검증 우선순위 목록
-# 규칙 분류 하나만 돌리고도 "먼저 읽을 건"을 고를 수 있는가. 세 가지 기계적 신호를 쓴다.
-#   s1 약한 근거: 유형을 결정한 키워드가 제목+내용 전체에서 한 번만 나왔다
-#                (제목의 [진료과] 표시로 걸린 건은 구조적 표시이므로 제외)
-#   s2 경합    : 둘 이상 유형의 키워드에 동시에 걸렸다
-#   s3 정보부족 : 내용이 "첨부파일 참조"이거나 제목과 같다
-MED_TAG = r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]"
+# ------------------------------------------------------------------ [2] 차이의 크기: 신뢰구간과 효과 크기
+line("[2] 차이의 크기: 평균 차이의 95% 신뢰구간과 효과 크기 (고령인구비율)")
 
 
-def decide(title, content, rules=RULES):
-    """규칙이 배정한 유형, 그 근거 키워드의 등장 횟수, [진료과] 표시로 걸렸는지."""
-    text = f"{title} {content}"
-    if re.search(rules[0][1], title):
-        return "의료", len(re.findall(rules[0][1], text)), bool(re.search(MED_TAG, title))
-    for label, pat in rules:
-        if re.search(pat, text):
-            return label, len(re.findall(pat, text)), False
-    return "기타", 0, False
+def welch_ci(a, b, alpha=0.05):
+    """b - a 의 평균 차이, Welch 표준오차, 자유도, 95% 신뢰구간"""
+    na, nb = len(a), len(b)
+    va, vb = a.var(ddof=1), b.var(ddof=1)
+    se = np.sqrt(va / na + vb / nb)
+    dfw = (va / na + vb / nb) ** 2 / ((va / na) ** 2 / (na - 1) + (vb / nb) ** 2 / (nb - 1))
+    diff = b.mean() - a.mean()
+    tcrit = stats.t.ppf(1 - alpha / 2, dfw)
+    return diff, se, dfw, diff - tcrit * se, diff + tcrit * se, tcrit
 
 
-def hit_count(title, content, rules=RULES):
-    """이 민원이 몇 개 유형의 키워드에 걸리는지."""
-    text = f"{title} {content}"
-    got = {"의료"} if re.search(rules[0][1], title) else set()
-    for label, pat in rules:
-        if re.search(pat, text):
-            got.add(label)
-    return len(got)
+def cohen_d(a, b):
+    na, nb = len(a), len(b)
+    sp = np.sqrt(((na - 1) * a.var(ddof=1) + (nb - 1) * b.var(ddof=1)) / (na + nb - 2))
+    return (b.mean() - a.mean()) / sp, sp
 
 
-dec = [decide(t, c) for t, c in zip(df["제목"], df["내용"])]
-df["근거횟수"] = [d[1] for d in dec]
-df["진료과표시"] = [d[2] for d in dec]
-df["걸린유형수"] = [hit_count(t, c) for t, c in zip(df["제목"], df["내용"])]
-df["약한근거"] = (df["유형_규칙"] != "기타") & (df["근거횟수"] <= 1) & (~df["진료과표시"])
-df["경합"] = df["걸린유형수"] >= 2
-df["정보부족"] = df["사건번호"].isin(short["사건번호"])
-df["우선순위점수"] = df[["약한근거", "경합", "정보부족"]].sum(axis=1)
-assert (df["유형_규칙"] == [d[0] for d in dec]).all(), "decide()와 classify()의 배정이 다르다"
+diff, se, dfw, lo, hi, tcrit = welch_ci(g_cap, g_non)
+d, sp = cohen_d(g_cap, g_non)
+print(f"평균 차이(비수도권 - 수도권) = {diff:.2f} %포인트")
+print(f"표준오차(Welch) = {se:.3f}, 자유도 = {dfw:.1f}, t임계값 = {tcrit:.3f}")
+print(f"95% 신뢰구간 = [{lo:.2f}, {hi:.2f}] %포인트 (폭 {hi-lo:.2f})")
+print(f"합동 표준편차 = {sp:.2f}, Cohen d = {d:.2f}")
+# scipy 내장 신뢰구간으로 교차검증
+res = stats.ttest_ind(g_non, g_cap, equal_var=False)
+ci = res.confidence_interval(0.95)
+print(f"scipy 교차검증: t = {res.statistic:.2f}, df = {res.df:.1f}, CI = [{ci.low:.2f}, {ci.high:.2f}]")
 
-print("\n[2.12 기계적 경계 후보 신호]")
-print(f"약한 근거 {int(df['약한근거'].sum())}건, 경합 {int(df['경합'].sum())}건, "
-      f"정보부족 {int(df['정보부족'].sum())}건")
-print("점수 분포:", df["우선순위점수"].value_counts().sort_index().to_dict())
-n_cand = int((df["우선순위점수"] >= 1).sum())
-print(f"하나라도 해당하는 경계 후보 {n_cand}건 ({n_cand / len(df) * 100:.1f}%)")
-print("약한 근거로 표시된 건의 유형 분포:",
-      df[df["약한근거"]]["유형_규칙"].value_counts().to_dict())
+print()
+print("참고: 합계출산율의 같은 계산")
+t_cap = df.loc[df["권역"] == "수도권", "합계출산율"].dropna()
+t_non = df.loc[df["권역"] == "비수도권", "합계출산율"].dropna()
+diff2, se2, dfw2, lo2, hi2, _ = welch_ci(t_cap, t_non)
+d2, sp2 = cohen_d(t_cap, t_non)
+res2 = stats.ttest_ind(t_non, t_cap, equal_var=False)
+print(f"n = {len(t_cap)} / {len(t_non)}, 평균 {t_cap.mean():.3f} / {t_non.mean():.3f}, 차이 = {diff2:.3f}명, "
+      f"95% CI = [{lo2:.3f}, {hi2:.3f}], t = {res2.statistic:.2f}, 합동SD = {sp2:.3f}, Cohen d = {d2:.2f}")
 
-top20 = df.sort_values(["우선순위점수", "약한근거", "정보부족", "사건번호"],
-                       ascending=[False, False, False, True]).head(20)
-print("\n검증 우선순위 상위 20건")
-for i, (_, r) in enumerate(top20.iterrows(), 1):
-    sig = ",".join(n for n in ["약한근거", "경합", "정보부족"] if r[n])
-    print(f"{i:2d} {r['사건번호']} 점수{r['우선순위점수']} [{sig}] "
-          f"규칙={r['유형_규칙']} 근거{r['근거횟수']}회 | {r['제목'][:40]}")
-print("상위 20건의 규칙 유형 분포:", top20["유형_규칙"].value_counts().to_dict())
+# ------------------------------------------------------------------ [3] 회귀 진단: 잔차와 한 점의 힘
+line("[3] 단순회귀 진단: 잔차 요약, 영향력 큰 점, 빼고 다시 돌리기")
+sub = df.dropna(subset=["고령인구비율", "합계출산율"]).reset_index(drop=True)
+x, y = sub["고령인구비율"].to_numpy(), sub["합계출산율"].to_numpy()
+reg = stats.linregress(x, y)
+print(f"n = {len(sub)}, 절편 = {reg.intercept:.4f}, 기울기 = {reg.slope:.5f} (SE {reg.stderr:.5f}), "
+      f"p = {reg.pvalue:.2e}, R제곱 = {reg.rvalue**2:.4f}")
+pred = reg.intercept + reg.slope * x
+resid = y - pred
+sub["예측값"], sub["잔차"] = pred, resid
+print(f"잔차 평균 = {resid.mean():.2e}, 잔차 표준편차 = {resid.std(ddof=2):.3f}, "
+      f"최소 = {resid.min():.3f}, 최대 = {resid.max():.3f}")
+print(f"잔차 절댓값이 0.3 넘는 시군구 수 = {(np.abs(resid) > 0.3).sum()}개, 0.2 넘는 수 = {(np.abs(resid) > 0.2).sum()}개")
+print(f"y 표준편차 = {y.std(ddof=1):.3f} (잔차 표준편차와 비교)")
+top = sub.reindex(sub["잔차"].abs().sort_values(ascending=False).index).head(6)
+print("잔차 절댓값 상위 6개:")
+print(top[["시도", "시군구", "고령인구비율", "합계출산율", "예측값", "잔차"]].round(3).to_string(index=False))
 
-# 이 표시가 쓸모 있는지를 표본 30건의 실제 불일치로 확인한다 (표 11-12)
-flag = df.set_index("사건번호")[["약한근거", "경합", "정보부족", "우선순위점수"]]
-sm = sample.join(flag, on="사건번호")
-sm["후보"] = sm["우선순위점수"] >= 1
-print("\n[표 11-12] 기계적 표시와 실제 불일치 (표본 30건, 개정 전 규칙 기준)")
-rows12 = []
-for name in ["약한근거", "경합", "정보부족"]:
-    sub = sm[sm[name]]
-    rows12.append((name, len(sub), int((sub["일치"] == "불일치").sum())))
-for name, mask in [("하나라도 해당(후보)", sm["후보"]), ("해당 없음", ~sm["후보"])]:
-    sub = sm[mask]
-    rows12.append((name, len(sub), int((sub["일치"] == "불일치").sum())))
-t12 = pd.DataFrame(rows12, columns=["신호", "해당 건수", "불일치"])
-t12["불일치 비율(%)"] = (t12["불일치"] / t12["해당 건수"] * 100).round(1)
-print(t12.to_string(index=False))
-print("\n에이전트가 붙인 비고와 기계적 후보 표시의 교차:")
-print(pd.crosstab(sm["비고(기준표)"], sm["후보"]).to_string())
-print("\n새 표본 30건의 경계 후보:", int((new30["사건번호"].map(
-    df.set_index("사건번호")["우선순위점수"]) >= 1).sum()), "건")
+# 잔차를 예측값 구간별로 요약(패턴 확인)
+bins = pd.cut(sub["고령인구비율"], [0, 15, 20, 25, 30, 35, 50])
+print("고령인구비율 구간별 잔차 평균(0 근처면 직선이 대체로 적절):")
+print(sub.groupby(bins, observed=True)["잔차"].agg(["count", "mean", "std"]).round(3))
 
-# ---------------------------------------------------------------- 2.13 유형별 대표 민원
-tv = TfidfVectorizer(analyzer=make_tokenizer(STOP_2))
-X = tv.fit_transform(docs)
-print("\n[유형별 대표 민원: 유형 중심 벡터와 코사인 유사도가 가장 높은 문서]")
-for label in ["의료", "보험", "통신·인터넷", "여행·운송", "자동차", "기타"]:
-    idx = df.index[df["유형_규칙"] == label]
-    centroid = np.asarray(X[idx].mean(axis=0))
-    sims = cosine_similarity(X[idx], centroid).ravel()
-    best = idx[sims.argmax()]
-    print(f"{label} ({len(idx)}건): 유사도 {sims.max():.2f}  #{df.loc[best, '사건번호']}  {df.loc[best, '제목']}")
+# 한 점씩 빼고 기울기 재계산(leave-one-out)
+loo = []
+for i in range(len(sub)):
+    m = np.ones(len(sub), dtype=bool)
+    m[i] = False
+    r_i = stats.linregress(x[m], y[m])
+    loo.append(dict(시도=sub.loc[i, "시도"], 시군구=sub.loc[i, "시군구"], 고령인구비율=x[i], 합계출산율=y[i],
+                    기울기=r_i.slope, 변화=r_i.slope - reg.slope, R제곱=r_i.rvalue ** 2))
+loo = pd.DataFrame(loo)
+loo["변화율%"] = loo["변화"] / reg.slope * 100
+top_loo = loo.reindex(loo["변화"].abs().sort_values(ascending=False).index).head(6)
+print("한 점을 뺐을 때 기울기 변화가 큰 시군구 상위 6개:")
+print(top_loo.round(5).to_string(index=False))
+
+# statsmodels로 Cook's distance 교차검증
+try:
+    import statsmodels.api as sm
+    X = sm.add_constant(x)
+    ols = sm.OLS(y, X).fit()
+    cooks = ols.get_influence().cooks_distance[0]
+    idx = np.argsort(cooks)[::-1][:5]
+    print("statsmodels Cook 거리 상위 5개:")
+    for i in idx:
+        print(f"  {sub.loc[i, '시도']} {sub.loc[i, '시군구']}: D = {cooks[i]:.4f}")
+except Exception as e:  # noqa: BLE001
+    print("statsmodels 교차검증 생략:", e)
+
+# 가장 영향력 큰 점을 빼고 다시 돌리기 + 영광군(출산율 최대)을 빼고 다시 돌리기
+i_max, i_min = int(np.argmax(resid)), int(np.argmin(resid))
+cands = [("영향력 1위", top_loo.iloc[0]), ("잔차 최대", sub.loc[i_max]), ("잔차 최소", sub.loc[i_min])]
+for tag, name in cands:
+    cond = (sub["시도"] == name["시도"]) & (sub["시군구"] == name["시군구"])
+    label = f"{tag}({name['시도']} {name['시군구']}) 제외"
+    m = ~cond.to_numpy()
+    r_m = stats.linregress(x[m], y[m])
+    print(f"{label}: n = {m.sum()}, 기울기 = {r_m.slope:.5f} (원래 {reg.slope:.5f}, "
+          f"변화 {(r_m.slope-reg.slope)/reg.slope*100:+.1f}%), 절편 = {r_m.intercept:.4f}, "
+          f"R제곱 = {r_m.rvalue**2:.4f} (원래 {reg.rvalue**2:.4f}), p = {r_m.pvalue:.2e}")
+
+# 잔차 상위 3개를 한꺼번에 뺐을 때
+top3 = top.head(3)
+m3 = ~sub.index.isin(top3.index)
+r_3 = stats.linregress(x[m3], y[m3])
+print(f"잔차 상위 3개({', '.join(top3['시군구'])}) 제외: n = {m3.sum()}, 기울기 = {r_3.slope:.5f} "
+      f"({(r_3.slope-reg.slope)/reg.slope*100:+.1f}%), R제곱 = {r_3.rvalue**2:.4f}")
+
+# ------------------------------------------------------------------ [4] 독립 검산용 값 (다른 경로로 계산)
+line("[4] 새 대화 독립 검산용: 원자료에서 다른 경로로 다시 계산")
+cap_rows = df[df["시도"].isin(capital)]
+print(f"수도권 행 수(시도 isin) = {len(cap_rows)}, 고령인구비율 합계 = {cap_rows['고령인구비율'].sum():.4f}, "
+      f"합계/개수 = {cap_rows['고령인구비율'].sum()/len(cap_rows):.4f}")
+print(f"수도권 시도별 개수: {cap_rows['시도'].value_counts().to_dict()}")
+# 기울기를 공식으로: 공분산 / 분산
+cov = np.cov(x, y, ddof=1)[0, 1]
+print(f"기울기 = 공분산/분산 = {cov:.5f} / {x.var(ddof=1):.4f} = {cov/x.var(ddof=1):.5f}")
+print(f"numpy polyfit 기울기 = {np.polyfit(x, y, 1)[0]:.5f}")
+print(f"합계출산율 결측 = {df['합계출산율'].isna().sum()}개, 사용 관측치 = {len(sub)}")
+print(f"전체 합계출산율 평균({len(sub)}) ={sub['합계출산율'].mean():.4f}, 중앙값 = {sub['합계출산율'].median():.3f}")
+print(f"고령인구비율 25%일 때 예측 = {reg.intercept + reg.slope*25:.4f}")
+
+# ------------------------------------------------------------------ [5] 선택 심화: 통제변수 하나 넣기
+line("[5] 선택 심화: 통제변수를 넣은 회귀 (numpy로 계산, statsmodels로 교차검증)")
+
+
+def ols_numpy(X, y, names):
+    X = np.column_stack([np.ones(len(y)), X])
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    res = y - X @ beta
+    n, k = X.shape
+    sigma2 = res @ res / (n - k)
+    cov_b = sigma2 * np.linalg.inv(X.T @ X)
+    se = np.sqrt(np.diag(cov_b))
+    t = beta / se
+    p = 2 * stats.t.sf(np.abs(t), n - k)
+    r2 = 1 - (res @ res) / ((y - y.mean()) @ (y - y.mean()))
+    out = pd.DataFrame(dict(계수=beta, 표준오차=se, t=t, p=p), index=["절편"] + names)
+    return out, r2, n
+
+
+sub["수도권"] = (sub["권역"] == "수도권").astype(int)
+
+
+def fit_names(names):
+    """설명변수에 결측이 있는 행(인구증가율의 군위군)은 그 모형에서만 뺀다."""
+    d = sub.dropna(subset=names)
+    out, r2, n = ols_numpy(d[names].to_numpy(dtype=float), d["합계출산율"].to_numpy(), names)
+    return out, r2, n, d
+
+
+for names in (["고령인구비율", "수도권"], ["고령인구비율", "인구증가율"], ["고령인구비율", "수도권", "인구증가율"]):
+    out, r2, n, _ = fit_names(names)
+    print(f"모형: 합계출산율 ~ {' + '.join(names)}  (n = {n}, R제곱 = {r2:.4f})")
+    print(out.round(5).to_string())
+    print()
+
+try:
+    import statsmodels.formula.api as smf
+    m1 = smf.ols("합계출산율 ~ 고령인구비율 + 수도권", data=sub).fit()
+    print("statsmodels 교차검증(고령인구비율 + 수도권): ",
+          {k: round(v, 5) for k, v in m1.params.items()}, "R2 =", round(m1.rsquared, 4), "n =", int(m1.nobs))
+except Exception as e:  # noqa: BLE001
+    print("statsmodels 교차검증 생략:", e)
+
+print()
+sg = sub.dropna(subset=["인구증가율"])
+print(f"(n = {len(sg)}) 인구증가율과 고령인구비율의 상관 = {stats.pearsonr(sg['고령인구비율'], sg['인구증가율'])[0]:.3f}")
+print(f"인구증가율과 합계출산율의 상관 = {stats.pearsonr(sg['인구증가율'], sg['합계출산율'])[0]:.3f}")
+print(f"수도권 안에서만 회귀: n = {(sub['수도권']==1).sum()}, "
+      f"기울기 = {stats.linregress(sub.loc[sub['수도권']==1,'고령인구비율'], sub.loc[sub['수도권']==1,'합계출산율']).slope:.5f}")
+print(f"비수도권 안에서만 회귀: n = {(sub['수도권']==0).sum()}, "
+      f"기울기 = {stats.linregress(sub.loc[sub['수도권']==0,'고령인구비율'], sub.loc[sub['수도권']==0,'합계출산율']).slope:.5f}")
+
+# ------------------------------------------------------------------ [6] 잔차 패턴 서술용 보조 값
+line("[6] 보조: 고령인구비율 15% 이하 시군구의 잔차 (직선이 낮게 예측하는 구간)")
+young = sub[sub["고령인구비율"] <= 15].sort_values("고령인구비율")
+print(young[["시도", "시군구", "고령인구비율", "합계출산율", "예측값", "잔차"]].round(3).to_string(index=False))
+print(f"15% 이하 {len(young)}개 중 잔차가 양수인 곳 = {(young['잔차'] > 0).sum()}개")
+
+# ------------------------------------------------------------------ [7] 같은 절차를 다른 변수로 반복
+line("[7] 같은 집단 비교를 다른 변수로 반복 (2.4절)")
+VARS7 = ["고령인구비율", "합계출산율", "인구증가율", "유소년부양비", "노령화지수"]
+rows7 = []
+for var in VARS7:
+    a = df.loc[df["권역"] == "수도권", var].dropna()
+    b = df.loc[df["권역"] == "비수도권", var].dropna()
+    diff_v, se_v, dfv, lo_v, hi_v, _ = welch_ci(a, b)
+    d_v, sp_v = cohen_d(a, b)
+    r_v = stats.ttest_ind(b, a, equal_var=False)
+    rows7.append(dict(변수=var, n수도권=len(a), n비수도권=len(b), 평균수도권=a.mean(), 평균비수도권=b.mean(),
+                      SD수도권=a.std(ddof=1), SD비수도권=b.std(ddof=1), 차이=diff_v,
+                      CI하한=lo_v, CI상한=hi_v, t=r_v.statistic, p=r_v.pvalue, 합동SD=sp_v, d=d_v))
+tab7 = pd.DataFrame(rows7).set_index("변수")
+print(tab7.round(4).T.to_string())
+print("p값(지수 표기):", {k: f"{v:.3e}" for k, v in tab7["p"].items()})
+print("결측 개수:", {c: int(df[c].isna().sum()) for c in
+                 VARS7})
+print("인구증가율 결측 시군구:", (df.loc[df["인구증가율"].isna(), "시도"] + " " +
+                           df.loc[df["인구증가율"].isna(), "시군구"]).tolist())
+print()
+pg = df["인구증가율"].dropna()
+print("인구증가율 분포 참고: n = %d, 전체 평균 %.3f, 최소 %.2f, 최대 %.2f, 5%%분위 %.2f, 95%%분위 %.2f, 0보다 큰 시군구 %d개"
+      % (len(pg), pg.mean(), pg.min(), pg.max(), pg.quantile(0.05), pg.quantile(0.95), (pg > 0).sum()))
+print("인구증가율이 양수인 곳의 권역 구성:",
+      df.loc[df["인구증가율"] > 0, "권역"].value_counts().to_dict())
+for v in ["유소년부양비", "노령화지수"]:
+    print("%s 최대/최소: %.1f (%s %s), %.1f (%s %s)"
+          % (v, df[v].max(), df.loc[df[v].idxmax(), "시도"], df.loc[df[v].idxmax(), "시군구"],
+             df[v].min(), df.loc[df[v].idxmin(), "시도"], df.loc[df[v].idxmin(), "시군구"]))
+gn = df[df["시군구"] == "강릉시"].iloc[0]
+print("강릉시: 유소년부양비 %.1f, 노령화지수 %.1f, 고령인구비율 %.1f" % (gn["유소년부양비"], gn["노령화지수"], gn["고령인구비율"]))
+
+# ------------------------------------------------------------------ [8] 시도별 평균과 신뢰구간
+line("[8] 시도별 고령인구비율 평균과 95% 신뢰구간 (2.5절)")
+
+
+def mean_ci(v, alpha=0.05):
+    """한 집단의 평균과 95% 신뢰구간. 관측치가 1개면 흩어짐을 잴 수 없어 구간을 만들지 못한다."""
+    n = len(v)
+    m = v.mean()
+    if n < 2:
+        return n, m, np.nan, np.nan, np.nan, np.nan, np.nan
+    sd = v.std(ddof=1)
+    se = sd / np.sqrt(n)
+    tc = stats.t.ppf(1 - alpha / 2, n - 1)
+    return n, m, sd, se, tc, m - tc * se, m + tc * se
+
+
+rows8 = []
+for sido, v in df.groupby("시도")["고령인구비율"]:
+    n, m, sd, se, tc, lo, hi = mean_ci(v)
+    rows8.append(dict(시도=sido, n=n, 평균=m, 표준편차=sd, 표준오차=se, t임계값=tc,
+                      CI하한=lo, CI상한=hi, CI폭=hi - lo))
+tab8 = pd.DataFrame(rows8).sort_values("평균").reset_index(drop=True)
+print(tab8.round(3).to_string(index=False))
+print(f"시도 수 = {len(tab8)}, 시군구 합 = {int(tab8['n'].sum())}")
+print("구간을 계산할 수 없는 시도:", tab8.loc[tab8["CI폭"].isna(), "시도"].tolist(),
+      "(시군구 수 %s)" % tab8.loc[tab8["CI폭"].isna(), "n"].tolist())
+ok8 = tab8.dropna(subset=["CI폭"]).reset_index(drop=True)
+print(f"구간 폭이 가장 좁은 시도: {ok8.loc[ok8['CI폭'].idxmin(), '시도']} "
+      f"{ok8['CI폭'].min():.2f}%포인트, 가장 넓은 시도: {ok8.loc[ok8['CI폭'].idxmax(), '시도']} "
+      f"{ok8['CI폭'].max():.2f}%포인트")
+print("하한이 0보다 작은 시도:", ok8.loc[ok8["CI하한"] < 0, "시도"].tolist())
+# 평균 순위가 이웃한 시도 쌍의 구간 겹침 여부
+print("평균 순위가 이웃한 시도 쌍의 신뢰구간 겹침:")
+for i in range(len(ok8) - 1):
+    a8, b8 = ok8.loc[i], ok8.loc[i + 1]
+    overlap = a8["CI상한"] >= b8["CI하한"]
+    print(f"  {a8['시도']}({a8['평균']:.2f}) vs {b8['시도']}({b8['평균']:.2f}): "
+          f"[{a8['CI하한']:.2f}, {a8['CI상한']:.2f}] / [{b8['CI하한']:.2f}, {b8['CI상한']:.2f}] "
+          f"-> {'겹침' if overlap else '겹치지 않음'}")
+# 평균 차이가 가장 작은 두 시도와, 구간이 겹치지 않는 가장 가까운 쌍
+gap = ok8["평균"].diff()
+j = int(gap.idxmin())
+print(f"평균이 가장 가까운 두 시도: {ok8.loc[j-1, '시도']} {ok8.loc[j-1, '평균']:.3f} vs "
+      f"{ok8.loc[j, '시도']} {ok8.loc[j, '평균']:.3f} (차이 {gap.min():.3f}%포인트)")
+# 본문 표에 실을 시도 쌍(겹치는 쌍과 겹치지 않는 쌍)
+print("본문 표에 실을 시도 쌍:")
+idx8 = tab8.set_index("시도")
+for s1, s2 in [("전남", "전북"), ("대구", "인천"), ("경기", "서울"), ("서울", "제주"),
+               ("경기", "강원"), ("서울", "경북")]:
+    a8, b8 = idx8.loc[s1], idx8.loc[s2]
+    lo_ov, hi_ov = max(a8["CI하한"], b8["CI하한"]), min(a8["CI상한"], b8["CI상한"])
+    print(f"  {s1}({int(a8['n'])}개, {a8['평균']:.2f}, [{a8['CI하한']:.2f}, {a8['CI상한']:.2f}]) vs "
+          f"{s2}({int(b8['n'])}개, {b8['평균']:.2f}, [{b8['CI하한']:.2f}, {b8['CI상한']:.2f}]): "
+          f"평균 차이 {abs(a8['평균']-b8['평균']):.2f}%포인트 -> "
+          f"{'겹침' if lo_ov <= hi_ov else '겹치지 않음'}")
+print("서울과 경기 비교(관측치는 많고 흩어짐은 다름):")
+for s in ["서울", "경기", "인천", "제주", "울산"]:
+    r8 = tab8[tab8["시도"] == s].iloc[0]
+    print(f"  {s}: n = {int(r8['n'])}, 표준편차 = {r8['표준편차']:.3f}, "
+          f"표준오차 = {r8['표준오차']:.3f}, t임계값 = {r8['t임계값']:.3f}, 폭 = {r8['CI폭']:.2f}")
+
+# ------------------------------------------------------------------ [9] 독립 검산 보조: 절편 공식
+line("[9] 독립 검산 보조: 절편을 평균으로 다시 만들기 (2.10절)")
+xbar, ybar = x.mean(), y.mean()
+print(f"고령인구비율 평균(228개) = {xbar:.4f}, 합계출산율 평균(228개) = {ybar:.4f}")
+print(f"절편 = ybar - 기울기 x xbar = {ybar:.4f} - {reg.slope:.5f} x {xbar:.4f} = {ybar - reg.slope * xbar:.4f}")
+print(f"linregress 절편 = {reg.intercept:.4f}")
+print(f"상관계수 r = {reg.rvalue:.4f}, r 제곱 = {reg.rvalue**2:.4f}")
+print(f"기울기 = r x (y표준편차 / x표준편차) = {reg.rvalue:.4f} x ({y.std(ddof=1):.4f} / {x.std(ddof=1):.4f}) "
+      f"= {reg.rvalue * y.std(ddof=1) / x.std(ddof=1):.5f}")
+
+# ------------------------------------------------------------------ [10] 설명변수를 하나씩 더하기 + 표준화 계수
+line("[10] 설명변수를 하나씩 더한 회귀와 표준화 계수 (2.12절)")
+models = [["고령인구비율"], ["고령인구비율", "수도권"], ["고령인구비율", "수도권", "인구증가율"]]
+for names in models:
+    out, r2, n, d = fit_names(names)
+    yd = d["합계출산율"]
+    std = {nm: out.loc[nm, "계수"] * d[nm].std(ddof=1) / yd.std(ddof=1) for nm in names}
+    print(f"모형 {names} : n = {n}, R제곱 = {r2:.4f}, 조정R제곱 = "
+          f"{1 - (1 - r2) * (n - 1) / (n - len(names) - 1):.4f}")
+    print(out.round(5).to_string())
+    print("  표준화 계수:", {k: round(v, 3) for k, v in std.items()})
+    print()
+print("변수별 표준편차:",
+      {c: round(sub[c].std(ddof=1), 4) for c in ["고령인구비율", "수도권", "인구증가율", "합계출산율"]})
+
+# ------------------------------------------------------------------ [11] 화면 출력 예시(본문 코드 블록용 실제 출력)
+line("[11] 본문 코드 블록에 실을 실제 출력")
+print("scipy shapiro(수도권):", stats.shapiro(g_cap))
+print("scipy shapiro(비수도권):", stats.shapiro(g_non))
+print("scipy levene:", stats.levene(g_cap, g_non, center="median"))
+print("scipy ttest_ind(Welch):", stats.ttest_ind(g_non, g_cap, equal_var=False))
+print("scipy linregress:", stats.linregress(x, y))
+_tc = stats.t.ppf(0.975, len(x) - 2)
+print(f"기울기의 95% 신뢰구간 = {reg.slope:.5f} +- {_tc:.4f} x {reg.stderr:.5f} = "
+      f"[{reg.slope - _tc * reg.stderr:.5f}, {reg.slope + _tc * reg.stderr:.5f}] (자유도 {len(x) - 2})")
+try:
+    import statsmodels.api as sm2
+    X1 = sm2.add_constant(x)
+    fit1 = sm2.OLS(y, X1).fit()
+    print("--- statsmodels 단순회귀 계수표 ---")
+    print(fit1.summary().tables[1])
+    print(f"R-squared = {fit1.rsquared:.3f}, Adj = {fit1.rsquared_adj:.3f}, "
+          f"F = {fit1.fvalue:.2f}, Prob(F) = {fit1.f_pvalue:.3e}, n = {int(fit1.nobs)}")
+    import statsmodels.formula.api as smf2
+    fit2 = smf2.ols("합계출산율 ~ 고령인구비율 + 수도권", data=sub).fit()
+    print("--- statsmodels 통제 회귀 계수표 ---")
+    print(fit2.summary().tables[1])
+    print(f"R-squared = {fit2.rsquared:.3f}, Adj = {fit2.rsquared_adj:.3f}, n = {int(fit2.nobs)}")
+except Exception as e:  # noqa: BLE001
+    print("statsmodels 출력 생략:", e)

@@ -23,6 +23,8 @@ nav.sidebar .tag { display:inline-block; font-size:.72rem; font-weight:700; bord
   padding:0 5px; margin-right:5px; vertical-align:1px; }
 nav.sidebar .t1 { background:#e7eefc; color:#2f6fb0; }
 nav.sidebar .t2 { background:#e6f4ea; color:#2f8f4e; }
+nav.sidebar .t3 { background:#fbeee0; color:#c77b2f; }
+nav.sidebar .t4 { background:#eee9f8; color:#6b4fb0; }
 main { margin-left:var(--sidebar-w); padding:36px 48px 80px; max-width:880px; }
 main h1 { font-size:1.7rem; border-bottom:3px solid var(--accent); padding-bottom:10px; }
 main h2 { font-size:1.32rem; margin-top:2.4em; border-bottom:1px solid #e3e6ea; padding-bottom:6px; }
@@ -95,22 +97,22 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 <li class="exam">8주차 · 중간고사</li>
 <li class="part">3부. 분석과 해석</li>
 <li class="chap"><a href="w09-1.html"><span class="tag t1">이론</span>9주차 탐색적 데이터 분석과 시각화</a></li>
-<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 에이전트로 EDA 수행하기</a></li>
-<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 통계로 정책 진단하기</a></li>
-<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 에이전트로 통계 분석하기</a></li>
-<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
-<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 민원 텍스트 분석하기</a></li>
-<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 문서 그라운딩과 RAG</a></li>
-<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 Skill과 MCP로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w09-2.html"><span class="tag t2">실습</span>9주차 공통 데이터를 모아 에이전트로 EDA 수행하기</a></li>
+<li class="chap"><a href="w10-1.html"><span class="tag t1">이론</span>10주차 서브에이전트, 문서 그라운딩, RAG</a></li>
+<li class="chap"><a href="w10-2.html"><span class="tag t2">실습</span>10주차 서브에이전트와 그라운딩으로 근거 있는 답 만들기</a></li>
+<li class="chap"><a href="w11-1.html"><span class="tag t1">이론</span>11주차 통계로 정책 진단하기</a></li>
+<li class="chap"><a href="w11-2.html"><span class="tag t2">실습</span>11주차 에이전트로 통계 분석하기</a></li>
+<li class="chap"><a href="w12-1.html"><span class="tag t1">이론</span>12주차 텍스트 데이터 분석 (Text-as-Data)</a></li>
+<li class="chap"><a href="w12-2.html"><span class="tag t2">실습</span>12주차 에이전트로 민원 텍스트 분석하기</a></li>
 <li class="part">4부. 종합과 확장</li>
-<li class="chap"><a href="w13-1.html"><span class="tag t1">이론</span>13주차 다중 에이전트와 분석 파이프라인</a></li>
-<li class="chap"><a href="w13-2.html"><span class="tag t2">실습</span>13주차 전 과정 파이프라인 구축하기</a></li>
-<li class="chap"><a href="w14-1.html"><span class="tag t1">이론</span>14주차 분석 보고서와 책임 있는 AI 활용</a></li>
-<li class="chap"><a href="w14-2.html"><span class="tag t2">실습</span>14주차 종합 프로젝트: 나의 분석 보고서</a></li>
+<li class="chap"><a href="w13-1.html"><span class="tag t4">통합</span>13주차 서브에이전트를 활용한 분석</a></li>
+<li class="chap"><a href="w13-2.html"><span class="tag t3">특강</span>13주차 특강. AI 에이전트, 누가 책임지는가: 자율성과 책임의 문제</a></li>
+<li class="chap"><a href="w14-1.html"><span class="tag t4">통합</span>14주차 서브에이전트를 활용한 검증</a></li>
+<li class="chap"><a href="w14-2.html"><span class="tag t3">특강</span>14주차 특강. 믿을 수 있는 AI 에이전트: 투명성, 공정성, 신뢰</a></li>
 <li class="exam">15주차 · 기말고사</li>
 </ul></nav>
 <main><h1>6주차 1차시. 공공데이터 생태계와 MCP</h1>
-<p class="moddate">최종 수정: 2026-10-07 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
+<p class="moddate">최종 수정: 2026-10-22 · 이 교재는 학기 중에도 계속 업데이트됩니다</p>
 <blockquote>
 <p>이 법은 공공기관이 보유·관리하는 데이터의 제공 및 그 이용 활성화에 관한 사항을 규정함으로써 국민의 공공데이터에 대한 이용권을 보장하고, 공공데이터의 민간 활용을 통한 삶의 질 향상과 국민경제 발전에 이바지함을 목적으로 한다.
 (「공공데이터의 제공 및 이용 활성화에 관한 법률」 제1조)</p>
@@ -213,7 +215,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 </tr>
 </tbody>
 </table>
-<p>몇 곳의 성격을 정리하면 다음과 같다. <strong>공공데이터포털</strong>은 행정안전부가 운영하는 범정부 종합 창구로, 생활어 검색("어린이집", "CCTV")이 잘 통하고, 원하는 데이터가 없으면 제공 신청도 할 수 있다. <strong>KOSIS</strong>는 국가데이터처가 운영하는 통계 전문 포털로, 공공데이터포털이 여러 기관이 제공한 데이터를 모아 둔 종합 목록이라면 KOSIS는 품질 관리를 거친 공식 통계를 제공하는 전문 포털이다. 우리가 <a href="index.html#week-2">2주차</a>부터 써 온 sigungu_2023.csv의 원천 통계(주민등록인구, 합계출산율)도 KOSIS에서 수집한 것이고, 이 장 후반의 MCP 실습 대상도 KOSIS다. <strong>지방재정365</strong>는 도입부 과장 질문("우리 시 재정자립도")의 답이 있는 곳으로, 행정학 전공자가 앞으로 가장 자주 이용할 포털 중 하나다. <strong>국가법령정보센터</strong>는 숫자 데이터는 아니지만 데이터 열 이름에 등장하는 제도 용어("재정자립도"의 산식, "공공기관"의 범위)가 정의된 곳이라 뜻밖에 자주 쓰이며, <a href="index.html#week-12">12주차</a>에서 법령 텍스트를 직접 분석 재료로 쓴다.</p>
+<p>몇 곳의 성격을 정리하면 다음과 같다. <strong>공공데이터포털</strong>은 행정안전부가 운영하는 범정부 종합 창구로, 생활어 검색("어린이집", "CCTV")이 잘 통하고, 원하는 데이터가 없으면 제공 신청도 할 수 있다. <strong>KOSIS</strong>는 국가데이터처가 운영하는 통계 전문 포털로, 공공데이터포털이 여러 기관이 제공한 데이터를 모아 둔 종합 목록이라면 KOSIS는 품질 관리를 거친 공식 통계를 제공하는 전문 포털이다. 우리가 <a href="index.html#week-2">2주차</a>부터 써 온 sigungu_2023.csv의 원천 통계(주민등록인구, 합계출산율)도 KOSIS에서 수집한 것이고, 이 장 후반의 MCP 실습 대상도 KOSIS다. <strong>지방재정365</strong>는 도입부 과장 질문("우리 시 재정자립도")의 답이 있는 곳으로, 행정학 전공자가 앞으로 가장 자주 이용할 포털 중 하나다. <strong>국가법령정보센터</strong>는 숫자 데이터는 아니지만 데이터 열 이름에 등장하는 제도 용어("재정자립도"의 산식, "공공기관"의 범위)가 정의된 곳이라 뜻밖에 자주 쓰이며, <a href="index.html#week-10">10주차</a>에서 법령 텍스트를 직접 분석 재료로 쓴다.</p>
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 포털 화면은 바뀐다, 성격은 남는다</strong><br>
 포털들은 수시로 개편된다. 메뉴 이름이 바뀌고, 주소가 통합되기도 하고, 기관 이름도 바뀐다. 통계청이 국가데이터처로 개편된 것처럼, 표 6-1의 운영 기관명도 언젠가 달라질 수 있다. 그래서 이 장에서 외울 것은 "어느 메뉴를 몇 번 클릭하는가"가 아니라 "이런 성격의 데이터는 이런 성격의 기관이 낸다"는 구조다. 구조를 알면 화면이 바뀌어도 3분 안에 원하는 데이터를 다시 찾을 수 있다.
@@ -330,7 +332,7 @@ html.nav-collapsed main { margin-left:auto; margin-right:auto; }
 
 <div style="border:1px solid #ecd9c6;border-left:5px solid #c77b2f;background:#fdf9f4;padding:12px 16px;margin:18px 0;border-radius:4px;">
 <strong>유의 · 화면을 자동 수집하는 크롤링에는 한계가 있다</strong><br>
-원하는 데이터에 정식 창구가 없을 때 사람용 웹 화면을 프로그램으로 자동 수집하는 방법을 크롤링(crawling)이라 부른다. 크롤링이 곧 불법은 아니지만, 제공자가 예정하지 않은 수집 경로이므로 지켜야 할 한계가 있다. 사이트 이용약관, 자동 수집 방침을 밝힌 robots.txt, 게시글의 저작권과 개인정보, 그리고 상대 서버의 부하다. 이 과목의 원칙은 명료하다. 정식 창구(API, MCP)가 있으면 그것을 쓰고, 크롤링은 차선책으로만, 한계를 확인하고 쓴다. 에이전트는 시키면 크롤링 코드를 쉽게 짜 주지만, 코드를 짤 수 있다는 것과 그래도 된다는 것은 다른 문제이며 그 판단은 지시하는 사람의 책임이다. <a href="index.html#week-11">11주차</a>에서 공개 텍스트 자료를 다룰 때 이 판단이 다시 필요하다.
+원하는 데이터에 정식 창구가 없을 때 사람용 웹 화면을 프로그램으로 자동 수집하는 방법을 크롤링(crawling)이라 부른다. 크롤링이 곧 불법은 아니지만, 제공자가 예정하지 않은 수집 경로이므로 지켜야 할 한계가 있다. 사이트 이용약관, 자동 수집 방침을 밝힌 robots.txt, 게시글의 저작권과 개인정보, 그리고 상대 서버의 부하다. 이 과목의 원칙은 명료하다. 정식 창구(API, MCP)가 있으면 그것을 쓰고, 크롤링은 차선책으로만, 한계를 확인하고 쓴다. 에이전트는 시키면 크롤링 코드를 쉽게 짜 주지만, 코드를 짤 수 있다는 것과 그래도 된다는 것은 다른 문제이며 그 판단은 지시하는 사람의 책임이다. <a href="index.html#week-12">12주차</a>에서 공개 텍스트 자료를 다룰 때 이 판단이 다시 필요하다.
 </div>
 
 <h2 id="14-MCP-에이전트와-외부-도구를-연결하는-표준">1.4 MCP: 에이전트와 외부 도구를 연결하는 표준</h2>

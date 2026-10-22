@@ -1,17 +1,17 @@
-# 10주차 분석 코드: 집단 비교(t검정)와 단순회귀
-# 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 11주차 분석 코드: 집단 비교(t검정)와 단순회귀
+# 데이터: 9주차 2차시 2.1-2.2에서 kosis MCP로 수집·결합한 data/sigungu_mcp_2023.csv (229개 시군구)
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 code/ch09_analysis.py
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from scipy import stats
 
-DATA = Path(__file__).resolve().parent.parent / "data" / "sigungu_2023.csv"
-df = pd.read_csv(DATA)
+DATA = Path(__file__).resolve().parent.parent / "data" / "sigungu_mcp_2023.csv"
+df = pd.read_csv(DATA, encoding="utf-8-sig")
 
-# 수도권(서울·경기·인천) 여부
-capital = ["서울", "경기", "인천"]
-df["권역"] = np.where(df["시도"].isin(capital), "수도권", "비수도권")
+# 수도권(서울·인천·경기) 여부는 데이터의 수도권 열을 그대로 쓴다
+df["권역"] = df["수도권"]
+print("결측 개수:", {c: int(v) for c, v in df.isna().sum().items() if v > 0})
 
 print("=" * 60)
 print("[1] 집단 비교: 수도권 vs 비수도권 고령인구비율")

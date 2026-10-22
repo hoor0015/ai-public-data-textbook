@@ -1,154 +1,144 @@
-# 10주차 2차시(실습) 그림 생성: 그림 10-5(분석 전 가정 확인), 그림 10-6(시도별 평균과 신뢰구간),
-# 그림 10-7(잔차 그림과 한 점의 힘). 번호는 본문 등장 순서를 따른다.
-# 실행: cd ~/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 10주차 2차시(실습) 그림 생성
+#   그림 10-7 fig10_cite_check.png    인용 검증표의 네 열과 세 가지 판정
+#   그림 10-8 fig10_evidence_skill.png evidence-memo 스킬의 구성과 실행 흐름
+# 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
 from pathlib import Path
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy import stats
 
-sns.set_style("whitegrid")
+sns.set_style("white")
 import koreanize_matplotlib  # noqa: E402,F401
+import figfit  # noqa: E402,F401  (상자 글씨 자동 크기)
 
-BASE = Path(__file__).resolve().parent.parent
-FIG = BASE / "figures"
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+FIG = Path(__file__).resolve().parent.parent / "figures"
 FIG.mkdir(exist_ok=True)
 
-df = pd.read_csv(BASE / "data" / "sigungu_2023.csv", encoding="utf-8-sig")
-capital = ["서울", "경기", "인천"]
-df["권역"] = np.where(df["시도"].isin(capital), "수도권", "비수도권")
-order = ["수도권", "비수도권"]
-pal = {"수도권": "#2f6fb0", "비수도권": "#c77b2f"}
 
-# ---------------------------------------------------------------- 그림 10-5
-# 분석 전 가정 확인: 두 집단의 고령인구비율 분포 모양과 흩어짐
-bins = np.arange(10, 48, 2)
-fig, axes = plt.subplots(2, 1, figsize=(8.5, 6.4), sharex=True)
-for ax, g in zip(axes, order):
-    v = df.loc[df["권역"] == g, "고령인구비율"]
-    ax.hist(v, bins=bins, color=pal[g], alpha=0.7, edgecolor="white")
-    m, sd, med = v.mean(), v.std(ddof=1), v.median()
-    ax.axvline(m, color="black", lw=1.6, ls="-")
-    ax.axvline(med, color="black", lw=1.2, ls="--")
-    ax.axvspan(m - sd, m + sd, color="gray", alpha=0.12)
-    ax.text(0.98, 0.92,
-            f"{g} (n = {len(v)})\n평균 {m:.1f}%  중앙값 {med:.1f}%\n표준편차 {sd:.1f}%포인트",
-            transform=ax.transAxes, ha="right", va="top", fontsize=10.5,
-            bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
-    ax.set_ylabel("시군구 수")
-axes[0].set_title("수도권과 비수도권 시군구의 고령인구비율 분포 모양 (2023)", fontsize=13)
-axes[1].set_xlabel("고령인구비율 (%)")
-axes[0].text(0.02, 0.92, "실선 = 평균, 점선 = 중앙값\n회색 띠 = 평균 ± 1표준편차",
-             transform=axes[0].transAxes, fontsize=9.5, va="top", color="#444")
-fig.tight_layout()
-fig.savefig(FIG / "fig10_assumption.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
+def box(ax, x, y, w, h, text, fc="#f5f9fd", ec="#2f6fb0", fontsize=10, weight="normal"):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.08",
+                                fc=fc, ec=ec, lw=1.4))
+    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
+            fontsize=fontsize, fontweight=weight)
+
+
+def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.6, ls="-"):
+    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>",
+                                 mutation_scale=16, color=color, lw=lw, linestyle=ls))
+
 
 # ---------------------------------------------------------------- 그림 10-7
-# 잔차 그림과 한 점의 힘 (본문 2.7절)
-sub = df.dropna(subset=["고령인구비율", "합계출산율"]).reset_index(drop=True)
-x, y = sub["고령인구비율"].to_numpy(), sub["합계출산율"].to_numpy()
-reg = stats.linregress(x, y)
-sub["잔차"] = y - (reg.intercept + reg.slope * x)
+figfit.SPREAD = 1.0          # 표 모양이므로 칸 사이 글씨 크기를 고르게 맞춘다
+fig, ax = plt.subplots(figsize=(13.8, 6.9))
+ax.set_xlim(0, 13.8)
+ax.set_ylim(0.2, 7.3)
+ax.axis("off")
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 5.2))
+XS = [0.2, 1.1, 4.3, 7.1]           # 표 열의 왼쪽 좌표
+WS = [0.8, 3.1, 2.7, 2.4]           # 표 열의 너비
+HEAD = ["번호", "주장", "근거 위치", "원문 인용"]
+ROWS = [
+    ["1", "영리 목적을 이유로\n제한할 수 없다",
+     "공공데이터법.txt\n제3조 제4항", "「(원문 그대로)」"],
+    ["2", "공공데이터란\n이러이러한 자료다",
+     "공공데이터법.txt\n제2조 제3호", "「(원문 그대로)」"],
+    ["3", "별도의 승인 절차를\n거쳐야 한다", "근거 없음", "(없음)"],
+]
+VERDICTS = [
+    "일치\n위치도 문장도 맞다",
+    "위치 어긋남\n문장은 제2조 제2호에 있다",
+    "원문에 없음\n파일에서 찾지 못했다",
+]
+VERDICT_FC = ["#f4fbf6", "#fdf9f4", "#fbf1f0"]
+VERDICT_EC = ["#2f8f4e", "#c77b2f", "#c0392b"]
 
-# (가) 잔차 그림
-ax = axes[0]
-for g in order:
-    d = sub[sub["권역"] == g]
-    ax.scatter(d["고령인구비율"], d["잔차"], s=24, alpha=0.6, color=pal[g], label=g,
-               edgecolor="white", linewidth=0.4)
-ax.axhline(0, color="#c0392b", lw=1.8)
-# 구간별 잔차 평균
-cuts = pd.cut(sub["고령인구비율"], [0, 15, 20, 25, 30, 35, 50])
-bm = sub.groupby(cuts, observed=True).agg(x=("고령인구비율", "mean"), r=("잔차", "mean"))
-ax.plot(bm["x"], bm["r"], marker="s", color="black", lw=1.2, ms=6, label="구간별 잔차 평균")
-labels = {("전남", "영광군"): (6, 4), ("부산", "중구"): (6, -14), ("강원", "인제군"): (6, 4)}
-for (sido, sgg), off in labels.items():
-    r = sub[(sub["시도"] == sido) & (sub["시군구"] == sgg)].iloc[0]
-    ax.annotate(f"{sido} {sgg} ({r['잔차']:+.2f})", (r["고령인구비율"], r["잔차"]),
-                xytext=off, textcoords="offset points", fontsize=9.5)
-ax.set_xlabel("고령인구비율 (%)")
-ax.set_ylabel("잔차 = 실제 출산율 - 예측 출산율 (명)")
-ax.set_title("(가) 잔차 그림: 직선이 빗나간 정도", fontsize=12)
-ax.set_ylim(-0.72, 0.88)
-ax.legend(loc="lower left", fontsize=9)
+VX, VW = 10.7, 2.9                  # 판정 상자의 왼쪽 좌표와 너비
 
-# (나) 한 점을 뺐을 때 회귀선의 변화
-ax = axes[1]
-ax.scatter(x, y, s=20, alpha=0.4, color="#888", edgecolor="white", linewidth=0.4)
-tgt = sub[(sub["시도"] == "경북") & (sub["시군구"] == "의성군")].iloc[0]
-ax.scatter(tgt["고령인구비율"], tgt["합계출산율"], s=110, color="#c0392b", edgecolor="black",
-           zorder=5, label="경북 의성군 (고령인구비율 최고)")
-m = ~((sub["시도"] == "경북") & (sub["시군구"] == "의성군")).to_numpy()
-reg2 = stats.linregress(x[m], y[m])
-xs = np.linspace(x.min(), x.max(), 100)
-ax.plot(xs, reg.intercept + reg.slope * xs, color="#c0392b", lw=2.4,
-        label=f"전체 228개: 기울기 {reg.slope:.5f}")
-ax.plot(xs, reg2.intercept + reg2.slope * xs, color="#2f6fb0", lw=2.2, ls="--",
-        label=f"의성군 제외 227개: 기울기 {reg2.slope:.5f}")
-ax.set_xlabel("고령인구비율 (%)")
-ax.set_ylabel("합계출산율 (명)")
-ax.set_title("(나) 한 점을 빼면 회귀선이 얼마나 움직이나", fontsize=12)
-ax.legend(loc="upper left", fontsize=9)
-fig.tight_layout()
-fig.savefig(FIG / "fig10_residuals.png", dpi=150, bbox_inches="tight")
+y_head, h_head = 5.20, 0.95
+for x, w, t in zip(XS, WS, HEAD):
+    box(ax, x, y_head, w, h_head, t, fc="#f7f7fc", ec="#5b6ee1", weight="bold")
+
+for i, row in enumerate(ROWS):
+    y = 3.95 - i * 1.15
+    for x, w, t in zip(XS, WS, row):
+        box(ax, x, y, w, 0.95, t, fc="#f5f9fd", ec="#2f6fb0")
+    arrow(ax, 9.65, y + 0.48, VX - 0.15, y + 0.48, color="#888888", lw=1.3)
+    box(ax, VX, y, VW, 0.95, VERDICTS[i], fc=VERDICT_FC[i], ec=VERDICT_EC[i],
+        weight="bold")
+
+# 왼쪽은 에이전트의 산출물, 오른쪽은 사람이 읽고 내리는 판정
+ax.annotate("", xy=(9.5, 6.42), xytext=(0.2, 6.42),
+            arrowprops=dict(arrowstyle="-", color="#2f6fb0", lw=1.2))
+ax.text(4.85, 6.52, "에이전트가 만들어 온 표 (네 열)", ha="center", va="bottom",
+        fontsize=11, color="#2f6fb0")
+ax.annotate("", xy=(13.6, 6.42), xytext=(10.7, 6.42),
+            arrowprops=dict(arrowstyle="-", color="#666666", lw=1.2))
+ax.text(12.15, 6.52, "원문과 대조해 내리는 판정", ha="center", va="bottom",
+        fontsize=11, color="#666666")
+
+ax.text(6.9, 0.72,
+        "판정은 표에 채워 넣는 칸이 아니라 원문 파일과 대조해 정하는 결과다. "
+        "'일치'가 아닌 줄은 그 줄을 근거로 재지시하고, "
+        "'원문에 없음'은 그 주장을 메모에서 빼는 사유가 된다.",
+        ha="center", va="center", fontsize=11, color="#333",
+        bbox=dict(fc="#fdf9f4", ec="#ecd9c6", boxstyle="round,pad=0.5"))
+
+fig.savefig(FIG / "fig10_cite_check.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
+print("saved:", FIG / "fig10_cite_check.png")
 
-# ---------------------------------------------------------------- 그림 10-6
-# 시도별 고령인구비율 평균과 95% 신뢰구간 (본문 2.5절)
-rows = []
-for sido, v in df.groupby("시도")["고령인구비율"]:
-    n, m = len(v), v.mean()
-    if n < 2:
-        rows.append(dict(시도=sido, n=n, 평균=m, 하한=np.nan, 상한=np.nan))
-        continue
-    se = v.std(ddof=1) / np.sqrt(n)
-    tc = stats.t.ppf(0.975, n - 1)
-    rows.append(dict(시도=sido, n=n, 평균=m, 하한=m - tc * se, 상한=m + tc * se))
-sido_ci = pd.DataFrame(rows).sort_values("평균").reset_index(drop=True)
-nation = df["고령인구비율"].mean()
-XLO, XHI = 8.0, 42.0
 
-fig, ax = plt.subplots(figsize=(9.0, 6.6))
-ax.axvline(nation, color="#7a5fa8", lw=1.4, ls="--", zorder=1)
-ax.text(nation + 0.4, -0.75, f"전국 229개 시군구 평균 {nation:.1f}%",
-        color="#7a5fa8", fontsize=9.5, va="center")
-for i, r in sido_ci.iterrows():
-    c = pal["수도권"] if r["시도"] in capital else pal["비수도권"]
-    if np.isnan(r["하한"]):
-        ax.plot([r["평균"]], [i], marker="o", ms=7, color=c, mfc="white", mew=1.8, zorder=4)
-        ax.annotate("시군구가 1개여서 구간을 만들 수 없다", (r["평균"], i), xytext=(10, 0),
-                    textcoords="offset points", va="center", fontsize=9.5, color="#555")
-        continue
-    ax.plot([r["하한"], r["상한"]], [i, i], color=c, lw=2.6, solid_capstyle="butt", zorder=2)
-    for xv in (r["하한"], r["상한"]):
-        if XLO < xv < XHI:
-            ax.plot([xv, xv], [i - 0.22, i + 0.22], color=c, lw=1.6, zorder=3)
-    ax.plot([r["평균"]], [i], marker="o", ms=6.5, color=c, zorder=4)
-jeju = sido_ci[sido_ci["시도"] == "제주"].iloc[0]
-ax.text(XHI - 0.5, sido_ci[sido_ci["시도"] == "제주"].index[0] + 0.52,
-        f"제주의 구간은 {jeju['하한']:.1f}%에서 {jeju['상한']:.1f}%까지다",
-        fontsize=9.5, color="#c0392b", ha="right", va="center",
-        bbox=dict(fc="white", ec="none", pad=1.5))
-ax.set_yticks(range(len(sido_ci)))
-ax.set_yticklabels([f"{r['시도']} ({int(r['n'])}개)" for _, r in sido_ci.iterrows()])
-ax.invert_yaxis()
-ax.set_xlim(XLO, XHI)
-ax.set_ylim(len(sido_ci) - 0.3, -1.3)
-ax.set_xlabel("고령인구비율 (%)")
-ax.set_title("시도별 고령인구비율 평균과 95% 신뢰구간 (2023, 시군구 단위)", fontsize=13)
-ax.text(0.015, 0.03, "점 = 시도 안 시군구의 평균, 가로 막대 = 95% 신뢰구간\n"
-                     "파랑 = 수도권, 주황 = 비수도권, 괄호 안 = 그 시도의 시군구 수",
-        transform=ax.transAxes, ha="left", va="bottom", fontsize=9.5,
-        bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
-fig.tight_layout()
-fig.savefig(FIG / "fig10_sido_ci.png", dpi=150, bbox_inches="tight")
+# ---------------------------------------------------------------- 그림 10-8
+figfit.SPREAD = 1.15         # 기본값으로 되돌린다
+fig, ax = plt.subplots(figsize=(13, 5.6))
+ax.set_xlim(0, 14)
+ax.set_ylim(1.9, 9)
+ax.axis("off")
+
+# 호출과 SKILL.md
+box(ax, 0.3, 6.3, 3.0, 1.9,
+    "부탁 (조건을 문장으로)\n/evidence-memo 를 부르고\ndata/laws 의 문서로 인구 감소 추세를\n묻는 근거 메모를 만들어 달라고 적는다",
+    fc="#fdf9f4", ec="#c77b2f")
+box(ax, 4.0, 6.4, 3.0, 1.7, "SKILL.md\n절차 10단계\n(폴더와 질문은 대화에서 받는다)",
+    fc="#f5f9fd", ec="#2f6fb0", weight="bold")
+arrow(ax, 3.3, 7.25, 4.0, 7.25)
+
+# 보조 파일 (필요할 때만 읽힘)
+box(ax, 3.4, 3.4, 2.1, 1.7, "reference.md\n근거 표기 규칙\n(필요할 때만 읽힘)",
+    fc="#faf8fc", ec="#7a5fa8")
+box(ax, 5.7, 3.4, 2.3, 1.7, "scripts/cite_check.py\n인용을 원문에서\n다시 찾아 대조",
+    fc="#faf8fc", ec="#7a5fa8")
+arrow(ax, 5.0, 6.3, 4.6, 5.1, color="#7a5fa8", ls="--")
+arrow(ax, 6.0, 6.3, 6.6, 5.1, color="#7a5fa8")
+
+# 근거의 원천
+box(ax, 8.0, 7.35, 2.6, 1.35, "reader가 data/laws 읽기\n(문서 근거)", fc="#f4fbf6", ec="#2f8f4e")
+box(ax, 8.0, 5.45, 2.6, 1.35, "kosis MCP로 통계 조회\n(데이터 근거)", fc="#f4fbf6", ec="#2f8f4e")
+arrow(ax, 7.0, 7.5, 8.0, 8.0)
+arrow(ax, 7.0, 7.0, 8.0, 6.1)
+
+# 산출물
+box(ax, 11.2, 6.0, 2.5, 2.3, "산출물/\n근거메모_인구감소.md\n일곱 절 고정 양식",
+    fc="white", ec="#c0392b")
+arrow(ax, 10.6, 8.0, 11.2, 7.5)
+arrow(ax, 10.6, 6.1, 11.2, 6.7)
+arrow(ax, 8.0, 4.25, 11.3, 6.0, color="#7a5fa8", ls="--")
+ax.text(9.9, 4.55, "검산 결과를\n7절에 붙임", ha="center", fontsize=9, color="#7a5fa8")
+
+# 사람의 확인
+box(ax, 10.6, 2.5, 3.0, 1.6, "사람의 확인 (마지막 겹)\n인용 1건을 원문과 대조\n수치 1건을 포털과 대조",
+    fc="#eeeeee", ec="#888888")
+arrow(ax, 12.45, 6.0, 12.1, 4.1, color="#888888")
+
+# 범례
+ax.text(1.75, 4.25,
+        "근거의 세 유형이 한 스킬 안에 있다\n문서 근거: reader의 인용\n데이터 근거: kosis MCP\n"
+        "절차 근거: SKILL.md, reference.md,\nscripts, 7절의 검산 기록",
+        ha="center", va="center", fontsize=9.8, color="#333",
+        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.5"))
+
+fig.savefig(FIG / "fig10_evidence_skill.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print(f"그림 10-6 보조 수치: 전국 평균 {nation:.4f}, 시도 수 {len(sido_ci)}, "
-      f"구간 없는 시도 {sido_ci.loc[sido_ci['하한'].isna(), '시도'].tolist()}")
-
-print("saved:", [p.name for p in sorted(FIG.glob("fig10_*.png"))])
+print("saved:", FIG / "fig10_evidence_skill.png")

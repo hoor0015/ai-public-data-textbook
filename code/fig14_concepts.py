@@ -1,5 +1,6 @@
-# 14주차 개념도 생성
-# 실행: cd $HOME/default-uv-env && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 14주차 1차시(통합 장) 개념도 생성: 그림 14-1(보고서 세 층), 그림 14-2(근거 사슬),
+# 그림 14-3(verifier의 삼중 대조와 사람의 2차 확인)
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 code/fig14_concepts.py
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -28,15 +29,13 @@ def arrow(ax, x1, y1, x2, y2, color="#555", style="-|>", lw=1.6, ls="-"):
 
 
 # ---------------------------------------------------------------- 그림 14-1
-# 보고서 구조 피라미드: 한 쪽 요약 - 본문 - 부록
+# 보고서의 세 층: 한 쪽 요약 - 본문 - 부록
 fig, ax = plt.subplots(figsize=(11, 5.6))
 ax.set_xlim(0, 13)
 ax.set_ylim(0, 9)
 ax.axis("off")
 
-# 피라미드 세 층 (사다리꼴)
 layers = [
-    # (아래왼x, 아래오른x, 밑y, 높이, 라벨, fc, ec)
     (4.4, 7.4, 6.0, 2.2, "한 쪽 요약\n(결론과 제언)", "#fdf9f4", "#c77b2f"),
     (3.3, 8.5, 3.4, 2.2, "본문\n배경 · 데이터와 방법 · 발견 · 제언", "#f5f9fd", "#2f6fb0"),
     (2.2, 9.6, 0.8, 2.2, "부록\n상세 표 · 코드 · 데이터 출처 · AI 활용 내역", "#f4fbf6", "#2f8f4e"),
@@ -47,10 +46,9 @@ for bl, br, yb, h, label, fc, ec in layers:
                          closed=True, fc=fc, ec=ec, lw=1.6))
     ax.text((bl + br) / 2, yb + h / 2, label, ha="center", va="center", fontsize=11)
 
-# 오른쪽: 읽는 사람과 시간
 readers = [
-    (7.2, "의사결정자: 이것만 읽는다 (1분)", "#c77b2f"),
-    (4.5, "담당자: 근거를 따라 읽는다 (30분)", "#2f6fb0"),
+    (7.2, "의사결정자: 이것만 읽는다", "#c77b2f"),
+    (4.5, "담당자: 근거를 따라 읽는다", "#2f6fb0"),
     (1.9, "검증하는 사람: 필요할 때 찾아본다", "#2f8f4e"),
 ]
 for y, text, color in readers:
@@ -59,75 +57,87 @@ for y, text, color in readers:
 ax.text(1.6, 4.5, "위로 갈수록\n짧아지고\n결론에 가깝다", fontsize=10.5, color="#555",
         ha="center", va="center")
 arrow(ax, 0.6, 2.6, 0.6, 6.3, color="#999")
-ax.set_title("보고서는 피라미드다: 층마다 읽는 사람이 다르다", fontsize=13, pad=10)
+ax.set_title("보고서의 세 층: 층마다 읽는 사람이 다르다", fontsize=13, pad=10)
 fig.tight_layout()
 fig.savefig(FIG / "fig14_report_pyramid.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 14-2
-# 삼중 대조: 숫자 - 인용 - 그림
-fig, ax = plt.subplots(figsize=(11, 6.2))
-ax.set_xlim(0, 13)
-ax.set_ylim(0, 10)
+# 근거 경로: 원자료 -> 결과 파일 -> 본문 문장 -> 요약·제언 (수치는 code/ch14_practice.py 출력)
+fig, ax = plt.subplots(figsize=(11.5, 5.4))
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 8.6)
 ax.axis("off")
 
-# 가운데: 보고서 본문
-box(ax, 4.5, 4.1, 4.0, 1.9, "보고서 본문의 서술\n(제출 직전의 원고)", fc="#f7f7fc", ec="#5b6ee1",
-    fontsize=11.5, weight="bold")
+chain = [
+    (0.4, "원자료\ndata/sigungu_mcp_2023.csv", "229개 시군구의\n고령인구비율 값", "#c77b2f", "#fdf9f4"),
+    (3.9, "결과 파일\n산출물/파이프라인/", "수도권 평균 18.58%\n비수도권 평균 27.82%", "#2f6fb0", "#f5f9fd"),
+    (7.4, "본문 문장\nreport.md 발견", "비수도권의 고령인구비율이\n9.24%포인트 높았다", "#2f8f4e", "#f4fbf6"),
+    (10.9, "요약·제언\nreport.md 요약, 제언", "제언 1의 근거:\n발견 1", "#7a5fa8", "#faf8fc"),
+]
+for x, title, example, ec, fc in chain:
+    box(ax, x, 4.3, 2.8, 1.7, title, fc=fc, ec=ec, fontsize=10.5, weight="bold")
+    box(ax, x, 2.2, 2.8, 1.5, example, fc="white", ec=ec, fontsize=9.5)
+    arrow(ax, x + 1.4, 4.2, x + 1.4, 3.8, color=ec, lw=1.2)
 
-# 대조 1: 숫자 (왼쪽 위)
-box(ax, 0.5, 7.6, 3.6, 1.7, "대조 1 · 숫자\n본문의 숫자 =\n데이터에서 다시 계산한 값?", fc="#fdf9f4", ec="#c77b2f", fontsize=10)
-box(ax, 0.5, 5.4, 3.6, 1.3, "원본 데이터 (CSV)", fc="white", ec="#c77b2f", fontsize=10)
-arrow(ax, 2.3, 7.5, 2.3, 6.9, color="#c77b2f")
-arrow(ax, 4.2, 6.3, 5.0, 5.9, color="#c77b2f")
+for x in (3.2, 6.7, 10.2):
+    arrow(ax, x + 0.05, 5.5, x + 0.65, 5.5, color="#333", lw=1.8)
+arrow(ax, 13.6, 1.5, 0.5, 1.5, color="#b03a2e", lw=1.8, ls="--")
+for x, _, _, ec, _ in chain:
+    arrow(ax, x + 1.4, 2.1, x + 1.4, 1.6, color=ec, lw=1.0, style="-")
 
-# 대조 2: 인용 (오른쪽 위)
-box(ax, 8.9, 7.6, 3.6, 1.7, "대조 2 · 인용\n본문의 인용문 =\n원문의 문장 그대로?", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
-box(ax, 8.9, 5.4, 3.6, 1.3, "원문 문서 (법령·보고서)", fc="white", ec="#2f8f4e", fontsize=10)
-arrow(ax, 10.7, 7.5, 10.7, 6.9, color="#2f8f4e")
-arrow(ax, 8.8, 6.3, 8.0, 5.9, color="#2f8f4e")
-
-# 대조 3: 그림 (아래)
-box(ax, 4.7, 0.6, 3.6, 1.7, "대조 3 · 그림\n그림이 보여 주는 것 =\n본문이 말하는 것?", fc="#faf8fc", ec="#7a5fa8", fontsize=10)
-box(ax, 9.0, 0.8, 3.4, 1.3, "그림 파일 (PNG)", fc="white", ec="#7a5fa8", fontsize=10)
-arrow(ax, 8.9, 1.45, 8.4, 1.45, color="#7a5fa8")
-arrow(ax, 6.5, 2.4, 6.5, 4.0, color="#7a5fa8")
-
-ax.text(6.5, 9.4, "세 대조를 모두 통과해야 보고서에 내 이름을 걸 수 있다",
-        ha="center", fontsize=12, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+ax.text(7.0, 6.6, "작성 방향: 원자료의 값이 결과 파일을 거쳐 문장과 제언으로 옮겨진다",
+        ha="center", fontsize=11, color="#333")
+ax.text(7.0, 0.5, "대조 방향: 문장과 제언의 숫자를 결과 파일이 아니라 원자료까지 거슬러 올라가 다시 계산한다",
+        ha="center", fontsize=11, color="#b03a2e")
+ax.text(7.0, 7.9, "근거 경로: 보고서의 모든 문장은 파일 하나까지 되짚어 갈 수 있어야 한다",
+        ha="center", fontsize=13)
 fig.tight_layout()
-fig.savefig(FIG / "fig14_triple_check.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig14_evidence_chain.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 14-3
-# 재현 패키지 구성도
-fig, ax = plt.subplots(figsize=(11, 5.8))
-ax.set_xlim(0, 13)
-ax.set_ylim(0, 9)
+# verifier 서브에이전트의 삼중 대조와 사람의 2차 확인
+fig, ax = plt.subplots(figsize=(13, 6.6))
+ax.set_xlim(0, 15.6)
+ax.set_ylim(0, 10)
 ax.axis("off")
 
-box(ax, 0.5, 3.3, 3.3, 2.2, "재현 패키지\n(제출 폴더 하나)", fc="#f7f7fc", ec="#5b6ee1",
-    fontsize=12, weight="bold")
+# 왼쪽: 보고서 초안
+box(ax, 0.3, 4.1, 2.5, 1.9, "보고서 초안\nreport.md", fc="#f7f7fc", ec="#5b6ee1", weight="bold")
 
-items = [
-    (7.2, "data/  원본 데이터 + 출처 기록", "이 숫자는 어디서 왔는가", "#2f6fb0", "#f5f9fd"),
-    (5.4, "code/  분석 코드 (pyproject.toml 포함)", "같은 환경에서 다시 돌릴 수 있는가", "#2f8f4e", "#f4fbf6"),
-    (3.6, "prompts.md  주요 지시문 기록", "에이전트에게 무엇을 시켰는가", "#c77b2f", "#fdf9f4"),
-    (1.8, "report.md + figures/  보고서와 그림", "최종 산출물", "#7a5fa8", "#faf8fc"),
-    (0.2, "README.md  재현 순서 안내", "처음 보는 사람이 어디부터 여는가", "#555555", "#f5f5f5"),
+# 가운데: verifier
+box(ax, 3.6, 7.7, 5.6, 1.3, "verifier 서브에이전트\n보고서와 원본만 받아 별도 맥락창에서 대조",
+    fc="#eef1fb", ec="#5b6ee1", weight="bold")
+rows = [
+    (5.6, "대조 1 · 숫자\n원자료에서 다시 계산", "data/sigungu_mcp_2023.csv\ndata/sigungu_mcp_tfr_2013.csv", "#c77b2f", "#fdf9f4"),
+    (3.6, "대조 2 · 인용\n원문에서 다시 찾기", "수집기록, 근거 메모의\n원문 파일", "#2f8f4e", "#f4fbf6"),
+    (1.6, "대조 3 · 그림\n주장과 그림 목록 정리", "그림 파일(PNG)\n제목 · 축 · 연도", "#7a5fa8", "#faf8fc"),
 ]
-for y, label, note, ec, fc in items:
-    box(ax, 4.9, y, 4.6, 1.3, label, fc=fc, ec=ec, fontsize=10)
-    ax.text(9.9, y + 0.65, note, fontsize=9.5, color=ec, va="center")
-    arrow(ax, 3.9, 4.4, 4.8, y + 0.65, color=ec, lw=1.2)
+for y, check, src, ec, fc in rows:
+    box(ax, 3.6, y, 2.7, 1.4, check, fc=fc, ec=ec)
+    box(ax, 6.6, y, 2.6, 1.4, src, fc="white", ec=ec)
+    arrow(ax, 6.55, y + 0.7, 6.4, y + 0.7, color=ec, style="-")
+    arrow(ax, 2.9, 5.05, 3.5, y + 0.7, color="#5b6ee1", lw=1.2)
+    arrow(ax, 9.3, y + 0.7, 9.9, 5.05, color=ec, lw=1.2)
 
-ax.text(2.15, 1.4, "검증 기준:\n남이 이 폴더만 받아서\n같은 보고서를 만들 수 있는가",
-        ha="center", fontsize=10.5, color="#333",
-        bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
-ax.set_title("재현 패키지: 보고서 한 편이 아니라 분석 전체를 제출한다", fontsize=13, pad=10)
+# 대조표
+box(ax, 10.0, 4.2, 2.1, 1.7, "대조표\ncheck_report.md", fc="white", ec="#333", weight="bold")
+arrow(ax, 12.2, 5.05, 12.7, 5.05, color="#333")
+
+# 사람의 2차 확인
+box(ax, 12.8, 3.95, 2.6, 2.2, "사람의 2차 확인\n불일치 · 확인 불가 행 판정\n재계산이 원자료에서 왔는가\n그림이 주장을 보여 주는가",
+    fc="#fdf2f0", ec="#b03a2e", weight="bold")
+
+# 수정 화살표: 사람 -> 보고서
+arrow(ax, 14.1, 3.85, 14.1, 0.5, color="#b03a2e", style="-", lw=1.6, ls="--")
+arrow(ax, 14.1, 0.5, 1.55, 0.5, color="#b03a2e", style="-", lw=1.6, ls="--")
+arrow(ax, 1.55, 0.5, 1.55, 4.0, color="#b03a2e", lw=1.6, ls="--")
+ax.text(7.8, 0.75, "판정에 따라 보고서를 고친다", ha="center", fontsize=10.5, color="#b03a2e")
+
+ax.set_title("삼중 대조: 대조는 verifier에게 맡기고 판정은 사람이 한다", fontsize=13, pad=10)
 fig.tight_layout()
-fig.savefig(FIG / "fig14_repro_package.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig14_verifier_triple.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-print("saved:", [p.name for p in sorted(FIG.glob('fig14_*.png'))])
+print("saved: fig14_report_pyramid.png, fig14_evidence_chain.png, fig14_verifier_triple.png")

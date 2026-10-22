@@ -1,210 +1,156 @@
-# 11주차 2차시 실습 그림 (실제 데이터)
-# 그림 11-4 불용어 1차/2차 실행의 최빈 단어 대조 (fig11_stopword_iter.png)
-# 그림 11-5 토큰 빈도 순위와 문서 빈도 순위 (fig11_freq_vs_docfreq.png)
-# 그림 11-7 키워드 규칙 개정 전후의 유형별 건수와 유형이 옮겨 간 경로 (fig11_rule_revision.png)
-# (그림 11-1 문서-단어 행렬, 그림 11-2 핵심어 빈도, 그림 11-3 유형별 TF-IDF,
-#  그림 11-6 유형 문서 간 코사인 유사도는 code/fig11_text.py, code/fig11_concepts.py에 있다)
-# 데이터: data/minwon_cases_2021.csv (공정거래위원회 소비자 민원 상담 사례 567건)
-# 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
-import re
+# 11주차 2차시(실습) 그림 생성: 그림 11-5(분석 전 가정 확인), 그림 11-6(시도별 평균과 신뢰구간),
+# 그림 11-7(잔차 그림과 한 점의 힘). 번호는 본문 등장 순서를 따른다.
+# 데이터: 9주차 2차시 2.1-2.2에서 kosis MCP로 수집·결합한 data/sigungu_mcp_2023.csv
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 code/fig11_practice.py
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy import stats
 
 sns.set_style("whitegrid")
 import koreanize_matplotlib  # noqa: E402,F401
-
-from sklearn.feature_extraction.text import CountVectorizer  # noqa: E402
 
 BASE = Path(__file__).resolve().parent.parent
 FIG = BASE / "figures"
 FIG.mkdir(exist_ok=True)
 
-# ---- 전처리 규칙 (ch11_practice.py, ch10_text.py와 동일) ---------------------
-JOSA = sorted(
-    ["으로부터", "에서부터", "에게서", "으로써", "으로는", "으로도", "이라고",
-     "라고", "에서는", "에서도", "까지", "부터", "에서", "에게", "한테", "으로",
-     "이라", "라는", "이나", "하고", "와의", "과의", "은", "는", "이", "가",
-     "을", "를", "에", "의", "도", "와", "과", "로", "만", "요"],
-    key=len, reverse=True,
-)
-PREDICATE = re.compile(
-    r"(습니다|입니다|합니다|니다|세요|어요|아요|해요|한다|았다|었다|였다|"
-    r"하여|해서|하고|하는|하던|되어|되는|하지|되지|있는|없는|같은|위해|"
-    r"대한|따라|통해|관한|드립니다|바랍니다|는지|은지|다고|다는|는데)$"
-)
-STOP_1 = {
-    "저는", "제가", "저의", "저희", "우리", "그런데", "그리고", "그러나",
-    "하지만", "그래서", "또한", "및", "등", "때문", "경우", "정도", "관련",
-    "여부", "이후", "당시", "현재", "다시", "함께", "가장", "매우", "일부",
-    "모두", "다른", "어떤", "무엇", "어떻게", "생각", "내용", "사실",
-    "하나", "지금", "동안", "상태", "상황", "문제", "가능", "필요",
-}
-ADDED = {
-    "받을", "받은", "받고", "받아", "않아", "않고", "있을", "있을까",
-    "할까", "원을", "만원", "개월", "이었", "되었", "됩니", "합니",
-    "이런", "그런", "저런", "어떠한",
-}
-STOP_2 = STOP_1 | ADDED
-
-
-def make_tokenizer(stopwords):
-    def tokenize(text):
-        text = re.sub(r"[^가-힣\s]", " ", str(text))
-        tokens = []
-        for w in text.split():
-            for j in JOSA:
-                if w.endswith(j) and len(w) - len(j) >= 2:
-                    w = w[: -len(j)]
-                    break
-            if len(w) < 2 or w in stopwords or PREDICATE.search(w):
-                continue
-            tokens.append(w)
-        return tokens
-    return tokenize
-
-
-df = pd.read_csv(BASE / "data" / "minwon_cases_2021.csv", on_bad_lines="skip")
-df.columns = ["사건번호", "제목", "내용", "답변"]
-df = df.dropna(subset=["제목", "내용"]).reset_index(drop=True)
-docs = (df["제목"] + " " + df["내용"]).tolist()
-
-
-def word_freq(stopwords):
-    cv = CountVectorizer(analyzer=make_tokenizer(stopwords))
-    dtm = cv.fit_transform(docs)
-    freq = pd.Series(dtm.sum(axis=0).A1, index=cv.get_feature_names_out())
-    return freq.sort_values(ascending=False)
-
-
-freq1 = word_freq(STOP_1)
-freq2 = word_freq(STOP_2)
-
-# ---------------------------------------------------------------- 그림 11-4
-# 불용어 1차 실행과 2차 실행의 최빈 단어 상위 15개. 1차에서 불용어로 추가된 토큰은 회색
-N = 15
-fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True)
-for ax, freq, title in zip(axes, [freq1, freq2],
-                           ["1차 실행 (기본 불용어만)", "2차 실행 (동사 조각·단위 추가 제거)"]):
-    top = freq.head(N)[::-1]
-    colors = ["#b0b0b0" if w in ADDED else "#5b8ac4" for w in top.index]
-    ax.barh(top.index, top.values, color=colors)
-    for i, v in enumerate(top.values):
-        ax.text(v + 2, i, str(v), va="center", fontsize=9, color="#333")
-    ax.set_title(title, fontsize=12)
-    ax.set_xlabel("등장 횟수 (토큰 빈도, 567건 합계)")
-    ax.tick_params(axis="y", labelsize=10)
-axes[0].text(0.98, 0.02, "회색: 2차에서 불용어로 추가한 토큰", transform=axes[0].transAxes,
-             ha="right", va="bottom", fontsize=9, color="#555")
-fig.suptitle("불용어 사전을 한 번 다듬기 전후의 최빈 단어 상위 15개", fontsize=13)
-sns.despine(left=True)
-fig.tight_layout()
-fig.savefig(FIG / "fig11_stopword_iter.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
+df = pd.read_csv(BASE / "data" / "sigungu_mcp_2023.csv", encoding="utf-8-sig")
+capital = ["서울", "경기", "인천"]
+df["권역"] = df["수도권"]  # 데이터의 수도권 열(서울·인천·경기)
+order = ["수도권", "비수도권"]
+pal = {"수도권": "#2f6fb0", "비수도권": "#c77b2f"}
 
 # ---------------------------------------------------------------- 그림 11-5
-# 토큰 빈도 상위 15개 단어가 문서 빈도(그 토큰이 든 민원 건수)로는 몇 위인지 잇는 그림
-cv2 = CountVectorizer(analyzer=make_tokenizer(STOP_2))
-dtm2 = cv2.fit_transform(docs)
-vocab2 = cv2.get_feature_names_out()
-tokfreq = pd.Series(np.asarray(dtm2.sum(axis=0)).ravel(), index=vocab2).sort_values(ascending=False)
-docfreq = pd.Series(np.asarray((dtm2 > 0).sum(axis=0)).ravel(), index=vocab2)
-rank_tok = {w: i + 1 for i, w in enumerate(tokfreq.index)}
-rank_doc = {w: i + 1 for i, w in enumerate(docfreq.sort_values(ascending=False).index)}
-top15 = list(tokfreq.head(15).index)
-
-fig, ax = plt.subplots(figsize=(8.5, 7.5))
-for w in top15:
-    r1, r2 = rank_tok[w], rank_doc[w]
-    color = "#c47f5b" if r2 > r1 else ("#5b8ac4" if r2 < r1 else "#999999")
-    ax.plot([0, 1], [r1, r2], color=color, lw=1.8, marker="o", ms=5, alpha=0.9)
-    ax.text(-0.04, r1, f"{w} {int(tokfreq[w])}회", ha="right", va="center", fontsize=10)
-    ax.text(1.04, r2, f"{w} {int(docfreq[w])}건", ha="left", va="center", fontsize=10)
-ax.set_xlim(-0.55, 1.55)
-ax.set_ylim(28.5, 0.2)
-ax.set_yticks([1, 5, 10, 15, 20, 25])
-ax.set_yticklabels(["1위", "5위", "10위", "15위", "20위", "25위"], fontsize=9)
-ax.set_xticks([0, 1])
-ax.set_xticklabels(["토큰 빈도 순위", "문서 빈도 순위"], fontsize=12)
-ax.grid(axis="x", visible=False)
-ax.set_title("같은 단어의 두 순위: 토큰 빈도 상위 15개가 문서 빈도로는 몇 위인가", fontsize=13)
-ax.text(0.5, 27.6, "주황: 문서 빈도 순위가 내려간 단어   파랑: 올라간 단어",
-        ha="center", va="center", fontsize=9.5, color="#555")
-sns.despine(left=True, bottom=True)
+# 분석 전 가정 확인: 두 집단의 고령인구비율 분포 모양과 흩어짐
+bins = np.arange(10, 48, 2)
+fig, axes = plt.subplots(2, 1, figsize=(8.5, 6.4), sharex=True)
+for ax, g in zip(axes, order):
+    v = df.loc[df["권역"] == g, "고령인구비율"]
+    ax.hist(v, bins=bins, color=pal[g], alpha=0.7, edgecolor="white")
+    m, sd, med = v.mean(), v.std(ddof=1), v.median()
+    ax.axvline(m, color="black", lw=1.6, ls="-")
+    ax.axvline(med, color="black", lw=1.2, ls="--")
+    ax.axvspan(m - sd, m + sd, color="gray", alpha=0.12)
+    ax.text(0.98, 0.92,
+            f"{g} (n = {len(v)})\n평균 {m:.1f}%  중앙값 {med:.1f}%\n표준편차 {sd:.1f}%포인트",
+            transform=ax.transAxes, ha="right", va="top", fontsize=10.5,
+            bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+    ax.set_ylabel("시군구 수")
+axes[0].set_title("수도권과 비수도권 시군구의 고령인구비율 분포 모양 (2023)", fontsize=13)
+axes[0].set_ylim(0, axes[0].get_ylim()[1] * 1.3)  # 범례 글자가 봉우리와 겹치지 않게
+axes[1].set_xlabel("고령인구비율 (%)")
+axes[0].text(0.02, 0.92, "실선 = 평균, 점선 = 중앙값\n회색 띠 = 평균 ± 1표준편차",
+             transform=axes[0].transAxes, fontsize=9.5, va="top", color="#444")
 fig.tight_layout()
-fig.savefig(FIG / "fig11_freq_vs_docfreq.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig11_assumption.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
 # ---------------------------------------------------------------- 그림 11-7
-# 키워드 규칙 개정 전후: 567건의 유형별 건수와 유형이 옮겨 간 경로
-RULES = [
-    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
-    ("보험", r"보험"),
-    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|인터넷|요금제"),
-    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션"),
-    ("자동차", r"자동차|중고차|차량|정비"),
-]
-RULES_REV = [
-    ("의료", r"^\s*\[[^\]]*(과|한방|검진|진료|의학)\]|오진|의료진|수술|진료"),
-    ("보험", r"보험"),
-    ("여행·운송", r"여행|항공|숙박|호텔|콘도|펜션|택배"),
-    ("통신·인터넷", r"통신|휴대폰|핸드폰|이동전화|요금제|초고속인터넷|인터넷\s*요금|인터넷\s*약정"),
-    ("자동차", r"자동차|중고차|차량|정비"),
-]
+# 잔차 그림과 한 점의 힘 (본문 2.7절)
+sub = df.dropna(subset=["고령인구비율", "합계출산율"]).reset_index(drop=True)
+x, y = sub["고령인구비율"].to_numpy(), sub["합계출산율"].to_numpy()
+reg = stats.linregress(x, y)
+sub["잔차"] = y - (reg.intercept + reg.slope * x)
 
+fig, axes = plt.subplots(1, 2, figsize=(12, 5.2))
 
-def classify(title, content, rules):
-    text = f"{title} {content}"
-    if re.search(rules[0][1], title):
-        return "의료"
-    for label, pat in rules:
-        if re.search(pat, text):
-            return label
-    return "기타"
+# (가) 잔차 그림
+ax = axes[0]
+for g in order:
+    d = sub[sub["권역"] == g]
+    ax.scatter(d["고령인구비율"], d["잔차"], s=24, alpha=0.6, color=pal[g], label=g,
+               edgecolor="white", linewidth=0.4)
+ax.axhline(0, color="#c0392b", lw=1.8)
+# 구간별 잔차 평균
+cuts = pd.cut(sub["고령인구비율"], [0, 15, 20, 25, 30, 35, 50])
+bm = sub.groupby(cuts, observed=True).agg(x=("고령인구비율", "mean"), r=("잔차", "mean"))
+ax.plot(bm["x"], bm["r"], marker="s", color="black", lw=1.2, ms=6, label="구간별 잔차 평균")
+labels = {("전남", "영광군"): (6, 4), ("부산", "중구"): (6, -14), ("강원", "인제군"): (6, 4)}
+for (sido, sgg), off in labels.items():
+    r = sub[(sub["시도"] == sido) & (sub["시군구"] == sgg)].iloc[0]
+    ax.annotate(f"{sido} {sgg} ({r['잔차']:+.2f})", (r["고령인구비율"], r["잔차"]),
+                xytext=off, textcoords="offset points", fontsize=9.5)
+ax.set_xlabel("고령인구비율 (%)")
+ax.set_ylabel("잔차 = 실제 출산율 - 예측 출산율 (명)")
+ax.set_title("(가) 잔차 그림: 직선이 빗나간 정도", fontsize=12)
+ax.set_ylim(-0.72, 0.88)
+ax.legend(loc="lower left", fontsize=9)
 
-
-before = pd.Series([classify(t, c, RULES) for t, c in zip(df["제목"], df["내용"])])
-after = pd.Series([classify(t, c, RULES_REV) for t, c in zip(df["제목"], df["내용"])])
-labels = ["의료", "보험", "통신·인터넷", "여행·운송", "자동차", "기타"]
-b = [int((before == l).sum()) for l in labels]
-a = [int((after == l).sum()) for l in labels]
-
-fig, axes = plt.subplots(1, 2, figsize=(12, 5), gridspec_kw={"width_ratios": [2.1, 1]})
-y = np.arange(len(labels))
-h = 0.36
-axes[0].barh(y + h / 2, b, h, label="개정 전", color="#b8c6d9")
-axes[0].barh(y - h / 2, a, h, label="개정 후", color="#5b8ac4")
-for i, (vb, va) in enumerate(zip(b, a)):
-    axes[0].text(vb + 4, i + h / 2, str(vb), va="center", fontsize=9, color="#555")
-    axes[0].text(va + 4, i - h / 2, str(va), va="center", fontsize=9, color="#333")
-axes[0].set_yticks(y)
-axes[0].set_yticklabels(labels, fontsize=11)
-axes[0].invert_yaxis()
-axes[0].set_xlabel("민원 건수 (전체 567건)")
-axes[0].set_title("규칙 개정 전후의 유형별 건수", fontsize=12)
-axes[0].legend(loc="upper right", fontsize=9, frameon=False)
-
-cross = pd.crosstab(before, after)
-moves = [(b, a, int(cross.loc[b, a])) for b in cross.index for a in cross.columns
-         if b != a and cross.loc[b, a] > 0]
-moves.sort(key=lambda m: m[2])
-ylab = [f"{b}\n-> {a}" for b, a, _ in moves]
-vals = [m[2] for m in moves]
-axes[1].barh(np.arange(len(moves)), vals, 0.5, color="#c47f5b")
-for i, v in enumerate(vals):
-    axes[1].text(v + 0.6, i, f"{v}건", va="center", fontsize=10, color="#333")
-axes[1].set_yticks(np.arange(len(moves)))
-axes[1].set_yticklabels(ylab, fontsize=10)
-axes[1].set_xlim(0, max(vals) * 1.25)
-axes[1].set_xlabel("민원 건수")
-axes[1].set_title(f"유형이 옮겨 간 경로 (모두 {sum(vals)}건)", fontsize=12)
-sns.despine()
-fig.suptitle("키워드 규칙을 기준표에 맞춰 고치면 무엇이 달라지는가", fontsize=13)
+# (나) 한 점을 뺐을 때 회귀선의 변화
+ax = axes[1]
+ax.scatter(x, y, s=20, alpha=0.4, color="#888", edgecolor="white", linewidth=0.4)
+tgt = sub[(sub["시도"] == "경북") & (sub["시군구"] == "의성군")].iloc[0]
+ax.scatter(tgt["고령인구비율"], tgt["합계출산율"], s=110, color="#c0392b", edgecolor="black",
+           zorder=5, label="경북 의성군 (고령인구비율 최고)")
+m = ~((sub["시도"] == "경북") & (sub["시군구"] == "의성군")).to_numpy()
+reg2 = stats.linregress(x[m], y[m])
+xs = np.linspace(x.min(), x.max(), 100)
+ax.plot(xs, reg.intercept + reg.slope * xs, color="#c0392b", lw=2.4,
+        label=f"전체 {len(sub)}개: 기울기 {reg.slope:.5f}")
+ax.plot(xs, reg2.intercept + reg2.slope * xs, color="#2f6fb0", lw=2.2, ls="--",
+        label=f"의성군 제외 {len(sub) - 1}개: 기울기 {reg2.slope:.5f}")
+ax.set_xlabel("고령인구비율 (%)")
+ax.set_ylabel("합계출산율 (명)")
+ax.set_title("(나) 한 점을 빼면 회귀선이 얼마나 움직이나", fontsize=12)
+ax.legend(loc="upper left", fontsize=9)
 fig.tight_layout()
-fig.savefig(FIG / "fig11_rule_revision.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "fig11_residuals.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
+
+# ---------------------------------------------------------------- 그림 11-6
+# 시도별 고령인구비율 평균과 95% 신뢰구간 (본문 2.5절)
+rows = []
+for sido, v in df.groupby("시도")["고령인구비율"]:
+    n, m = len(v), v.mean()
+    if n < 2:
+        rows.append(dict(시도=sido, n=n, 평균=m, 하한=np.nan, 상한=np.nan))
+        continue
+    se = v.std(ddof=1) / np.sqrt(n)
+    tc = stats.t.ppf(0.975, n - 1)
+    rows.append(dict(시도=sido, n=n, 평균=m, 하한=m - tc * se, 상한=m + tc * se))
+sido_ci = pd.DataFrame(rows).sort_values("평균").reset_index(drop=True)
+nation = df["고령인구비율"].mean()
+XLO, XHI = 8.0, 42.0
+
+fig, ax = plt.subplots(figsize=(9.0, 6.6))
+ax.axvline(nation, color="#7a5fa8", lw=1.4, ls="--", zorder=1)
+ax.text(nation + 0.4, -0.75, f"전국 229개 시군구 평균 {nation:.1f}%",
+        color="#7a5fa8", fontsize=9.5, va="center")
+for i, r in sido_ci.iterrows():
+    c = pal["수도권"] if r["시도"] in capital else pal["비수도권"]
+    if np.isnan(r["하한"]):
+        ax.plot([r["평균"]], [i], marker="o", ms=7, color=c, mfc="white", mew=1.8, zorder=4)
+        ax.annotate("시군구가 1개여서 구간을 만들 수 없다", (r["평균"], i), xytext=(10, 0),
+                    textcoords="offset points", va="center", fontsize=9.5, color="#555")
+        continue
+    ax.plot([r["하한"], r["상한"]], [i, i], color=c, lw=2.6, solid_capstyle="butt", zorder=2)
+    for xv in (r["하한"], r["상한"]):
+        if XLO < xv < XHI:
+            ax.plot([xv, xv], [i - 0.22, i + 0.22], color=c, lw=1.6, zorder=3)
+    ax.plot([r["평균"]], [i], marker="o", ms=6.5, color=c, zorder=4)
+jeju = sido_ci[sido_ci["시도"] == "제주"].iloc[0]
+ax.text(XHI - 0.5, sido_ci[sido_ci["시도"] == "제주"].index[0] + 0.52,
+        f"제주의 구간은 {jeju['하한']:.1f}%에서 {jeju['상한']:.1f}%까지다",
+        fontsize=9.5, color="#c0392b", ha="right", va="center",
+        bbox=dict(fc="white", ec="none", pad=1.5))
+ax.set_yticks(range(len(sido_ci)))
+ax.set_yticklabels([f"{r['시도']} ({int(r['n'])}개)" for _, r in sido_ci.iterrows()])
+ax.invert_yaxis()
+ax.set_xlim(XLO, XHI)
+ax.set_ylim(len(sido_ci) - 0.3, -1.3)
+ax.set_xlabel("고령인구비율 (%)")
+ax.set_title("시도별 고령인구비율 평균과 95% 신뢰구간 (2023, 시군구 단위)", fontsize=13)
+ax.text(0.015, 0.03, "점 = 시도 안 시군구의 평균, 가로 막대 = 95% 신뢰구간\n"
+                     "파랑 = 수도권, 주황 = 비수도권, 괄호 안 = 그 시도의 시군구 수",
+        transform=ax.transAxes, ha="left", va="bottom", fontsize=9.5,
+        bbox=dict(fc="white", ec="#d9d9e3", boxstyle="round,pad=0.4"))
+fig.tight_layout()
+fig.savefig(FIG / "fig11_sido_ci.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+print(f"그림 11-6 보조 수치: 전국 평균 {nation:.4f}, 시도 수 {len(sido_ci)}, "
+      f"구간 없는 시도 {sido_ci.loc[sido_ci['하한'].isna(), '시도'].tolist()}")
 
 print("saved:", [p.name for p in sorted(FIG.glob("fig11_*.png"))])

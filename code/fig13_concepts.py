@@ -1,5 +1,5 @@
-# 13주차 1차시 개념도 생성
-# 실행: cd "$HOME/default-uv-env" && PYTHONIOENCODING=utf-8 VIRTUAL_ENV= uv run python "<이 파일 경로>"
+# 13주차 1차시(통합 장) 개념도 생성: 그림 13-1 (파이프라인과 검증 지점), 그림 13-2 (검증 지점의 1차·2차 확인)
+# 실행: VIRTUAL_ENV= uv run --project ~/default-uv-env python -X utf8 <이 파일 경로>
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -28,102 +28,62 @@ def arrow(ax, x1, y1, x2, y2, color="#555", style="-|>", lw=1.6, ls="-"):
 
 
 # ---------------------------------------------------------------- 그림 13-1
-# 단일 에이전트 vs 서브에이전트 분업
-fig, axes = plt.subplots(1, 2, figsize=(12.5, 5.4))
-for ax in axes:
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
-    ax.axis("off")
-
-ax = axes[0]
-ax.set_title("(가) 혼자 일하는 에이전트: 맥락창 하나에 전부 쌓인다", fontsize=12.5, pad=12)
-box(ax, 3.1, 7.9, 3.8, 1.5, "사용자 지시", fc="#fdf9f4", ec="#c77b2f")
-box(ax, 1.6, 1.0, 6.8, 6.0, "", fc="#f5f9fd", ec="#2f6fb0")
-ax.text(5.0, 6.5, "에이전트의 맥락창(책상 하나)", ha="center", fontsize=11, fontweight="bold")
-for i, t in enumerate(["정제 로그 전체", "분석 코드와 출력 전체", "그림 코드와 시행착오", "보고서 초안"]):
-    box(ax, 2.1, 5.0 - i * 1.05, 5.8, 0.8, t, fc="white", ec="#9bb8d4", fontsize=9.5)
-arrow(ax, 5.0, 7.8, 5.0, 7.2)
-ax.text(5.0, 0.35, "긴 작업일수록 책상이 서류로 덮여 앞 내용이 밀려난다",
-        ha="center", fontsize=10.5, color="#a04747")
-
-ax = axes[1]
-ax.set_title("(나) 서브에이전트 분업: 각자 자기 책상에서 일한다", fontsize=12.5, pad=12)
-box(ax, 3.1, 7.9, 3.8, 1.5, "본 에이전트\n(팀장)", fc="#f5f9fd", ec="#2f6fb0", weight="bold")
-subs = [("정제 담당", 0.4), ("분석 담당", 3.7), ("시각화 담당", 7.0)]
-for t, xx in subs:
-    box(ax, xx, 3.6, 2.6, 1.9, t + "\n독립된 맥락창", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
-    arrow(ax, 5.0, 7.8, xx + 1.3, 5.7, color="#2f8f4e")
-    arrow(ax, xx + 1.3, 3.5, 5.0, 2.2, color="#7a5fa8")
-box(ax, 3.2, 0.9, 3.6, 1.3, "요약 결과만 보고", fc="#faf8fc", ec="#7a5fa8", fontsize=10)
-ax.text(5.0, 0.35, "본 에이전트의 책상에는 각 담당의 요약만 올라온다",
-        ha="center", fontsize=10.5, color="#2f6fb0")
-fig.tight_layout()
-fig.savefig(FIG / "fig13_single_vs_subagents.png", dpi=150, bbox_inches="tight")
-plt.close(fig)
-
-# ---------------------------------------------------------------- 그림 13-2
-# 파이프라인 5단계와 검문소
-fig, ax = plt.subplots(figsize=(12.5, 4.6))
+# 파이프라인 5단계: 단계, 담당, 산출 파일, 검증 지점
+fig, ax = plt.subplots(figsize=(13, 5.6))
 ax.set_xlim(0, 14)
-ax.set_ylim(1.0, 7.2)
+ax.set_ylim(0.6, 8.2)
 ax.axis("off")
 stages = [
-    ("수집", "원자료 CSV\n(6주차)", "#f5f9fd", "#2f6fb0"),
-    ("정제·병합", "분석용 데이터\n(7주차)", "#f4fbf6", "#2f8f4e"),
-    ("분석", "통계 결과표\n(10주차)", "#faf8fc", "#7a5fa8"),
-    ("시각화", "그림 파일\n(9주차)", "#fdf9f4", "#c77b2f"),
-    ("보고", "요약 보고서\n(14주차로)", "#f7f7fc", "#5b6ee1"),
+    ("① 수집 확인\n(9주차 파일)", "본 에이전트", "확인 보고\n(행 수·열·결측)", "#f5f9fd", "#2f6fb0"),
+    ("② 정제·병합\n(7주차)", "cleaner", "merged.csv\n정제로그.md", "#f4fbf6", "#2f8f4e"),
+    ("③ 분석\n(11주차)", "analyst", "analysis.md\n(결과표)", "#faf8fc", "#7a5fa8"),
+    ("④ 시각화\n(9주차)", "plotter", "fig_scatter.png\nfig_change.png", "#fdf9f4", "#c77b2f"),
+    ("⑤ 요약\n(14주차로)", "본 에이전트", "summary.md\n(결과 요약)", "#f7f7fc", "#5b6ee1"),
 ]
-for i, (t1, t2, fc, ec) in enumerate(stages):
+for i, (t1, who, out, fc, ec) in enumerate(stages):
     x = 0.4 + i * 2.75
-    box(ax, x, 4.95, 2.2, 1.0, t1, fc=fc, ec=ec, fontsize=12, weight="bold")
-    box(ax, x, 2.9, 2.2, 1.3, t2, fc="white", ec=ec, fontsize=9.5)
+    box(ax, x, 4.6, 2.2, 1.5, t1, fc=fc, ec=ec, weight="bold")
+    box(ax, x, 3.3, 2.2, 0.9, "담당: " + who, fc="white", ec=ec)
+    box(ax, x, 1.75, 2.2, 1.2, out, fc="white", ec="#aaa")
     if i < 4:
-        arrow(ax, x + 2.3, 5.45, x + 2.65, 5.45)
-        # 검문소 표시
+        arrow(ax, x + 2.3, 5.35, x + 2.65, 5.35)
         cx = x + 2.475
-        ax.plot([cx], [6.35], marker="v", color="#a04747", markersize=9)
-        ax.text(cx, 6.75, f"검문소 {i + 1}", ha="center", fontsize=9.5,
+        ax.plot([cx], [6.45], marker="v", color="#a04747", markersize=9)
+        ax.text(cx, 6.8, f"검증 지점 {i + 1}", ha="center", fontsize=9.5,
                 color="#a04747", fontweight="bold")
-checks = [
-    "행 수·표본 대조", "병합 손실·요약통계 확인", "수치 재검산·과잉해석 점검", "그림-수치 대조",
-]
+checks = ["행 수·열·결측", "행 수·빈 값·대응표", "관측치 수·대표 수치", "점 개수·축·단위"]
 for i, c in enumerate(checks):
     cx = 0.4 + i * 2.75 + 2.475
-    ax.text(cx, 2.35, c, ha="center", fontsize=8.8, color="#a04747")
-ax.text(7.0, 1.35, "화살표 위의 붉은 표시가 사람이 멈춰서 확인하는 검문소다. 단계 산출물은 모두 파일로 남긴다.",
+    ax.text(cx, 7.35, c, ha="center", fontsize=8.8, color="#a04747")
+ax.text(7.0, 1.0, "단계 사이의 전달은 산출물/파이프라인 폴더의 파일로 하고, 검증 지점에서 사람이 통과·반려를 정한다",
         ha="center", fontsize=10.5, color="#333")
 fig.savefig(FIG / "fig13_pipeline_checkpoints.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-# ---------------------------------------------------------------- 그림 13-3
-# 검문소의 두 눈: 검증 에이전트의 1차 대조와 사람의 2차 확인
-fig, ax = plt.subplots(figsize=(12.5, 5.8))
+# ---------------------------------------------------------------- 그림 13-2
+# 검증 지점의 1차 확인(verifier)과 2차 확인(사람)
+fig, ax = plt.subplots(figsize=(12.5, 5.6))
 ax.set_xlim(0, 14)
-ax.set_ylim(0, 9)
+ax.set_ylim(1.4, 8.0)
 ax.axis("off")
-box(ax, 0.3, 3.6, 2.6, 2.2, "② 단계 산출물\n산출물/merged.csv", fc="#f5f9fd", ec="#2f6fb0", fontsize=10)
-box(ax, 3.6, 1.7, 7.2, 6.8, "", fc="white", ec="#c0392b")
-ax.text(7.2, 8.05, "검문소", ha="center", fontsize=12, fontweight="bold", color="#c0392b")
-box(ax, 3.85, 4.0, 3.3, 3.7,
-    "1차: verifier\n(검증 전담 서브에이전트)\n독립 맥락창\n원자료 + 산출물만 받음\n행 수·대표 수치·표본 5행\n전수 대조 → 대조표",
-    fc="#f4fbf6", ec="#2f8f4e", fontsize=9)
-box(ax, 7.45, 4.0, 3.2, 3.7,
-    "2차: 사람\n결정적 항목(행 수)\n파일 열어 직접 확인\n'일치' 칸 표본 대조\n통과 / 반려 결정",
-    fc="#fdf9f4", ec="#c77b2f", fontsize=9)
-arrow(ax, 3.0, 4.7, 3.75, 5.9)
-arrow(ax, 7.2, 5.9, 7.35, 5.9)
-box(ax, 11.4, 5.8, 2.2, 1.3, "통과\n→ ③ 분석", fc="#f4fbf6", ec="#2f8f4e", fontsize=10)
-box(ax, 11.4, 2.8, 2.2, 1.3, "반려\n→ ② 재실행", fc="#fdf9f4", ec="#c0392b", fontsize=10)
-arrow(ax, 10.7, 6.3, 11.3, 6.4, color="#2f8f4e")
+box(ax, 0.3, 3.6, 2.6, 2.2, "② 단계 산출물\nmerged.csv", fc="#f5f9fd", ec="#2f6fb0")
+box(ax, 3.6, 2.6, 7.2, 5.2, "", fc="white", ec="#c0392b")
+ax.text(7.2, 7.35, "검증 지점 2", ha="center", fontsize=12, fontweight="bold", color="#c0392b")
+box(ax, 3.85, 3.3, 3.3, 3.5,
+    "1차 확인: verifier\n별도 맥락창\n원자료와 산출물만 받음\n행 수·지정 항목 재계산\n→ 대조표",
+    fc="#f4fbf6", ec="#2f8f4e")
+box(ax, 7.45, 3.3, 3.2, 3.5,
+    "2차 확인: 사람\n대조표의 결정적 항목\n대응표 판단의 근거\n→ 통과 또는 반려",
+    fc="#fdf9f4", ec="#c77b2f")
+arrow(ax, 3.0, 4.7, 3.75, 5.3)
+arrow(ax, 7.2, 5.3, 7.35, 5.3)
+box(ax, 11.4, 5.5, 2.2, 1.3, "통과\n→ ③ 분석", fc="#f4fbf6", ec="#2f8f4e")
+box(ax, 11.4, 2.8, 2.2, 1.3, "반려\n→ ② 재실행", fc="#fdf9f4", ec="#c0392b")
+arrow(ax, 10.7, 6.0, 11.3, 6.1, color="#2f8f4e")
 arrow(ax, 10.7, 4.8, 11.3, 3.6, color="#c0392b")
-ax.text(7.2, 3.3, "만든 팀원과 검증 팀원은 다르다. 검증 보고에도 행 번호·계산 방법이라는 손잡이가 달린다.",
-        ha="center", fontsize=9.5, color="#555")
-ax.text(7.2, 2.35, "전수 대조라는 노동은 에이전트가, 결정적 판단과 표본 확인은 사람이 맡는다",
-        ha="center", fontsize=10, color="#333",
-        bbox=dict(fc="#f7f7fc", ec="#d9d9e3", boxstyle="round,pad=0.3"))
+ax.text(7.2, 1.75, "값을 다시 세는 일은 verifier가, 통과·반려의 결정은 사람이 맡는다",
+        ha="center", fontsize=10, color="#333")
 fig.savefig(FIG / "fig13_verifier_gate.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 
-
-print("saved:", [p.name for p in sorted(FIG.glob("fig13_*.png"))])
+print("saved: fig13_pipeline_checkpoints.png, fig13_verifier_gate.png")
